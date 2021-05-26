@@ -1,3 +1,7 @@
+Start by making sure all finished branches have been merged to the main branch on GitHub.
+Then move to the main branch on your computer then pull all those changes.
+After this, the commands bellow can be executed to create the build and deploy it to firebase. 
+
 Since Firebase hosting has already been set up. All that is needed, is to 
 - npm run build
     This will genetate a build version of the app and put it in the build folder.
