@@ -1,0 +1,5 @@
+Since Firebase hosting has already been set up. All that is needed, is to 
+- npm run build
+    This will genetate a build version of the app and put it in the build folder.
+- firebase deploy
+    This will then deploy that build folder that you have created above. 
