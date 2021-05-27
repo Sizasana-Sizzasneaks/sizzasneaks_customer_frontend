@@ -15,26 +15,26 @@ function App() {
   return (
     <>
     <p>Customer Front-End</p>
-      <Navbar />
+      <Navbar /> {/* Mata */}
       <Router>
         <div>
           <Switch>
             <Route exact path="/product">
-              <ProductPage />
+              <ProductPage /> {/* Lukumo */}
             </Route>
             <Route exact path="/products">
-              <ProductsPage />
+              <ProductsPage />  {/* Ameer */}
             </Route>
-            <Route exact path="/sign-up">
+            <Route exact path="/sign-up"> {/* Lara */}
               <SignUpPage />
             </Route>
             <Route exact path="/">
-              <HomePage />
+            <HomePage /> {/* Lusanda */}
             </Route>
           </Switch>
         </div>
       </Router>
-      <Footer />
+      <Footer /> {/* Mata */}
     </>
   );
 }
