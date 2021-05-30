@@ -1,7 +1,7 @@
 import React from 'react';
 
 function LogInComponent(){
-    return(<p>LogInComponent</p>)
+    return(<p>LogInComponent-lara</p>)
 }
 
 export default LogInComponent;
