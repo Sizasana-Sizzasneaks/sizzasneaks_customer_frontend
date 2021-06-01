@@ -5,12 +5,12 @@
   padding: 0;
 }
 
-.col{
+.col {
   margin: 0;
   padding: 0;
 }
 
-nav p{
+nav p {
   margin-bottom: 0;
 }
 
@@ -67,11 +67,11 @@ nav p{
 
 .search-bar-box {
   background-color: #e3e3e3;
-  width: 442px;
+  width: 100%;
   height: 33px;
   padding: 5px 5px;
   border-radius: 4px;
-  box-shadow: 1px 1px 10px #e3e3e3;
+  box-shadow: 2px 2px 10px rgba(00, 00, 00, 0.3);
   margin-top: 18px;
 }
 
@@ -82,19 +82,30 @@ nav p{
   height: 100%;
 }
 
-.top-right-nav-banner-links {
+#search-input:focus {
   
-  margin-left: 25px;
-  height: 33px;
-  margin-top: 20px;
+  border-style: none;
   
 }
 
-.top-right-nav-banner-link{
+.top-right-nav-banner-links {
+  margin-left: auto;
+  height: 26px;
+  margin-top: 19px;
+  width: 250px;
+}
+
+.top-right-nav-banner-link {
   text-align: center;
-  margin-top: 5px;
+  margin-top: 2px;
   height: 100%;
   padding: 0;
+}
+
+
+.top-right-nav-banner-link p {
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .shopping-cart-banner {
@@ -110,4 +121,20 @@ nav p{
 .navbar-links-segment {
   background-color: #38cccc;
   height: 55px;
+}
+
+.navbarNavigationLink{
+
+  height: 100%;
+  display: inline-block;
+  text-align: center;
+  padding-top: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 14px;
+}
+
+.navbarNavigationLink:hover{
+  background-color: rgba(00, 00, 00, 0.16);
+  cursor: pointer;
 }
