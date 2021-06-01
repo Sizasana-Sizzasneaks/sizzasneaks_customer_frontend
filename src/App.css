@@ -1,3 +1,19 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+.row {
+  margin: 0;
+  padding: 0;
+}
+
+.col{
+  margin: 0;
+  padding: 0;
+}
+
+nav p{
+  margin-bottom: 0;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +51,63 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.navbar-banner {
+  background-color: #ffffff;
+  height: 88px;
+}
+
+.logo-banner {
+  font-size: 39px;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.search-bar-box {
+  background-color: #e3e3e3;
+  width: 442px;
+  height: 33px;
+  padding: 5px 5px;
+  border-radius: 4px;
+  box-shadow: 1px 1px 10px #e3e3e3;
+  margin-top: 18px;
+}
+
+#search-input {
+  width: 100%;
+  border-style: none;
+  background-color: #e3e3e3;
+  height: 100%;
+}
+
+.top-right-nav-banner-links {
+  
+  margin-left: 25px;
+  height: 33px;
+  margin-top: 20px;
+  
+}
+
+.top-right-nav-banner-link{
+  text-align: center;
+  margin-top: 5px;
+  height: 100%;
+  padding: 0;
+}
+
+.shopping-cart-banner {
+  display: inline;
+}
+
+.vertical-divider {
+  height: 100%;
+  background-color: black;
+  width: 2px;
+}
+
+.navbar-links-segment {
+  background-color: #38cccc;
+  height: 55px;
 }
