@@ -22,7 +22,11 @@ function Navbar() {
 
             <Col xs={5} style={{ padding: "0" }}>
               <div className="search-bar-box">
-                <input id="search-input" type="text" value="Search" />
+                <input
+                  id="search-input"
+                  type="text"
+                  placeholder="Search Products"
+                />
               </div>
             </Col>
 
@@ -63,8 +67,8 @@ function Navbar() {
           style={{ height: "100%", paddingLeft: "0", paddingRight: "0" }}
         >
           <div style={{ display: "flex", height: "100%" }}>
-            <div style={{ height: "100%" }}>
-              <NavabarNavigationLink label="BRANDS" />
+            <div style={{ height: "100%", display: "inline-block" }}>
+              <NavabarNavigationLink label="BRANDS" expandable={true} />
               <NavabarNavigationLink label="WOMEN" />
               <NavabarNavigationLink label="MEN" />
               <NavabarNavigationLink label="KIDS" />
@@ -73,6 +77,7 @@ function Navbar() {
               style={{
                 height: "100%",
                 marginLeft: "auto",
+                display: "inline-block" 
               }}
             >
               <NavabarNavigationLink label="NEW ARRIVALS" />
@@ -94,6 +99,7 @@ function NavabarNavigationLink(props) {
       }}
     >
       <p style={{}}>{props.label}</p>
+      {props.expandable && <span class="material-icons" style={{marginLeft:"10px"}}>expand_more</span>}
     </div>
   );
 }
