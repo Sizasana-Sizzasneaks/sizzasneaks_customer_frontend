@@ -53,6 +53,8 @@ nav p {
   }
 }
 
+/* ------------------------Navbar------------------------------ */
+
 .navbar-banner {
   background-color: #ffffff;
   height: 88px;
@@ -81,14 +83,12 @@ nav p {
   border-style: none;
   background-color: #e3e3e3;
   height: 100%;
-  
+
   margin-left: 3px;
 }
 
 #search-input:focus {
-  
   outline: none;
-  
 }
 
 .top-right-nav-banner-links {
@@ -108,7 +108,6 @@ nav p {
 .top-right-nav-banner-link:hover {
   cursor: pointer;
 }
-
 
 .top-right-nav-banner-link p {
   font-size: 16px;
@@ -130,8 +129,7 @@ nav p {
   height: 55px;
 }
 
-.navbarNavigationLink{
-
+.navbarNavigationLink {
   height: 100%;
   display: inline-flex;
   text-align: center;
@@ -141,7 +139,93 @@ nav p {
   font-size: 14px;
 }
 
-.navbarNavigationLink:hover{
+.navbarNavigationLink:hover {
   background-color: rgba(00, 00, 00, 0.16);
   cursor: pointer;
+}
+
+/* --------------------Footer------------------------- */
+
+footer {
+  background-color: #38cccc;
+  height: 465px;
+}
+
+.footer-heading-text {
+  margin-bottom: 0px;
+  position: absolute;
+  top: 6px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.footer-headingOne-text {
+  margin-bottom: 0px;
+  position: absolute;
+  top: 0px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.footer-heading-block {
+  position: relative;
+  padding: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.footer-segment-block {
+  padding: 0;
+}
+
+.footer-segment-item-text {
+  margin-bottom: 22px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.footer-segment-item-text:hover {
+  cursor: pointer;
+}
+
+.footer-newsletter-subscribe-box {
+  background-color: white;
+  width: 100%;
+  height: 42px;
+  /* //padding: 6px 5px; */
+  border-radius: 4px;
+
+  /* padding-top: 6px; */
+  display: inline-flex;
+}
+
+#footer-newsletter-subscribe-input {
+  width: 100%;
+  border-style: none;
+  height: 100%;
+  margin-left: 8px;
+}
+
+#footer-newsletter-subscribe-input:focus {
+  outline: none;
+}
+
+.footer-subscribe-button {
+  display: inline-block;
+  padding: 9.5px 10px;
+  background-color: black;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.footer-subscribe-button:hover {
+  cursor: pointer;
+}
+
+.payment-container {
+  margin-left: auto;
+  
+  
 }
