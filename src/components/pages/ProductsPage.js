@@ -1,7 +1,9 @@
 import React from 'react';
 
 function ProductsPage(){
-    return(<p>ProductsPage_Lusanda</p>)
+    return(<></>)
+
+    /////
 }
 
 export default ProductsPage;
