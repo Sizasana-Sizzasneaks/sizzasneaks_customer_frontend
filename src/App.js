@@ -14,7 +14,7 @@ import SignUpPage from "./components/pages/SignUpPage.js";
 function App() {
   return (
     <>
-    <p>Customer Front-End</p>
+    {/* <p>Customer Front-End</p> */}
       <Navbar /> {/* Mata */}
       <Router>
         <div>
