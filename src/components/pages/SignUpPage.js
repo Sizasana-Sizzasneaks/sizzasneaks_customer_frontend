@@ -6,19 +6,17 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn,MDBCard, MDBCardBody} from 'mdb-re
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    marginRight:100,
-    marginLeft:100
+    
   },
   paper: {
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
   },
   card:{
-    marginRight:30,
-    marginLeft:200  
+     
   }
 }));
-//
+
 function SignUpPage(){
     const classes=useStyles();
     return(
@@ -26,32 +24,32 @@ function SignUpPage(){
         <MDBContainer >
             <p>Sign Up</p>
         <MDBRow>
-          <MDBCol md="8">
+          <MDBCol md="8" className={classes.card}>
             <MDBCard>
-              <MDBCardBody > 
+              <MDBCardBody className={classes.root} > 
                 <form>
                 <p>Error message field</p>
                 <p className="h4 text-left mb-4">Personal Details</p>
                 <MDBRow >
                     <MDBCol md="6">  
-                    <label htmlFor="defaultFormRegisterNameEx" className="grey-text">
+                    <label htmlFor="defaultFormRegisterNameEx" >
                         First name
                     </label>
                     <input type="text" id="defaultFormRegisterNameEx" className="form-control" />
-                    <br />
+                    <br/>
                     </MDBCol>
 
                     <MDBCol md="6">
-                    <label htmlFor="defaultFormRegisterNameEx" className="grey-text">
+                    <label htmlFor="defaultFormRegisterNameEx">
                         Last Name
                     </label>
                     <input type="text" id="defaultFormRegisterNameEx" className="form-control" />
-                    <br />
+                    <br/>
                     </MDBCol>
                 </MDBRow>
                 <MDBRow>
                     <MDBCol md="6">  
-                    <label htmlFor="defaultFormRegisterEmailEx" className="grey-text">
+                    <label htmlFor="defaultFormRegisterEmailEx">
                      Email Address
                     </label>
                     <input type="email" id="defaultFormRegisterEmailEx" className="form-control" />
@@ -59,7 +57,7 @@ function SignUpPage(){
                     </MDBCol>
 
                     <MDBCol md="6">
-                    <label htmlFor="defaultFormRegisterMobileEx" className="grey-text">
+                    <label htmlFor="defaultFormRegisterMobileEx">
                      Mobile Number
                     </label>
                     <input type="email" id="defaultFormMobileEx" className="form-control" />
@@ -68,7 +66,7 @@ function SignUpPage(){
                 </MDBRow>
                 <MDBRow>
                     <MDBCol md="6">  
-                    <label htmlFor="defaultFormRegisterPasswordEx" className="grey-text">
+                    <label htmlFor="defaultFormRegisterPasswordEx">
                      Password
                     </label>
                     <input type="password" id="defaultFormRegisterPasswordEx" className="form-control" />
@@ -76,7 +74,7 @@ function SignUpPage(){
                     </MDBCol>
 
                     <MDBCol md="6">
-                    <label htmlFor="defaultFormRegisterPasswordEx" className="grey-text">
+                    <label htmlFor="defaultFormRegisterPasswordEx">
                      Retype Password
                     </label>
                     <input type="password" id="defaultFormRegisterPasswordEx" className="form-control" />
