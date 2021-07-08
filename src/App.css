@@ -15,7 +15,7 @@ nav p {
 }
 
 .App {
-  background: color #8a8a8a; ;
+  background: color #8a8a8a;
 }
 
 .App-logo {
@@ -226,6 +226,66 @@ footer {
 
 .payment-container {
   margin-left: auto;
-  
-  
+}
+
+/* --------------------HomePage------------------------- */
+
+.homepage {
+  margin: 20px auto;
+}
+
+.homepage-promotion-banner-image-one {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.home-section-header {
+  margin-top: 30px;
+}
+
+.home-section-header p {
+  display: inline;
+  font-size: 18px;
+}
+
+.homepage-promotion-banner-image-two {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.homepage-banner-product-segment{
+  margin: 50px 0px;
+}
+
+
+.product-coursel{
+
+  display: flex;
+  justify-content: space-around;
+  margin: 40px 0px;
+}
+/* --------------------Product Item------------------------- */
+
+.product-item {
+  background-color:#ffffff;
+  width: 220px;
+  height: 100%;
+  padding: 10px;
+}
+.product-item  p{
+  margin-bottom: 7px;
+}
+
+.product-item-image {
+  height: 180px;
+  width: 100%;
+  object-fit: cover;
+  /* border-style: solid; */
+}
+
+.name-rating-row {
+  display: flex;
+  justify-content: space-between;
 }
