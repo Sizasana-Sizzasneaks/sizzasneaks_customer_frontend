@@ -22,7 +22,7 @@ function SignUpPage(){
     return(
         <div>
         <MDBContainer >
-            <p>Sign Up</p>
+            <p>Sign Up My my my</p>
         <MDBRow>
           <MDBCol md="8" className={classes.card}>
             <MDBCard>
