@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function Navbar() {
   return (
@@ -17,7 +18,7 @@ function Navbar() {
         >
           <Row>
             <Col xs={4} style={{ padding: "0" }}>
-              <p className="logo-banner">SIZZASNEAKS</p>
+            <Link to="/"> <p className="logo-banner">SIZZASNEAKS</p> </Link>
             </Col>
 
             <Col xs={5} style={{ padding: "0" }}>
@@ -37,24 +38,29 @@ function Navbar() {
                   className="top-right-nav-banner-link"
                   style={{ marginLeft: "auto" }}
                 >
-                  <p>LogIn</p>
+                 <Link to="/log-in"><p>LogIn</p></Link> 
                 </Col>
                 <Col xs={1}>
                   <div className="vertical-divider"></div>
                 </Col>
                 <Col xs={3} className="top-right-nav-banner-link">
-                  <p>Sign Up</p>
+                <Link to="/sign-up"> <p>Sign Up</p> </Link>
                 </Col>
                 <Col xs={1}>
                   <div className="vertical-divider"></div>
                 </Col>
                 <Col xs={3} className="top-right-nav-banner-link">
-                  <div className="shopping-cart-banner">
-                    <span style={{ float: "left" }} className="material-icons">
-                      shopping_cart
-                    </span>
-                    <p>Cart</p>
-                  </div>
+                  
+                    <div className="shopping-cart-banner">
+                      <span
+                        style={{ float: "left" }}
+                        className="material-icons"
+                      >
+                        shopping_cart
+                      </span>
+                      <p>Cart</p>
+                    </div>
+                 
                 </Col>
               </Row>
             </Col>
@@ -77,7 +83,7 @@ function Navbar() {
               style={{
                 height: "100%",
                 marginLeft: "auto",
-                display: "inline-block" 
+                display: "inline-block",
               }}
             >
               <NavabarNavigationLink label="NEW ARRIVALS" />
@@ -99,7 +105,11 @@ function NavabarNavigationLink(props) {
       }}
     >
       <p style={{}}>{props.label}</p>
-      {props.expandable && <span class="material-icons" style={{marginLeft:"10px"}}>expand_more</span>}
+      {props.expandable && (
+        <span class="material-icons" style={{ marginLeft: "10px" }}>
+          expand_more
+        </span>
+      )}
     </div>
   );
 }

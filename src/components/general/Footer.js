@@ -77,13 +77,13 @@ function Footer() {
           </Col>
         </Row>
 
-        <Row style={{ backgroundColor: "red", height: "55px" }}>
+        <Row style={{ backgroundColor: "", height: "55px" }}>
           <div style={{display:"inline-flex", position:"relative"}}>
             <div className="copyright-container">
-              <p >2021 All Rights Reserved</p>
+              <p >© 2021 All Rights Reserved</p>
             </div>
             <div className="payment-container">
-              <p >2021 All Rights Reserved</p>
+              {/* <p >2021 All Rights Reserved</p> */}
             </div>
           </div>
         </Row>
