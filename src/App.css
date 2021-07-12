@@ -116,12 +116,12 @@ body {
 
 }
 
-.products_page .card:hover {
-  background-color: #e2c520;
+/* .products_page .card:hover {
+  background-color: #0fcef0;
   -webkit-transform: scale(1.1);
           transform: scale(1.1);
   cursor: pointer;
-}
+} */
 
 .products_page .card:hover .btn {
   background-color: #000000;

@@ -1,3 +1,4 @@
+
 const product_card = [
     {
         id: 1,
@@ -70,6 +71,8 @@ const product_card = [
         price: 350,
         currency: "R",
         thumb: "./images/1.jpg"
-    }
+    },
+    
 ]
+
 export default product_card;
