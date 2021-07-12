@@ -1,6 +1,7 @@
 import React from 'react'
 import product_card from "../data/product_data";
 
+
 const ProductsPage = () => {
     console.log(product_card);
     const listItems = product_card.map((item) =>
