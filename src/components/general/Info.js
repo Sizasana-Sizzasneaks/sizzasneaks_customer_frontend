@@ -8,7 +8,7 @@ export default function Info({title, description, price, brand}){
         <Typography variant="subtitle1">{brand}</Typography>
         <Divider/>
         <Box mt={2}>
-            <Typography variant="h4">{title}</Typography>
+            <Typography variant="h5">{title}</Typography>
             <Typography variant="subtitle1">{description}</Typography>            
             <Typography variant="h6">Color</Typography>
             <Button variant="outlined" >Green</Button>
@@ -22,6 +22,8 @@ export default function Info({title, description, price, brand}){
             <Button variant="contained" color="primary" justifyContent="flex-end" alignItems="flex-end">Add To Cart</Button>
             <Button variant="contained" color="primary" >Wishlist</Button>
         </Box>
+
+        
         
         
     </Grid>

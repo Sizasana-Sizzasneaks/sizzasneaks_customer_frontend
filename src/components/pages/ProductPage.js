@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import 'bootstrap-css-only/css/bootstrap.min.css'; 
 import 'mdbreact/dist/css/mdb.css'; */
 
-import {Grid} from '@material-ui/core';
+import {Grid, Divider} from '@material-ui/core';
 import ImageGrid from '../general/ImageGrid';
 import MainImage from '../general/MainImage';
 import Info from '../general/Info';
+import Reviews from '../general/Reviews';
+import RelatedProducts from '../general/RelatedProducts';
 
 
 const images = [
@@ -21,6 +23,10 @@ const product = {
   description: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
   price: 1999,
   brand:"Nike"
+};
+
+const reviews ={
+  name:'Levi Ackerman'
 };
 
 function ProductPage(){
@@ -38,6 +44,14 @@ function ProductPage(){
             <Info {...product}/>
           </Grid>
         </Grid>
+
+        <Grid container spacing={1} style={{maxWidth: 1100, margin: "0 auto"}}>
+          <Grid Item sm={1}>
+            <Reviews{...reviews}/>
+          </Grid>
+          
+        </Grid>
+        
       </div>
       )
 }
