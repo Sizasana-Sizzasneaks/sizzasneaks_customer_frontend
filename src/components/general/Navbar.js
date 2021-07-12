@@ -98,11 +98,12 @@ function Navbar() {
 
 function NavabarNavigationLink(props) {
   return (
+    <Link to="/products">
     <div
       className="navbarNavigationLink"
-      onClick={function () {
-        alert("Coming Soon");
-      }}
+      // onClick={function () {
+      //   alert("Coming Soon");
+      // }}
     >
       <p style={{}}>{props.label}</p>
       {props.expandable && (
@@ -111,6 +112,7 @@ function NavabarNavigationLink(props) {
         </span>
       )}
     </div>
+    </Link>
   );
 }
 

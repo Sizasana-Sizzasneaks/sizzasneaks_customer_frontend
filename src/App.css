@@ -289,3 +289,28 @@ footer {
   display: flex;
   justify-content: space-between;
 }
+/* --------------------Products Page------------------------- */
+.products-display{
+  display: inline-block;
+}
+.page-number-indicator-section{
+  display: inline-block;
+
+
+}
+.page-number-holder{
+  border-style:solid;
+  display: inline-block;
+  height: 30px ;
+  width: 30px;
+  text-align: center;
+  border-width: 1px;
+  margin: 0 5px;
+
+}
+
+.page-number-holder p{
+  margin: 0;
+  font-weight: bold;
+
+}
