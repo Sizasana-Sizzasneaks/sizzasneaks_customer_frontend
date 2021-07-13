@@ -296,9 +296,19 @@ footer {
 .page-number-indicator-section{
   display: inline-block;
 
+}
+.page-number-holder-1{
+  border-style:solid;
+  display: inline-block;
+  height: 28px ;
+  width: 28px;
+  text-align: center;
+  border-width: 1px;
+  margin: 0 5px;
+  background-color: #282c34;
 
 }
-.page-number-holder{
+.page-number-holder-2{
   border-style:solid;
   display: inline-block;
   height: 30px ;
@@ -309,8 +319,13 @@ footer {
 
 }
 
-.page-number-holder p{
-  margin: 0;
+.page-number-holder-1 p{
+  margin: 5px;
   font-weight: bold;
-
+  color: #ffffff;
+}
+.page-number-holder-2 p{
+  margin: 5px;
+  font-weight: bold;
+  color: #000000;
 }
