@@ -297,35 +297,26 @@ footer {
   display: inline-block;
 
 }
-.page-number-holder-1{
-  border-style:solid;
-  display: inline-block;
-  height: 28px ;
-  width: 28px;
-  text-align: center;
-  border-width: 1px;
-  margin: 0 5px;
-  background-color: #282c34;
 
-}
-.page-number-holder-2{
+.page-number-holder{
   border-style:solid;
   display: inline-block;
-  height: 30px ;
+  height: 30px;
   width: 30px;
   text-align: center;
   border-width: 1px;
   margin: 0 5px;
-
-}
-
-.page-number-holder-1 p{
-  margin: 5px;
-  font-weight: bold;
-  color: #ffffff;
-}
-.page-number-holder-2 p{
-  margin: 5px;
+  margin: 10px;
   font-weight: bold;
   color: #000000;
+}
+
+.active-page{
+  background-color: #282c34;
+}
+
+.active-page p{
+  font-weight: bold;
+  color: #ffffff;
+  
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import { Row, Col } from "react-bootstrap";
 import ProductItem from "../general/ProductItem.js";
 import { Grid } from "@material-ui/core";
 
@@ -71,14 +70,13 @@ function ProductsPage() {
 
       <Grid container>
         <div className="page-number-indicator-section">
-          <PageNumberHolder/>
-          <PageNumberHolder2/>
-          <PageNumberHolder3/>
-          <PageNumberHolder4/>
-          <PageNumberHolder5/>
-          <PageNumberHolder6/>
-
-
+          <PageNumberHolder pageNumber={1} activePage={true}/>
+          <PageNumberHolder pageNumber={2} activePage={true} />
+          <PageNumberHolder pageNumber={3}/>
+          <PageNumberHolder pageNumber={4}/>
+          <PageNumberHolder pageNumber={5}/>
+          <PageNumberHolder pageNumber={">"}/>
+          <PageNumberHolder pageNumber={">>"}/>
         </div>
       </Grid>
     </>
@@ -87,45 +85,15 @@ function ProductsPage() {
 
 export default ProductsPage;
 
-function PageNumberHolder() {
+function PageNumberHolder(props) {
+
+  var className = props.activePage ? "page-number-holder active-page": "page-number-holder";
+
+
   return (
-    <div className="page-number-holder-1">
-      <p>1</p>
+    <div className={className}>
+      <p>{props.pageNumber}</p>
     </div>
   );
 }
-function PageNumberHolder2() {
-    return (
-      <div className="page-number-holder-2">
-        <p>2</p>
-      </div>
-    );
-  }
-  function PageNumberHolder3() {
-    return (
-      <div className="page-number-holder-2">
-        <p>3</p>
-      </div>
-    );
-  }
-  function PageNumberHolder4() {
-    return (
-      <div className="page-number-holder-2">
-        <p>4</p>
-      </div>
-    );
-  }
-  function PageNumberHolder5() {
-    return (
-      <div className="page-number-holder-2">
-        <p>{">"}</p>
-      </div>
-    );
-  }
-  function PageNumberHolder6() {
-    return (
-      <div className="page-number-holder-2">
-        <p>{">>"}</p>
-      </div>
-    );
-  }
+
