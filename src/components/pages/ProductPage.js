@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import 'bootstrap-css-only/css/bootstrap.min.css'; 
 import 'mdbreact/dist/css/mdb.css'; */
 
-import {Grid, Divider} from '@material-ui/core';
+import {Grid, Typography} from '@material-ui/core';
 import ImageGrid from '../general/ImageGrid';
 import MainImage from '../general/MainImage';
 import Info from '../general/Info';
@@ -32,7 +32,7 @@ const reviews ={
 function ProductPage(){
     const [selectedImage, setSelectedImage] = useState(0)
     return(
-      <div>
+    <div>
         <Grid container spacing={1} style={{maxWidth: 1100, margin: "0 auto"}}>
           <Grid Item sm={1}>
             <ImageGrid images={images} onSelect={setSelectedImage} selectedImage={selectedImage}/>
@@ -46,13 +46,31 @@ function ProductPage(){
         </Grid>
 
         <Grid container spacing={1} style={{maxWidth: 1100, margin: "0 auto"}}>
-          <Grid Item sm={1}>
+          <Grid Item>
             <Reviews{...reviews}/>
           </Grid>
           
         </Grid>
+
+        <div className='w-100'></div>
+        <Grid container spaacing={1} style={{maxWidth: 1100, margin: "0 auto"}}>
+        <Typography variant="h5">Related Products</Typography>
+        </Grid>
         
-      </div>
+        <Grid container spacing={1} style={{maxWidth: 1100, margin: "0 auto"}}>
+          <Grid Item sm={4}>
+            <RelatedProducts {...product}/>
+          </Grid>
+          <Grid Item sm={4}>
+            <RelatedProducts {...product}/>
+          </Grid>
+          <Grid Item sm={4}>
+            <RelatedProducts {...product}/>
+          </Grid>
+          
+        </Grid>
+        
+    </div>
       )
 }
 
