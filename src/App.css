@@ -10,7 +10,7 @@
   padding: 0;
 }
 
-nav p {
+.nav p {
   margin-bottom: 0;
 }
 
@@ -105,11 +105,31 @@ nav p {
   padding: 0;
 }
 
+.top-right-nav-banner-linky {
+  /* text-align: center; */
+  margin-top: 2px;
+  height: 100%;
+  padding: 0;
+  width: 20%;
+}
+
+.top-right-nav-banner-linkyy {  
+  margin-top: 2px;
+  height: 100%;
+  padding: 0;
+  width: 600%;
+}
+
 .top-right-nav-banner-link:hover {
   cursor: pointer;
 }
 
 .top-right-nav-banner-link p {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.top-right-nav-banner-linky p {
   font-size: 16px;
   font-weight: bold;
 }
@@ -288,4 +308,15 @@ footer {
 .name-rating-row {
   display: flex;
   justify-content: space-between;
+}
+
+.show{
+  display: block;
+  transition: 800ms;
+  opacity: 1;
+}
+
+.show.active{
+  transition: translateY(100px) scale(0) rotateY(180deg);
+  opacity: 0;
 }

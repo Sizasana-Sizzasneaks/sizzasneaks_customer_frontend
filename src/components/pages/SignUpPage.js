@@ -8,8 +8,6 @@ import {
   MDBRow,
   MDBCol,
   MDBBtn,
-  MDBCard,
-  MDBCardBody,
 } from "mdb-react-ui-kit";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,20 +17,18 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
-  },
-  card: {},
+   },  
+
 }));
 
 function SignUpPage() {
   const classes = useStyles();
   return (
     <div>
-      <p>Sign Up</p>
-      <MDBContainer style={{ margin: "10px auto", backgroundColor: "#FFFFFF" }}>
+      <p style={{margin:"40px 0px 0px 0px", padding: "0px 50px 0px"}} >Sign Up</p>
+      <MDBContainer style={{ margin: "10px auto 50px", backgroundColor: "#FFFFFF", padding:"20px"}}>
         <MDBRow>
           <MDBCol md="8" className={classes.card} style={{ margin: "0 auto" }}>
-            <MDBCard>
-              <MDBCardBody className={classes.root}>
                 <form>
                   <p>Error message field</p>
                   <p className="h4 text-left mb-4">Personal Details</p>
@@ -45,6 +41,7 @@ function SignUpPage() {
                         type="text"
                         id="defaultFormRegisterNameEx"
                         className="form-control"
+                        required
                       />
                       <br />
                     </MDBCol>
@@ -57,6 +54,7 @@ function SignUpPage() {
                         type="text"
                         id="defaultFormRegisterNameEx"
                         className="form-control"
+                        required
                       />
                       <br />
                     </MDBCol>
@@ -70,6 +68,7 @@ function SignUpPage() {
                         type="email"
                         id="defaultFormRegisterEmailEx"
                         className="form-control"
+                        required
                       />
                       <br />
                     </MDBCol>
@@ -82,6 +81,7 @@ function SignUpPage() {
                         type="email"
                         id="defaultFormMobileEx"
                         className="form-control"
+                        required
                       />
                       <br />
                     </MDBCol>
@@ -95,6 +95,7 @@ function SignUpPage() {
                         type="password"
                         id="defaultFormRegisterPasswordEx"
                         className="form-control"
+                        required
                       />
                       <br />
                     </MDBCol>
@@ -107,19 +108,19 @@ function SignUpPage() {
                         type="password"
                         id="defaultFormRegisterPasswordEx"
                         className="form-control"
+                        required
                       />
-                      <br />
+                     
                     </MDBCol>
                   </MDBRow>
 
                   <div className="text-center mt-4">
-                    <MDBBtn color="unique" type="submit">
+                    <MDBBtn color="red-text"  className="rounded amber" type="submit">
                       Register
                     </MDBBtn>
                   </div>
                 </form>
-              </MDBCardBody>
-            </MDBCard>
+              
           </MDBCol>
         </MDBRow>
       </MDBContainer>

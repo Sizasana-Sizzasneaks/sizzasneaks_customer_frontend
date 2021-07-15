@@ -1,8 +1,21 @@
-import React from "react";
+import React,{useState} from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import LogIn from "./LogInComponent";
 
 function Navbar() {
+  const handleClick =()=>{
+    handleLoginClick()
+}
+
+// declare a variable to use State Hook: isShowLogin
+const [isShowLogin, setIsShowLogin]=useState(false)
+  
+//function setIsShowLogin to update our state 
+const handleLoginClick=()=>{
+setIsShowLogin((isShowLogin)=>!isShowLogin)
+}
+
   return (
     <nav>
       <div className="navbar-banner">
@@ -35,11 +48,13 @@ function Navbar() {
               <Row className="top-right-nav-banner-links">
                 <Col
                   xs={2}
-                  className="top-right-nav-banner-link"
+                  className="top-right-nav-banner-linky"
                   style={{ marginLeft: "auto" }}
-                >
-                 <Link to="/log-in"><p>LogIn</p></Link> 
-                </Col>
+                >   
+                  <p onClick={handleClick}> Log In</p>  
+                  <div className="top-right-nav-banner-linkyy"><LogIn isShowLogin={isShowLogin} /></div>                
+                </Col>               
+                
                 <Col xs={1}>
                   <div className="vertical-divider"></div>
                 </Col>
