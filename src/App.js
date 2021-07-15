@@ -14,6 +14,7 @@ import SignUpPage from "./components/pages/SignUpPage.js";
 import LogInComponent from "./components/general/LogInComponent.js";
 
 function App() {
+
   return (
     <>
       {/* <p>Customer Front-End</p> */}
@@ -35,7 +36,7 @@ function App() {
             <Route exact path="/log-in">
               {" "}
               {/* Lara */}
-              <LogInComponent />
+              <LogInComponent />  
             </Route>
             <Route exact path="/">
               <HomePage /> {/* Lusanda */}
