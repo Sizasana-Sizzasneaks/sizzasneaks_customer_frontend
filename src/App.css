@@ -310,6 +310,7 @@ footer {
   justify-content: space-between;
 }
 
+
 .show{
   display: block;
   transition: 800ms;
@@ -320,3 +321,36 @@ footer {
   transition: translateY(100px) scale(0) rotateY(180deg);
   opacity: 0;
 }
+
+/* --------------------Products Page------------------------- */
+.products-display{
+  display: inline-block;
+}
+.page-number-indicator-section{
+  display: inline-block;
+
+}
+
+.page-number-holder{
+  border-style:solid;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  border-width: 1px;
+  margin: 0 5px;
+  margin: 10px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.active-page{
+  background-color: #282c34;
+}
+
+.active-page p{
+  font-weight: bold;
+  color: #ffffff;
+  
+}
+

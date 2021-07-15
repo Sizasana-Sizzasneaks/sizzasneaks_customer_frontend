@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+
 import LogIn from "./LogInComponent";
 
 function Navbar() {
@@ -113,11 +114,12 @@ setIsShowLogin((isShowLogin)=>!isShowLogin)
 
 function NavabarNavigationLink(props) {
   return (
+    <Link to="/products">
     <div
       className="navbarNavigationLink"
-      onClick={function () {
-        alert("Coming Soon");
-      }}
+      // onClick={function () {
+      //   alert("Coming Soon");
+      // }}
     >
       <p style={{}}>{props.label}</p>
       {props.expandable && (
@@ -126,6 +128,7 @@ function NavabarNavigationLink(props) {
         </span>
       )}
     </div>
+    </Link>
   );
 }
 
