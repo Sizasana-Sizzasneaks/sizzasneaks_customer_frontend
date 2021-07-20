@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const LogInComponent = ({ isShowLogin }) => {
   const firebase = useFirebase();
 
-  var [email, setEmail] = React.useState(null);
+  var [email, setEmail] = React.useState("");
   var [password, setPassword] = React.useState("");
 
   //Validation

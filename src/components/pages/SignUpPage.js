@@ -1,11 +1,8 @@
 import React from "react";
 import * as Yup from "yup";
 import { useFirebase } from "react-redux-firebase";
-
 import { makeStyles } from "@material-ui/core/styles";
-// import 'bootstrap-css-only/css/bootstrap.min.css';
 import "mdbreact/dist/css/mdb.css";
-
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-react-ui-kit";
 
 const useStyles = makeStyles((theme) => ({
@@ -19,17 +16,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 //The following are schemas used to display error message
-const NameSchema = Yup.object().shape({
+const firstNameSchema = Yup.object().shape({
   firstName: Yup.string("Please enter a string")
     .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
     .max(50)
     .required("Required"),
 });
 
-const mobileNumberSchema = Yup.object().shape({
-  mobileNumber: Yup.number("Please enter correct Phone number")
-  .required("Required"),
-  //.phone()
+const lastNameSchema = Yup.object().shape({
+  lastName: Yup.string("Please enter a string")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
+    .max(50)
+    .required("Required"),
 });
 
 const emailSchema = Yup.object().shape({
@@ -38,19 +36,23 @@ const emailSchema = Yup.object().shape({
     .required("Required"),
 });
 
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+const mobileNumberSchema = Yup.object().shape({
+  mobileNumber: Yup.string("Please enter a string")
+    .matches(phoneRegExp, "Phone number is not valid").min(10)
+    .required("Required"),
+  //.phone()
+});
+
 const passwordSchema = Yup.object().shape({
   password: Yup.string("Please enter a string")
-     .matches(
+    .matches(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
       "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
     )
     .required("Required"),
-});
-
-const retypepasswordSchema = Yup.object().shape({
-  retypepassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords does not match")
-    .required("Confirm Password is required"),
 });
 
 function SignUpPage() {
@@ -60,7 +62,7 @@ function SignUpPage() {
   var [firstName, setFirstName] = React.useState("");
   var [lastName, setLastName] = React.useState("");
   var [email, setEmail] = React.useState("");
-  var [mobileNumber, setMobileNumber] = React.useState(null);
+  var [mobileNumber, setMobileNumber] = React.useState("");
   var [password, setPassword] = React.useState("");
   var [retypePsw, setRetypePsw] = React.useState("");
 
@@ -68,17 +70,27 @@ function SignUpPage() {
   var [errorEmail, setErrorEmail] = React.useState(null);
   var [errorPassword, setErrorPassword] = React.useState(null);
   var [errorRetypePsw, setErrorRetypePsw] = React.useState(null);
-  var [errorNames, setErrorNames] = React.useState(null);
+  var [errorFirstName, setErrorFirstName] = React.useState(null);
+  var [errorLastName, setErrorLastName] = React.useState(null);
   var [signUpFail, setErrorSignUp] = React.useState(null);
   var [errorMobile, setErrorMobile] = React.useState(null);
 
   React.useEffect(() => {
-    validateNames();
+    validateFirstName();
+    validateLastName();
     validateMobileNumber();
     validateEmail();
     validatePassword();
     validateRetypePsw();
   }, [firstName, lastName, mobileNumber, email, password, retypePsw]);
+
+  const retypePasswordSchema = Yup.object().shape({
+    retypepassword: Yup.string()
+      .test("mactch", "Password does not match", (retypePasswordCheck) => {
+        return retypePasswordCheck === password;
+      })
+      .required("Confirm Password is required"),
+  });
 
   function signUp() {
     console.log("SignUp Method");
@@ -97,16 +109,30 @@ function SignUpPage() {
       });
   }
 
-  function validateNames() {
-    NameSchema.validate({ name: firstName || lastName })
+  function validateFirstName() {
+    firstNameSchema
+      .validate({ firstName: firstName })
       .then(() => {
-        setErrorNames({ valid: true, message: "" });
+        setErrorFirstName({ valid: true, message: "" });
         console.log("checked name");
       })
       .catch((error) => {
-        setErrorNames({ valid: false, message: error.errors[0] });
+        setErrorFirstName({ valid: false, message: error.errors[0] });
       });
   }
+
+  function validateLastName() {
+    lastNameSchema
+      .validate({ lastName: lastName })
+      .then(() => {
+        setErrorLastName({ valid: true, message: "" });
+        console.log("checked name");
+      })
+      .catch((error) => {
+        setErrorLastName({ valid: false, message: error.errors[0] });
+      });
+  }
+
   function validateEmail() {
     emailSchema
       .validate({ email: email })
@@ -142,7 +168,7 @@ function SignUpPage() {
   }
 
   function validateRetypePsw() {
-    retypepasswordSchema
+    retypePasswordSchema
       .validate({ retypepassword: retypePsw })
       .then(() => {
         setErrorRetypePsw({ valid: true, message: "" });
@@ -185,8 +211,8 @@ function SignUpPage() {
                     }}
                   />
                   <p>
-                    {errorNames &&
-                      (!errorNames.valid ? errorNames.message : "")}
+                    {errorFirstName &&
+                      (!errorFirstName.valid ? errorFirstName.message : "")}
                   </p>
                 </MDBCol>
 
@@ -201,8 +227,8 @@ function SignUpPage() {
                     }}
                   />
                   <p>
-                    {errorNames &&
-                      (!errorNames.valid ? errorNames.message : "")}
+                    {errorLastName &&
+                      (!errorLastName.valid ? errorLastName.message : "")}
                   </p>
                 </MDBCol>
               </MDBRow>
@@ -287,7 +313,7 @@ function SignUpPage() {
                   className="rounded amber"
                   onClick={() => {
                     console.log("clicked");
-                    signUp(email, password);
+                    signUp();
                   }}
                 >
                   Register
