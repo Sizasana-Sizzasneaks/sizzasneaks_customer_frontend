@@ -1,14 +1,12 @@
 import React from "react";
+import * as Yup from "yup";
+import { useFirebase } from "react-redux-firebase";
+
 import { makeStyles } from "@material-ui/core/styles";
 // import 'bootstrap-css-only/css/bootstrap.min.css';
 import "mdbreact/dist/css/mdb.css";
 
-import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBBtn,
-} from "mdb-react-ui-kit";
+import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-react-ui-kit";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,110 +15,285 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
-   },  
-
+  },
 }));
 
+//The following are schemas used to display error message
+const NameSchema = Yup.object().shape({
+  firstName: Yup.string("Please enter a string")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
+    .max(50)
+    .required("Required"),
+});
+
+const mobileNumberSchema = Yup.object().shape({
+  mobileNumber: Yup.number("Please enter correct Phone number")
+  .required("Required"),
+  //.phone()
+});
+
+const emailSchema = Yup.object().shape({
+  email: Yup.string("Please Enter a String")
+    .email("Invalid email address")
+    .required("Required"),
+});
+
+const passwordSchema = Yup.object().shape({
+  password: Yup.string("Please enter a string")
+     .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+    )
+    .required("Required"),
+});
+
+const retypepasswordSchema = Yup.object().shape({
+  retypepassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Passwords does not match")
+    .required("Confirm Password is required"),
+});
+
 function SignUpPage() {
+  const firebase = useFirebase();
+
+  //state manage of the form input fields
+  var [firstName, setFirstName] = React.useState("");
+  var [lastName, setLastName] = React.useState("");
+  var [email, setEmail] = React.useState("");
+  var [mobileNumber, setMobileNumber] = React.useState(null);
+  var [password, setPassword] = React.useState("");
+  var [retypePsw, setRetypePsw] = React.useState("");
+
+  //Validation
+  var [errorEmail, setErrorEmail] = React.useState(null);
+  var [errorPassword, setErrorPassword] = React.useState(null);
+  var [errorRetypePsw, setErrorRetypePsw] = React.useState(null);
+  var [errorNames, setErrorNames] = React.useState(null);
+  var [signUpFail, setErrorSignUp] = React.useState(null);
+  var [errorMobile, setErrorMobile] = React.useState(null);
+
+  React.useEffect(() => {
+    validateNames();
+    validateMobileNumber();
+    validateEmail();
+    validatePassword();
+    validateRetypePsw();
+  }, [firstName, lastName, mobileNumber, email, password, retypePsw]);
+
+  function signUp() {
+    console.log("SignUp Method");
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((user) => {
+        console.log("Im In");
+        setErrorSignUp({ message: "Successful SignUp" });
+      })
+      .catch((error) => {
+        console.log("Sign In Error");
+        setErrorSignUp({
+          message: "Failed SignUp, Please verify all fields are valid",
+        });
+      });
+  }
+
+  function validateNames() {
+    NameSchema.validate({ name: firstName || lastName })
+      .then(() => {
+        setErrorNames({ valid: true, message: "" });
+        console.log("checked name");
+      })
+      .catch((error) => {
+        setErrorNames({ valid: false, message: error.errors[0] });
+      });
+  }
+  function validateEmail() {
+    emailSchema
+      .validate({ email: email })
+      .then(() => {
+        setErrorEmail({ valid: true, message: "" });
+        console.log("check email");
+      })
+      .catch((error) => {
+        setErrorEmail({ valid: false, message: error.errors[0] });
+      });
+  }
+  function validateMobileNumber() {
+    mobileNumberSchema
+      .validate({ mobileNumber: mobileNumber })
+      .then(() => {
+        setErrorMobile({ valid: true, message: "" });
+        console.log("check mobile");
+      })
+      .catch((error) => {
+        setErrorMobile({ valid: false, message: error.errors[0] });
+      });
+  }
+  function validatePassword() {
+    passwordSchema
+      .validate({ password: password })
+      .then(() => {
+        setErrorPassword({ valid: true, message: "Strong is Password" });
+        console.log("check password");
+      })
+      .catch((error) => {
+        setErrorPassword({ valid: false, message: error.errors[0] });
+      });
+  }
+
+  function validateRetypePsw() {
+    retypepasswordSchema
+      .validate({ retypepassword: retypePsw })
+      .then(() => {
+        setErrorRetypePsw({ valid: true, message: "" });
+        console.log("check confirm psw");
+      })
+      .catch((error) => {
+        setErrorRetypePsw({ valid: false, message: error.errors[0] });
+      });
+  }
+
   const classes = useStyles();
   return (
     <div>
-      <p style={{margin:"40px 0px 0px 0px", padding: "0px 50px 0px"}} >Sign Up</p>
-      <MDBContainer style={{ margin: "10px auto 50px", backgroundColor: "#FFFFFF", padding:"20px"}}>
+      <p style={{ margin: "40px 0px 0px 0px", padding: "0px 50px 0px" }}>
+        Sign Up
+      </p>
+      <MDBContainer
+        style={{
+          margin: "10px auto 50px",
+          backgroundColor: "#FFFFFF",
+          padding: "20px",
+        }}
+      >
         <MDBRow>
           <MDBCol md="8" className={classes.card} style={{ margin: "0 auto" }}>
-                <form>
-                  <p>Error message field</p>
-                  <p className="h4 text-left mb-4">Personal Details</p>
-                  <MDBRow>
-                    <MDBCol md="6">
-                      <label htmlFor="defaultFormRegisterNameEx">
-                        First name
-                      </label>
-                      <input
-                        type="text"
-                        id="defaultFormRegisterNameEx"
-                        className="form-control"
-                        required
-                      />
-                      <br />
-                    </MDBCol>
+            <form>
+              <p>
+                {signUpFail && (!signUpFail.valid ? signUpFail.message : "")}
+              </p>
+              <p className="h4 text-left mb-4">Personal Details</p>
+              <MDBRow>
+                <MDBCol md="6">
+                  <label htmlFor="defaultFormRegisterNameEx">First name</label>
+                  <input
+                    type="text"
+                    id="defaultFormRegisterNameEx"
+                    className="form-control"
+                    onChange={(event) => {
+                      setFirstName(event.target.value);
+                    }}
+                  />
+                  <p>
+                    {errorNames &&
+                      (!errorNames.valid ? errorNames.message : "")}
+                  </p>
+                </MDBCol>
 
-                    <MDBCol md="6">
-                      <label htmlFor="defaultFormRegisterNameEx">
-                        Last Name
-                      </label>
-                      <input
-                        type="text"
-                        id="defaultFormRegisterNameEx"
-                        className="form-control"
-                        required
-                      />
-                      <br />
-                    </MDBCol>
-                  </MDBRow>
-                  <MDBRow>
-                    <MDBCol md="6">
-                      <label htmlFor="defaultFormRegisterEmailEx">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        id="defaultFormRegisterEmailEx"
-                        className="form-control"
-                        required
-                      />
-                      <br />
-                    </MDBCol>
+                <MDBCol md="6">
+                  <label htmlFor="defaultFormRegisterNameEx">Last Name</label>
+                  <input
+                    type="text"
+                    id="defaultFormRegisterNameEx"
+                    className="form-control"
+                    onChange={(event) => {
+                      setLastName(event.target.value);
+                    }}
+                  />
+                  <p>
+                    {errorNames &&
+                      (!errorNames.valid ? errorNames.message : "")}
+                  </p>
+                </MDBCol>
+              </MDBRow>
+              <MDBRow>
+                <MDBCol md="6">
+                  <label htmlFor="defaultFormRegisterEmailEx">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="defaultFormRegisterEmailEx"
+                    className="form-control"
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                    }}
+                  />
+                  <p>
+                    {errorEmail &&
+                      (!errorEmail.valid ? errorEmail.message : "")}
+                  </p>
+                </MDBCol>
 
-                    <MDBCol md="6">
-                      <label htmlFor="defaultFormRegisterMobileEx">
-                        Mobile Number
-                      </label>
-                      <input
-                        type="email"
-                        id="defaultFormMobileEx"
-                        className="form-control"
-                        required
-                      />
-                      <br />
-                    </MDBCol>
-                  </MDBRow>
-                  <MDBRow>
-                    <MDBCol md="6">
-                      <label htmlFor="defaultFormRegisterPasswordEx">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        id="defaultFormRegisterPasswordEx"
-                        className="form-control"
-                        required
-                      />
-                      <br />
-                    </MDBCol>
+                <MDBCol md="6">
+                  <label htmlFor="defaultFormRegisterMobileEx">
+                    Mobile Number
+                  </label>
+                  <input
+                    type="email"
+                    id="defaultFormMobileEx"
+                    className="form-control"
+                    onChange={(event) => {
+                      setMobileNumber(event.target.value);
+                    }}
+                  />
+                  <p>
+                    {errorMobile &&
+                      (!errorMobile.valid ? errorMobile.message : "")}
+                  </p>
+                </MDBCol>
+              </MDBRow>
+              <MDBRow>
+                <MDBCol md="6">
+                  <label htmlFor="defaultFormRegisterPasswordEx">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    id="defaultFormRegisterPasswordEx"
+                    className="form-control"
+                    onChange={(event) => {
+                      setPassword(event.target.value);
+                    }}
+                  />
+                  <p>
+                    {errorPassword &&
+                      (!errorPassword.valid ? errorPassword.message : "")}
+                  </p>
+                </MDBCol>
 
-                    <MDBCol md="6">
-                      <label htmlFor="defaultFormRegisterPasswordEx">
-                        Retype Password
-                      </label>
-                      <input
-                        type="password"
-                        id="defaultFormRegisterPasswordEx"
-                        className="form-control"
-                        required
-                      />
-                     
-                    </MDBCol>
-                  </MDBRow>
+                <MDBCol md="6">
+                  <label htmlFor="defaultFormRegisterPasswordEx">
+                    Retype Password
+                  </label>
+                  <input
+                    type="password"
+                    id="defaultFormRegisterPasswordEx"
+                    className="form-control"
+                    onChange={(event) => {
+                      setRetypePsw(event.target.value);
+                    }}
+                  />
+                  <p>
+                    {errorRetypePsw &&
+                      (!errorRetypePsw.valid ? errorRetypePsw.message : "")}
+                  </p>
+                </MDBCol>
+              </MDBRow>
 
-                  <div className="text-center mt-4">
-                    <MDBBtn color="red-text"  className="rounded amber" type="submit">
-                      Register
-                    </MDBBtn>
-                  </div>
-                </form>
-              
+              <div className="text-center mt-4">
+                <MDBBtn
+                  color="red-text"
+                  className="rounded amber"
+                  onClick={() => {
+                    console.log("clicked");
+                    signUp(email, password);
+                  }}
+                >
+                  Register
+                </MDBBtn>
+              </div>
+            </form>
           </MDBCol>
         </MDBRow>
       </MDBContainer>

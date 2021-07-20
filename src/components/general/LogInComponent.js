@@ -12,7 +12,8 @@ const emailSchema = Yup.object().shape({
 });
 
 const passwordSchema = Yup.object().shape({
-  password: Yup.string("Please enter a string").required("Required"),
+  password: Yup.string("Please enter a string")
+      .required("Required"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +35,7 @@ const LogInComponent = ({ isShowLogin }) => {
   //Validation
   var [errorEmail, setErrorEmail] = React.useState(null);
   var [errorPassword, setErrorPassword] = React.useState(null);
+  var [formError, setFormError]=React.useState(null);
 
   React.useEffect(() => {
     validateEmail();
@@ -47,9 +49,11 @@ const LogInComponent = ({ isShowLogin }) => {
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
         console.log("Im In");
+        setFormError({message:"SuccessFull Login"})
       })
       .catch((error) => {
         console.log("Log In Error");
+        setFormError({message:"Login failed"})
       });
   }
 
@@ -87,7 +91,10 @@ const LogInComponent = ({ isShowLogin }) => {
               <form>
                 <p className="h4 text-center py-4">LOGIN</p>
                 <div>
-                  <p>Successful Login: div error message</p>
+                  <p> 
+                    {formError &&
+                        (!formError.valid ? formError.message : "")}
+                  </p>
                 </div>
                 <MDBRow>
                   <MDBCol md="12">
