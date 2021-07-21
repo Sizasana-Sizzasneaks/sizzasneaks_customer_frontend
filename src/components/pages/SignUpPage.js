@@ -92,6 +92,7 @@ function SignUpPage() {
       .required("Confirm Password is required"),
   });
 
+  // Change this sign up to an Accout conversion, where the current Anonyous account becomes a credential account.
   function signUp() {
     console.log("SignUp Method");
     firebase

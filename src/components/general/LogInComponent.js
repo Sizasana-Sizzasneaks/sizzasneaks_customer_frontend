@@ -48,6 +48,8 @@ const LogInComponent = ({ isShowLogin }) => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
+        // Copy Shopping Cart of Anonyomouse user that was there before and add to Logged In accounts shopping cart.
+        //Then delete the Anonymouse Account.
         console.log("Im In");
         setFormError({message:"SuccessFull Login"})
       })
