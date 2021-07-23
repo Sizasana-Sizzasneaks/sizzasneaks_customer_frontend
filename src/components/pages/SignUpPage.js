@@ -1,5 +1,6 @@
 import React from "react";
 import * as Yup from "yup";
+import axios from "axios";
 import { useFirebase } from "react-redux-firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import "mdbreact/dist/css/mdb.css";
@@ -41,7 +42,8 @@ const phoneRegExp =
 
 const mobileNumberSchema = Yup.object().shape({
   mobileNumber: Yup.string("Please enter a string")
-    .matches(phoneRegExp, "Phone number is not valid").min(10)
+    .matches(phoneRegExp, "Phone number is not valid")
+    .min(10)
     .required("Required"),
   //.phone()
 });
@@ -95,19 +97,41 @@ function SignUpPage() {
   // Change this sign up to an Accout conversion, where the current Anonyous account becomes a credential account.
   function signUp() {
     console.log("SignUp Method");
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        console.log("Im In");
-        setErrorSignUp({ message: "Successful SignUp" });
-      })
-      .catch((error) => {
-        console.log("Sign In Error");
-        setErrorSignUp({
-          message: "Failed SignUp, Please verify all fields are valid",
-        });
-      });
+
+    // firebase
+    //   .auth()
+    //   .currentUser.getIdToken(true)
+    //   .then((idToken) => {
+    //     const config = {
+    //       headers: { Authorization: "Bearer " + idToken },
+    //     };
+
+    //     console.log(idToken);
+
+    //     axios
+    //       .post("http://localhost:5000/user", { hey: "test" }, config)
+    //       .then(() => {
+    //         console.log("Then");
+    //       })
+    //       .catch((error) => {
+    //         console.log("error");
+    //         console.log(error);
+    //       });
+    //   });
+
+    // firebase
+    //   .auth()
+    //   .createUserWithEmailAndPassword(email, password)
+    //   .then((user) => {
+    //     console.log("Im In");
+    //     setErrorSignUp({ message: "Successful SignUp" });
+    //   })
+    //   .catch((error) => {
+    //     console.log("Sign In Error");
+    //     setErrorSignUp({
+    //       message: "Failed SignUp, Please verify all fields are valid",
+    //     });
+    //   });
   }
 
   function validateFirstName() {
@@ -312,7 +336,8 @@ function SignUpPage() {
                 <MDBBtn
                   color="red-text"
                   className="rounded amber"
-                  onClick={() => {
+                  onClick={(event) => {
+                    event.preventDefault();
                     console.log("clicked");
                     signUp();
                   }}
