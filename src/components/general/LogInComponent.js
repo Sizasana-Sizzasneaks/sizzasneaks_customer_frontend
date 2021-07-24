@@ -149,7 +149,8 @@ const LogInComponent = ({ isShowLogin }) => {
                     color="red-text"
                     className="rounded amber"
                     // type="submit"
-                    onClick={() => {
+                    onClick={(event) => {
+                      event.preventDefault();
                       console.log("clicked");
                         logIn(email, password);
                     }}

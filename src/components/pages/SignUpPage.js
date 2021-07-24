@@ -1,10 +1,13 @@
 import React from "react";
 import * as Yup from "yup";
 import axios from "axios";
+import { useDispatch } from "react-redux";
 import { useFirebase } from "react-redux-firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-react-ui-kit";
+
+import { getUserProfile } from "../../redux/actions/profile";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,6 +62,7 @@ const passwordSchema = Yup.object().shape({
 
 function SignUpPage() {
   const firebase = useFirebase();
+  const dispatch = useDispatch();
 
   //state manage of the form input fields
   var [firstName, setFirstName] = React.useState("");
@@ -98,40 +102,57 @@ function SignUpPage() {
   function signUp() {
     console.log("SignUp Method");
 
-    // firebase
-    //   .auth()
-    //   .currentUser.getIdToken(true)
-    //   .then((idToken) => {
-    //     const config = {
-    //       headers: { Authorization: "Bearer " + idToken },
-    //     };
+    var credential = firebase.auth.EmailAuthProvider.credential(
+      email,
+      password
+    );
 
-    //     console.log(idToken);
+    var user = firebase.auth().currentUser;
 
-    //     axios
-    //       .post("http://localhost:5000/user", { hey: "test" }, config)
-    //       .then(() => {
-    //         console.log("Then");
-    //       })
-    //       .catch((error) => {
-    //         console.log("error");
-    //         console.log(error);
-    //       });
-    //   });
+    user
+      .linkWithCredential(credential)
+      .then(() => {
+        console.log("Anonymous account successfully upgraded");
+        firebase
+          .auth()
+          .signOut()
+          .then(() => {
+            user
+              .getIdToken(true)
+              .then((idToken) => {
+                console.log(idToken);
 
-    // firebase
-    //   .auth()
-    //   .createUserWithEmailAndPassword(email, password)
-    //   .then((user) => {
-    //     console.log("Im In");
-    //     setErrorSignUp({ message: "Successful SignUp" });
-    //   })
-    //   .catch((error) => {
-    //     console.log("Sign In Error");
-    //     setErrorSignUp({
-    //       message: "Failed SignUp, Please verify all fields are valid",
-    //     });
-    //   });
+                const config = {
+                  headers: { Authorization: "Bearer " + idToken },
+                };
+
+                axios.patch(
+                  "http://localhost:5000/user",
+                  {
+                    firstName,
+                    lastName,
+                    mobileNumber,
+                    email,
+                  },
+                  config
+                );
+              })
+              .then(() => {
+                console.log("Patch Request Made");
+
+                // Sign-out successfull
+                console.log("Sign Out");
+                firebase.auth().signInWithEmailAndPassword(email, password);
+              })
+              .then(() => {
+                console.log("Sign Up Done");
+                dispatch(getUserProfile())
+              });
+          });
+      })
+      .catch((error) => {
+        console.log("Error upgrading anonymous account", error);
+      });
   }
 
   function validateFirstName() {
