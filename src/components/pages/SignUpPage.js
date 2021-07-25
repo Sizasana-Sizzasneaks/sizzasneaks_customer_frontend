@@ -9,6 +9,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-react-ui-kit";
 import { getUserProfile } from "../../redux/actions/profile";
 
 import * as InputValidation from "../../services/inputValidation.js";
+import { signUp } from "../../services/authentication.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,61 +43,61 @@ function SignUpPage() {
   var [signUpFail, setErrorSignUp] = React.useState(null);
 
   // Change this sign up to an Accout conversion, where the current Anonyous account becomes a credential account.
-  function signUp() {
-    console.log("SignUp Method");
+  // function signUp() {
+  //   console.log("SignUp Method");
 
-    var credential = firebase.auth.EmailAuthProvider.credential(
-      email,
-      password
-    );
+  //   var credential = firebase.auth.EmailAuthProvider.credential(
+  //     email,
+  //     password
+  //   );
 
-    var user = firebase.auth().currentUser;
+  //   var user = firebase.auth().currentUser;
 
-    user
-      .linkWithCredential(credential)
-      .then(() => {
-        console.log("Anonymous account successfully upgraded");
-        firebase
-          .auth()
-          .signOut()
-          .then(() => {
-            user
-              .getIdToken(true)
-              .then((idToken) => {
-                console.log(idToken);
+  //   user
+  //     .linkWithCredential(credential)
+  //     .then(() => {
+  //       console.log("Anonymous account successfully upgraded");
+  //       firebase
+  //         .auth()
+  //         .signOut()
+  //         .then(() => {
+  //           user
+  //             .getIdToken(true)
+  //             .then((idToken) => {
+  //               console.log(idToken);
 
-                const config = {
-                  headers: { Authorization: "Bearer " + idToken },
-                };
+  //               const config = {
+  //                 headers: { Authorization: "Bearer " + idToken },
+  //               };
 
-                axios.patch(
-                  "http://localhost:5000/user",
-                  {
-                    firstName,
-                    lastName,
-                    mobileNumber,
-                    email,
-                  },
-                  config
-                );
-              })
-              .then(() => {
-                console.log("Patch Request Made");
+  //               axios.patch(
+  //                 "http://localhost:5000/user",
+  //                 {
+  //                   firstName,
+  //                   lastName,
+  //                   mobileNumber,
+  //                   email,
+  //                 },
+  //                 config
+  //               );
+  //             })
+  //             .then(() => {
+  //               console.log("Patch Request Made");
 
-                // Sign-out successfull
-                console.log("Sign Out");
-                firebase.auth().signInWithEmailAndPassword(email, password);
-              })
-              .then(() => {
-                console.log("Sign Up Done");
-                dispatch(getUserProfile());
-              });
-          });
-      })
-      .catch((error) => {
-        console.log("Error upgrading anonymous account", error);
-      });
-  }
+  //               // Sign-out successfull
+  //               console.log("Sign Out");
+  //               firebase.auth().signInWithEmailAndPassword(email, password);
+  //             })
+  //             .then(() => {
+  //               console.log("Sign Up Done");
+  //               dispatch(getUserProfile());
+  //             });
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error upgrading anonymous account", error);
+  //     });
+  // }
 
   const classes = useStyles();
   return (
@@ -218,7 +219,9 @@ function SignUpPage() {
                     onChange={async (event) => {
                       await setPassword(event.target.value);
                       var passwordValidationResult =
-                        await InputValidation.validateSignUpPassword(event.target.value);
+                        await InputValidation.validateSignUpPassword(
+                          event.target.value
+                        );
                       setErrorPassword(passwordValidationResult);
                     }}
                   />
@@ -257,10 +260,16 @@ function SignUpPage() {
                 <MDBBtn
                   color="red-text"
                   className="rounded amber"
-                  onClick={(event) => {
+                  onClick={async (event) => {
                     event.preventDefault();
-                    console.log("clicked");
-                    signUp();
+                   
+                    var signUpResult = await signUp({
+                      firstName,
+                      lastName,
+                      email,
+                      mobileNumber,
+                      password,
+                    });
                   }}
                 >
                   Register

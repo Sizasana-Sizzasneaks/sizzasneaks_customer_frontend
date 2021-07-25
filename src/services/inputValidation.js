@@ -30,11 +30,9 @@ export const validateEmail = (email) => {
   return emailSchema
     .validate({ email: email })
     .then(() => {
-      console.log("validateEmail - work");
       return { valid: true, message: null };
     })
     .catch((error) => {
-      console.log("validateEmail - Fail");
       return { valid: false, message: error.errors[0] };
     });
 };

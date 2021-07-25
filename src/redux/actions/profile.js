@@ -1,22 +1,17 @@
-import axios from "axios";
-import firebase from "../../config/firebaseConfig.js";
+import { getUserDetails } from "../../api/users.js";
 
-export const getUserProfile = () => {
-  var user = firebase.auth().currentUser;
-  return (dispatch) => {
-    var data;
+export const getUserProfile = () => async (dispatch) => {
+  var getUserDetailsResult = await getUserDetails();
 
-    user.getIdToken(true).then((idToken) => {
-      const config = {
-        headers: { Authorization: "Bearer " + idToken },
-      };
-
-      axios.get("http://localhost:5000/user", config).then((res) => {
-        if (res.status === 200) {
-          data = res.body;
-        }
-        dispatch({ type: "GET_USER_PROFILE", payload: data });
-      });
+  if (getUserDetailsResult.ok === true) {
+    dispatch({
+      type: "GET_USER_PROFILE",
+      payload: getUserDetailsResult.data,
     });
-  };
+  } else {
+    dispatch({
+      type: "GET_USER_PROFILE",
+      payload: { ok: false, error: "Failed Geting Details From backend" },
+    });
+  }
 };

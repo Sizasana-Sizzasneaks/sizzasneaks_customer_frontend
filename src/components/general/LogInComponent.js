@@ -1,6 +1,6 @@
 import React from "react";
-import { useFirebase } from "react-redux-firebase";
 import * as InputValidation from "../../services/inputValidation.js";
+import { logIn } from "../../services/authentication.js";
 
 //Styles & Themes
 import { MDBRow, MDBCol, MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function LogInComponent({ isShowLogin }) {
-  const firebase = useFirebase();
 
   //Form State
   var [email, setEmail] = React.useState("");
@@ -27,25 +26,6 @@ function LogInComponent({ isShowLogin }) {
   var [errorEmail, setErrorEmail] = React.useState(null);
   var [errorPassword, setErrorPassword] = React.useState(null);
   var [formError, setFormError] = React.useState(null);
-
-  //Log In User Function
-  function logIn(email, password) {
-    console.log("login Method");
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        /* Build Two
-         Copy Shopping Cart of Anonyomous user that was there
-         before and add to Logged In account's shopping cart.
-         Then delete the Anonymouse Account. */
-        setFormError({ message: "SuccessFull Login" });
-      })
-      .catch((error) => {
-        console.log("Log In Error");
-        setFormError({ message: "Login failed" });
-      });
-  }
 
   const classes = useStyles();
 
@@ -105,7 +85,6 @@ function LogInComponent({ isShowLogin }) {
                           await InputValidation.validateLogInPassword(
                             event.target.value
                           );
-                        console.log(passwordValidationResult);
                         setErrorPassword(passwordValidationResult);
                       }}
                     />
@@ -122,7 +101,13 @@ function LogInComponent({ isShowLogin }) {
                 </MDBRow>
 
                 <div className="text-center mt-4">
-                  <MDBBtn color="red-text" className="rounded amber">
+                  <MDBBtn color="red-text" className="rounded amber"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    console.log("clicked");
+                    var logInResult = logIn(email, password);
+                    console.log(logInResult);
+                  }}>
                     LOGIN
                   </MDBBtn>
                   <p>

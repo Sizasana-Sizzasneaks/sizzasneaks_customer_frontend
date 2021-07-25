@@ -6,10 +6,10 @@ var data = {
 };
 
 const profileState = function (state = data, action) {
-  if (action.type === "GET_USER_PROFILE") {
-    return action.payload;
-  }
-  else{
+  switch (action.type) {
+    case "GET_USER_PROFILE":
+      return action.payload;
+    default:
       return state;
   }
 };
