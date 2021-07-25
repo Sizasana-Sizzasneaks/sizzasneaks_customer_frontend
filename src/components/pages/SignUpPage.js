@@ -1,5 +1,4 @@
 import React from "react";
-import * as Yup from "yup";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useFirebase } from "react-redux-firebase";
@@ -8,6 +7,8 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-react-ui-kit";
 
 import { getUserProfile } from "../../redux/actions/profile";
+
+import * as InputValidation from "../../services/inputValidation.js";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,47 +19,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-
-//The following are schemas used to display error message
-const firstNameSchema = Yup.object().shape({
-  firstName: Yup.string("Please enter a string")
-    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
-    .max(50)
-    .required("Required"),
-});
-
-const lastNameSchema = Yup.object().shape({
-  lastName: Yup.string("Please enter a string")
-    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
-    .max(50)
-    .required("Required"),
-});
-
-const emailSchema = Yup.object().shape({
-  email: Yup.string("Please Enter a String")
-    .email("Invalid email address")
-    .required("Required"),
-});
-
-const phoneRegExp =
-  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
-const mobileNumberSchema = Yup.object().shape({
-  mobileNumber: Yup.string("Please enter a string")
-    .matches(phoneRegExp, "Phone number is not valid")
-    .min(10)
-    .required("Required"),
-  //.phone()
-});
-
-const passwordSchema = Yup.object().shape({
-  password: Yup.string("Please enter a string")
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
-    )
-    .required("Required"),
-});
 
 function SignUpPage() {
   const firebase = useFirebase();
@@ -73,30 +33,13 @@ function SignUpPage() {
   var [retypePsw, setRetypePsw] = React.useState("");
 
   //Validation
-  var [errorEmail, setErrorEmail] = React.useState(null);
-  var [errorPassword, setErrorPassword] = React.useState(null);
-  var [errorRetypePsw, setErrorRetypePsw] = React.useState(null);
   var [errorFirstName, setErrorFirstName] = React.useState(null);
   var [errorLastName, setErrorLastName] = React.useState(null);
-  var [signUpFail, setErrorSignUp] = React.useState(null);
+  var [errorEmail, setErrorEmail] = React.useState(null);
   var [errorMobile, setErrorMobile] = React.useState(null);
-
-  React.useEffect(() => {
-    validateFirstName();
-    validateLastName();
-    validateMobileNumber();
-    validateEmail();
-    validatePassword();
-    validateRetypePsw();
-  }, [firstName, lastName, mobileNumber, email, password, retypePsw]);
-
-  const retypePasswordSchema = Yup.object().shape({
-    retypepassword: Yup.string()
-      .test("mactch", "Password does not match", (retypePasswordCheck) => {
-        return retypePasswordCheck === password;
-      })
-      .required("Confirm Password is required"),
-  });
+  var [errorPassword, setErrorPassword] = React.useState(null);
+  var [errorRetypePsw, setErrorRetypePsw] = React.useState(null);
+  var [signUpFail, setErrorSignUp] = React.useState(null);
 
   // Change this sign up to an Accout conversion, where the current Anonyous account becomes a credential account.
   function signUp() {
@@ -146,82 +89,12 @@ function SignUpPage() {
               })
               .then(() => {
                 console.log("Sign Up Done");
-                dispatch(getUserProfile())
+                dispatch(getUserProfile());
               });
           });
       })
       .catch((error) => {
         console.log("Error upgrading anonymous account", error);
-      });
-  }
-
-  function validateFirstName() {
-    firstNameSchema
-      .validate({ firstName: firstName })
-      .then(() => {
-        setErrorFirstName({ valid: true, message: "" });
-        console.log("checked name");
-      })
-      .catch((error) => {
-        setErrorFirstName({ valid: false, message: error.errors[0] });
-      });
-  }
-
-  function validateLastName() {
-    lastNameSchema
-      .validate({ lastName: lastName })
-      .then(() => {
-        setErrorLastName({ valid: true, message: "" });
-        console.log("checked name");
-      })
-      .catch((error) => {
-        setErrorLastName({ valid: false, message: error.errors[0] });
-      });
-  }
-
-  function validateEmail() {
-    emailSchema
-      .validate({ email: email })
-      .then(() => {
-        setErrorEmail({ valid: true, message: "" });
-        console.log("check email");
-      })
-      .catch((error) => {
-        setErrorEmail({ valid: false, message: error.errors[0] });
-      });
-  }
-  function validateMobileNumber() {
-    mobileNumberSchema
-      .validate({ mobileNumber: mobileNumber })
-      .then(() => {
-        setErrorMobile({ valid: true, message: "" });
-        console.log("check mobile");
-      })
-      .catch((error) => {
-        setErrorMobile({ valid: false, message: error.errors[0] });
-      });
-  }
-  function validatePassword() {
-    passwordSchema
-      .validate({ password: password })
-      .then(() => {
-        setErrorPassword({ valid: true, message: "Strong is Password" });
-        console.log("check password");
-      })
-      .catch((error) => {
-        setErrorPassword({ valid: false, message: error.errors[0] });
-      });
-  }
-
-  function validateRetypePsw() {
-    retypePasswordSchema
-      .validate({ retypepassword: retypePsw })
-      .then(() => {
-        setErrorRetypePsw({ valid: true, message: "" });
-        console.log("check confirm psw");
-      })
-      .catch((error) => {
-        setErrorRetypePsw({ valid: false, message: error.errors[0] });
       });
   }
 
@@ -252,8 +125,12 @@ function SignUpPage() {
                     type="text"
                     id="defaultFormRegisterNameEx"
                     className="form-control"
-                    onChange={(event) => {
-                      setFirstName(event.target.value);
+                    value={firstName}
+                    onChange={async (event) => {
+                      await setFirstName(event.target.value);
+                      var firstNameValidationResult =
+                        await InputValidation.validateName(event.target.value);
+                      setErrorFirstName(firstNameValidationResult);
                     }}
                   />
                   <p>
@@ -268,8 +145,12 @@ function SignUpPage() {
                     type="text"
                     id="defaultFormRegisterNameEx"
                     className="form-control"
-                    onChange={(event) => {
-                      setLastName(event.target.value);
+                    value={lastName}
+                    onChange={async (event) => {
+                      await setLastName(event.target.value);
+                      var lastNameValidationResult =
+                        await InputValidation.validateName(event.target.value);
+                      setErrorLastName(lastNameValidationResult);
                     }}
                   />
                   <p>
@@ -287,8 +168,12 @@ function SignUpPage() {
                     type="email"
                     id="defaultFormRegisterEmailEx"
                     className="form-control"
-                    onChange={(event) => {
-                      setEmail(event.target.value);
+                    value={email}
+                    onChange={async (event) => {
+                      await setEmail(event.target.value);
+                      var emailValidationResult =
+                        await InputValidation.validateEmail(event.target.value);
+                      setErrorEmail(emailValidationResult);
                     }}
                   />
                   <p>
@@ -305,8 +190,14 @@ function SignUpPage() {
                     type="email"
                     id="defaultFormMobileEx"
                     className="form-control"
-                    onChange={(event) => {
-                      setMobileNumber(event.target.value);
+                    value={mobileNumber}
+                    onChange={async (event) => {
+                      await setMobileNumber(event.target.value);
+                      var mobileNumberValidationResult =
+                        await InputValidation.validateMobileNumber(
+                          event.target.value
+                        );
+                      setErrorMobile(mobileNumberValidationResult);
                     }}
                   />
                   <p>
@@ -324,8 +215,11 @@ function SignUpPage() {
                     type="password"
                     id="defaultFormRegisterPasswordEx"
                     className="form-control"
-                    onChange={(event) => {
-                      setPassword(event.target.value);
+                    onChange={async (event) => {
+                      await setPassword(event.target.value);
+                      var passwordValidationResult =
+                        await InputValidation.validateSignUpPassword(event.target.value);
+                      setErrorPassword(passwordValidationResult);
                     }}
                   />
                   <p>
@@ -342,8 +236,14 @@ function SignUpPage() {
                     type="password"
                     id="defaultFormRegisterPasswordEx"
                     className="form-control"
-                    onChange={(event) => {
-                      setRetypePsw(event.target.value);
+                    onChange={async (event) => {
+                      await setRetypePsw(event.target.value);
+                      var retypePasswordValidationResult =
+                        await InputValidation.validateRetypePassword(
+                          password,
+                          event.target.value
+                        );
+                      setErrorRetypePsw(retypePasswordValidationResult);
                     }}
                   />
                   <p>
