@@ -40,64 +40,7 @@ function SignUpPage() {
   var [errorMobile, setErrorMobile] = React.useState(null);
   var [errorPassword, setErrorPassword] = React.useState(null);
   var [errorRetypePsw, setErrorRetypePsw] = React.useState(null);
-  var [signUpFail, setErrorSignUp] = React.useState(null);
-
-  // Change this sign up to an Accout conversion, where the current Anonyous account becomes a credential account.
-  // function signUp() {
-  //   console.log("SignUp Method");
-
-  //   var credential = firebase.auth.EmailAuthProvider.credential(
-  //     email,
-  //     password
-  //   );
-
-  //   var user = firebase.auth().currentUser;
-
-  //   user
-  //     .linkWithCredential(credential)
-  //     .then(() => {
-  //       console.log("Anonymous account successfully upgraded");
-  //       firebase
-  //         .auth()
-  //         .signOut()
-  //         .then(() => {
-  //           user
-  //             .getIdToken(true)
-  //             .then((idToken) => {
-  //               console.log(idToken);
-
-  //               const config = {
-  //                 headers: { Authorization: "Bearer " + idToken },
-  //               };
-
-  //               axios.patch(
-  //                 "http://localhost:5000/user",
-  //                 {
-  //                   firstName,
-  //                   lastName,
-  //                   mobileNumber,
-  //                   email,
-  //                 },
-  //                 config
-  //               );
-  //             })
-  //             .then(() => {
-  //               console.log("Patch Request Made");
-
-  //               // Sign-out successfull
-  //               console.log("Sign Out");
-  //               firebase.auth().signInWithEmailAndPassword(email, password);
-  //             })
-  //             .then(() => {
-  //               console.log("Sign Up Done");
-  //               dispatch(getUserProfile());
-  //             });
-  //         });
-  //     })
-  //     .catch((error) => {
-  //       console.log("Error upgrading anonymous account", error);
-  //     });
-  // }
+  var [signUpState, setSignUpState] = React.useState(null);
 
   const classes = useStyles();
   return (
@@ -116,7 +59,7 @@ function SignUpPage() {
           <MDBCol md="8" className={classes.card} style={{ margin: "0 auto" }}>
             <form>
               <p>
-                {signUpFail && (!signUpFail.valid ? signUpFail.message : "")}
+                {signUpState && signUpState.message}
               </p>
               <p className="h4 text-left mb-4">Personal Details</p>
               <MDBRow>
@@ -270,6 +213,9 @@ function SignUpPage() {
                       mobileNumber,
                       password,
                     });
+
+                    setSignUpState(signUpResult);
+                    console.log(signUpResult);
                   }}
                 >
                   Register

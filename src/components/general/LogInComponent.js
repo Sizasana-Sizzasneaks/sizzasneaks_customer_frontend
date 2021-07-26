@@ -25,7 +25,7 @@ function LogInComponent({ isShowLogin }) {
   //Form Validation State
   var [errorEmail, setErrorEmail] = React.useState(null);
   var [errorPassword, setErrorPassword] = React.useState(null);
-  var [formError, setFormError] = React.useState(null);
+  var [logInState, setLogInState] = React.useState(null);
 
   const classes = useStyles();
 
@@ -39,7 +39,7 @@ function LogInComponent({ isShowLogin }) {
                 <p className="h4 text-center py-4">LOGIN</p>
                 <div>
                   <p>
-                    {formError && (!formError.valid ? formError.message : "")}
+                    {logInState && logInState.message}
                   </p>
                 </div>
                 <MDBRow>
@@ -102,10 +102,10 @@ function LogInComponent({ isShowLogin }) {
 
                 <div className="text-center mt-4">
                   <MDBBtn color="red-text" className="rounded amber"
-                  onClick={(event) => {
+                  onClick={async (event) => {
                     event.preventDefault();
-                    console.log("clicked");
-                    var logInResult = logIn(email, password);
+                    var logInResult =await logIn(email, password);
+                    setLogInState(logInResult);
                     console.log(logInResult);
                   }}>
                     LOGIN

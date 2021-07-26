@@ -17,6 +17,8 @@ import firebase from "./config/firebaseConfig.js";
 import store from "./redux/index.js";
 import createGuestUser from "./services/createGuestUser.js";
 
+import {getUserProfile} from "./redux/actions/profile.js"
+
 dotenv.config();
 
 const rrfConfig = {
@@ -39,6 +41,13 @@ function appStart() {
       //We create a Guest User Now
       createGuestUser();
     } else {
+
+      const state = store.getState();
+
+      if(!state.firebase.auth.isAnonymous){
+        //store.dispatch(getUserProfile());
+        console.log("Profile Retrieved");
+      }
       //Has Loaded & Not Empty - Has User
       //We Close the Listener
       subscription();

@@ -2,13 +2,14 @@ import { getFirebase } from "react-redux-firebase";
 import * as USER_API from "../api/users.js";
 import store from "../redux/index.js";
 import { getUserProfile } from "../redux/actions/profile.js";
-
+import createGuestUser from "./createGuestUser.js";
 
 // Firebase Fuction for Logging In a User.
-export const logIn = (email, password) => {
+export const logIn = async (email, password) => {
   var firebase = getFirebase();
 
-  return firebase
+  var output;
+  await firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then((user) => {
@@ -16,13 +17,28 @@ export const logIn = (email, password) => {
          Copy Shopping Cart of Anonyomous user that was there
          before and add to Logged In account's shopping cart.
          Then delete the Anonymouse Account. */
-      return { ok: true, message: null };
+
+      //store.dispatch(getUserProfile());
+      output = { ok: true, message: "Log In Succesfull" };
     })
     .catch((error) => {
-      console.log("Log In Error");
-      console.log("error");
-      return { ok: false, message: "Log In Error" };
+      console.log(error.code);
+      console.log(error.message);
+      if (
+        error.code === "auth/user-not-found" ||
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/too-many-requests"
+      ) {
+        output = {
+          ok: false,
+          message: "Invalid Log In Credentials, Try Again",
+        };
+      } else {
+        output = { ok: false, message: "Log In Unsuccesfull" };
+      }
     });
+
+  return output;
 };
 
 // Firebase Fuction for Signing Up a New User.
@@ -36,12 +52,42 @@ export const signUp = async ({
   password,
 }) => {
   console.log("SignUp Method");
-  var firebase = getFirebase();
 
-  var credential = firebase.auth.EmailAuthProvider.credential(email, password);
-  var user = firebase.auth().currentUser;
+  const state = store.getState();
 
-  await user.linkWithCredential(credential);
+  if (!state.firebase.auth.isAnonymous) {
+    var vanillaSignUpResult = await vanillaSignUp(email, password);
+
+    console.log(vanillaSignUpResult);
+    if (vanillaSignUpResult.ok === false) {
+      //Vanilla Sign Up Failed
+      console.log(vanillaSignUpResult);
+      return vanillaSignUpResult;
+    }
+  } else {
+    var upgradeAnonymousAccountResult = await upgradeAnonymousAccount(
+      email,
+      password
+    );
+
+    if (upgradeAnonymousAccountResult.ok === true) {
+      var signOutResult = await signOutCurrentUser();
+      if (signOutResult.ok === true) {
+        var logInResult = await logIn(email, password);
+
+        if (logInResult.ok === false) {
+          //Failed Login User
+          return logInResult;
+        }
+      } else {
+        // Failed To Sign Out
+        return signOutResult;
+      }
+    } else {
+      //Failed Upgrade Account Returned
+      return upgradeAnonymousAccountResult;
+    }
+  }
 
   var getTokenResult = await getCurrentUserIdToken();
 
@@ -54,21 +100,8 @@ export const signUp = async ({
     });
 
     if (updateDetailsCallResult.ok === true) {
-      var signOutResult = await signOutCurrentUser();
-      if (signOutResult.ok === true) {
-        var logInResult = await logIn(email, password);
-
-        if (logInResult.ok === true) {
-          store.dispatch(getUserProfile());
-          return { ok: true, data: "Succesfull Sign Up" };
-        } else {
-          //Failed Login User
-          return logInResult;
-        }
-      } else {
-        // Failed To Sign Out
-        return signOutResult;
-      }
+      //store.dispatch(getUserProfile());
+      return { ok: true, message: "Sign Up Succesfull" };
     } else {
       // Update Backend Failed
       return updateDetailsCallResult;
@@ -79,6 +112,42 @@ export const signUp = async ({
   }
 };
 
+async function upgradeAnonymousAccount(email, password) {
+  var firebase = await getFirebase();
+
+  var credential = firebase.auth.EmailAuthProvider.credential(email, password);
+  var user = await firebase.auth().currentUser;
+
+  var output;
+  await user
+    .linkWithCredential(credential)
+    .then(() => {
+      output = { ok: true, message: "Account Upgrade Succesfull" };
+    })
+    .catch((error) => {
+      output = authErrorHandling(error);
+    });
+
+  return output;
+}
+
+async function vanillaSignUp(email, password) {
+  var firebase = getFirebase();
+
+  var output;
+  await firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((UserCredential) => {
+      output = { ok: true, message: "Sign Up Succesfull" };
+    })
+    .catch((error) => {
+      output = authErrorHandling(error);
+    });
+
+  return output;
+}
+
 //Firebase Fuction for Logging Out the Current User
 export const signOutCurrentUser = () => {
   var firebase = getFirebase();
@@ -87,26 +156,42 @@ export const signOutCurrentUser = () => {
     .auth()
     .signOut()
     .then(() => {
-      return { ok: true };
+      return { ok: true, message: "Sign Out Succesfull" };
     })
     .catch((error) => {
-      return { ok: false, error: error };
+      return { ok: false, message: "Sign Out Failed" };
     });
 };
 
 //Firebase Fuction for getting the ID Token of the Current User
-
-export const getCurrentUserIdToken = () => {
+export const getCurrentUserIdToken = async () => {
   var firebase = getFirebase();
-
-  return firebase
+  var output;
+  await firebase
     .auth()
     .currentUser.getIdToken(true)
     .then((idToken) => {
-      return { ok: true, data: idToken };
-      
+      output = { ok: true, data: idToken };
     })
     .catch((error) => {
-      return { ok: false, error: error };
+      output = { ok: false, message: "Failed to get Id Token" };
     });
+  return output;
 };
+
+
+//Helper Functions
+
+function authErrorHandling(error){
+  var output
+  if (error.code === "auth/email-already-in-use") {
+    output = { ok: false, message: "Email Address already in Use" };
+  } else if (error.code === "auth/invalid-email") {
+    output = { ok: false, message: "Invalid Email Address" };
+  } else if (error.code === "auth/weak-password") {
+    output = { ok: false, message: "Password too weak" };
+  } else {
+    output = { ok: false, message: "Sign Up Unsuccesfull" };
+  }
+  return output;
+}

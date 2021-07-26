@@ -3,6 +3,19 @@ import { getCurrentUserIdToken } from "../services/authentication.js";
 import * as API_CONSTANTS from "./index.js";
 
 export const updateUserDetails = async (data) => {
+  
+  if (data.firstName && data.lastName) {
+    var firstName =
+      data.firstName.substr(0, 1).toUpperCase() +
+      data.firstName.substr(1, data.firstName.length);
+    var lastName =
+      data.lastName.substr(0, 1).toUpperCase() +
+      data.lastName.substr(1, data.lastName.length);
+    var displayName = firstName.substr(0, 1) + ". " + lastName;
+
+    data = { ...data, firstName, lastName, displayName };
+  }
+
   var getTokenResult = await getCurrentUserIdToken();
 
   if (getTokenResult.ok === true) {
