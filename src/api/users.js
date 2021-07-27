@@ -66,6 +66,7 @@ export const createNewUser = async (userData) => {
   var getTokenResult = await getCurrentUserIdToken();
 
   if (getTokenResult.ok === true) {
+    console.log(getTokenResult.data);
     const config = {
       headers: { Authorization: "Bearer " + getTokenResult.data },
     };
