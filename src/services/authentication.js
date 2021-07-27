@@ -2,7 +2,6 @@ import { getFirebase } from "react-redux-firebase";
 import * as USER_API from "../api/users.js";
 import store from "../redux/index.js";
 import { getUserProfile } from "../redux/actions/profile.js";
-import createGuestUser from "./createGuestUser.js";
 
 // Firebase Fuction for Logging In a User.
 export const logIn = async (email, password) => {
@@ -18,7 +17,7 @@ export const logIn = async (email, password) => {
          before and add to Logged In account's shopping cart.
          Then delete the Anonymouse Account. */
 
-      //store.dispatch(getUserProfile());
+      store.dispatch(getUserProfile());
       output = { ok: true, message: "Log In Succesfull" };
     })
     .catch((error) => {
@@ -59,9 +58,20 @@ export const signUp = async ({
     var vanillaSignUpResult = await vanillaSignUp(email, password);
 
     console.log(vanillaSignUpResult);
-    if (vanillaSignUpResult.ok === false) {
+    if (vanillaSignUpResult.ok === true) {
       //Vanilla Sign Up Failed
-      console.log(vanillaSignUpResult);
+      var createNewUserResult = await USER_API.createNewUser({
+        firstName,
+        lastName,
+        email,
+        mobileNumber,
+      });
+
+      if (createNewUserResult.ok === false) {
+        return createNewUserResult;
+      }
+    } else {
+      //Vanilla SignUp Failed
       return vanillaSignUpResult;
     }
   } else {
@@ -75,7 +85,18 @@ export const signUp = async ({
       if (signOutResult.ok === true) {
         var logInResult = await logIn(email, password);
 
-        if (logInResult.ok === false) {
+        if (logInResult.ok === true) {
+          var updateDetailsCallResult = await USER_API.updateUserDetails({
+            firstName,
+            lastName,
+            email,
+            mobileNumber,
+          });
+
+          if (updateDetailsCallResult.ok === false) {
+            return updateDetailsCallResult;
+          }
+        } else {
           //Failed Login User
           return logInResult;
         }
@@ -89,27 +110,9 @@ export const signUp = async ({
     }
   }
 
-  var getTokenResult = await getCurrentUserIdToken();
+  await store.dispatch(getUserProfile());
 
-  if (getTokenResult.ok === true) {
-    var updateDetailsCallResult = await USER_API.updateUserDetails({
-      firstName,
-      lastName,
-      email,
-      mobileNumber,
-    });
-
-    if (updateDetailsCallResult.ok === true) {
-      //store.dispatch(getUserProfile());
-      return { ok: true, message: "Sign Up Succesfull" };
-    } else {
-      // Update Backend Failed
-      return updateDetailsCallResult;
-    }
-  } else {
-    //Failed to Get Token
-    return getTokenResult;
-  }
+  return { ok: true, message: "Sign Up Succesfull" };
 };
 
 async function upgradeAnonymousAccount(email, password) {
@@ -179,11 +182,26 @@ export const getCurrentUserIdToken = async () => {
   return output;
 };
 
+export const createGuestUser = async () => {
+  const firebase = getFirebase();
+
+  firebase
+    .auth()
+    .signInAnonymously()
+    .then(() => {
+      //Anonyomous Account Created
+      // Use Backend and Create New User in Database
+
+      USER_API.createNewUser({});
+
+      console.log("Anonyomous User");
+    });
+};
 
 //Helper Functions
 
-function authErrorHandling(error){
-  var output
+function authErrorHandling(error) {
+  var output;
   if (error.code === "auth/email-already-in-use") {
     output = { ok: false, message: "Email Address already in Use" };
   } else if (error.code === "auth/invalid-email") {

@@ -15,7 +15,7 @@ import {
 } from "react-redux-firebase";
 import firebase from "./config/firebaseConfig.js";
 import store from "./redux/index.js";
-import createGuestUser from "./services/createGuestUser.js";
+import { createGuestUser } from "./services/authentication.js";
 
 import {getUserProfile} from "./redux/actions/profile.js"
 
@@ -45,7 +45,7 @@ function appStart() {
       const state = store.getState();
 
       if(!state.firebase.auth.isAnonymous){
-        //store.dispatch(getUserProfile());
+        store.dispatch(getUserProfile());
         console.log("Profile Retrieved");
       }
       //Has Loaded & Not Empty - Has User

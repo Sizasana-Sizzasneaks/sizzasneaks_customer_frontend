@@ -3,7 +3,6 @@ import { getCurrentUserIdToken } from "../services/authentication.js";
 import * as API_CONSTANTS from "./index.js";
 
 export const updateUserDetails = async (data) => {
-  
   if (data.firstName && data.lastName) {
     var firstName =
       data.firstName.substr(0, 1).toUpperCase() +
@@ -55,6 +54,28 @@ export const getUserDetails = async () => {
       })
       .catch((error) => {
         //Request Unsuccesfull
+        return { ok: false, error: error };
+      });
+  } else {
+    //Failed to get Token
+    return getTokenResult;
+  }
+};
+
+export const createNewUser = async (userData) => {
+  var getTokenResult = await getCurrentUserIdToken();
+
+  if (getTokenResult.ok === true) {
+    const config = {
+      headers: { Authorization: "Bearer " + getTokenResult.data },
+    };
+
+    return axios
+      .post("http://localhost:5000/user", { ...userData }, config)
+      .then((res) => {
+        return { ok: true };
+      })
+      .catch((error) => {
         return { ok: false, error: error };
       });
   } else {
