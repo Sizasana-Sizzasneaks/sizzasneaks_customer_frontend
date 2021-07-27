@@ -1,0 +1,25 @@
+.currentProductCard {
+  background-color: green;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  padding: 20px;
+  height: 499px;
+}
+
+.currentProductImagesSegment {
+  background-color: red;
+  height: 460px;
+}
+
+.imageOptionsSegment {
+  background-color: blue;
+}
+
+.mainImageSegment {
+    background-color:white;
+}
+
+.currentProductDetailsSegment {
+  background-color: purple;
+  height: 460px;
+}
