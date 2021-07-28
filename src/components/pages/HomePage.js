@@ -3,7 +3,8 @@ import { Row, Col } from "react-bootstrap";
 
 // import LogInComponent from '../general/LogInComponent';
 
-import ProductItem from "../general/ProductItem";
+import ProductItem from "../general/ProductItem.js";
+import ProductCarousel from "../general/ProductsCarousel.js";
 
 //Replace With Image From the internet
 import PromotionlBannerImgOne from "../../images/homepage-promotion-banner-one.png";
@@ -57,19 +58,9 @@ function HomePage() {
           />
         </Col>
       </Row>
-      <Row>
-        <div className="home-section-header">
-          <p>TOP SELLERS</p>
-          <p style={{ marginLeft: "10px" }}>See All</p>
-        </div>
-      </Row>
+      
 
-      <Row className="product-coursel">
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-        <ProductItem />
-      </Row>
+      <ProductCarousel label="TOP SELLERS" />
     </div>
   );
 }

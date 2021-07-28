@@ -1,10 +1,12 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import ProductItemImage from "../../images/product-item-image.png";
 
 function ProductItem(props) {
   return (
+    <Link to="/product"> 
     <div className="product-item">
       <Row>
         <Col>
@@ -49,6 +51,7 @@ function ProductItem(props) {
         </Col>
       </Row>
     </div>
+    </Link>
   );
 }
 
