@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 
+import { getProducts } from "../../api/products.js";
 // import LogInComponent from '../general/LogInComponent';
 
 import ProductItem from "../general/ProductItem.js";
@@ -12,6 +13,30 @@ import PromotionlBannerImgTwo from "../../images/homepage-promotion-banner-image
 import PromotionalBannerImgThree from "../../images/homepage-promotion-banner-image-three.png";
 
 function HomePage() {
+  var [products, setProducts] = React.useState(null);
+
+  React.useEffect(() => {
+    console.log("Use Effct");
+
+    getTheProducts();
+  }, []);
+
+  async function getTheProducts() {
+    var getProductsResult = await getProducts({
+      searchBy: "NONE",
+      value: "NONE",
+    });
+
+    if (getProductsResult.ok === true) {
+      console.log("Worked");
+      console.log(getProductsResult);
+      setProducts(getProductsResult.data);
+    } else {
+      console.log("Failed");
+      console.log(getProductsResult);
+    }
+  }
+
   return (
     <div className="homepage">
       <Row>
@@ -35,20 +60,20 @@ function HomePage() {
             alt="Promotional Banner One"
           />
         </Col>
-        <Col xl={3} style={{ display: "flex", justifyContent: "center"}}>
-          <ProductItem />
+        <Col xl={3} style={{ display: "flex", justifyContent: "center" }}>
+          {products && <ProductItem product={products[0]} />}
         </Col>
-        <Col xl={3} style={{ display: "flex", justifyContent: "center"}} >
-          <ProductItem />
+        <Col xl={3} style={{ display: "flex", justifyContent: "center" }}>
+          {products && <ProductItem product={products[1]} />}
         </Col>
       </Row>
 
       <Row className="homepage-banner-product-segment">
-        <Col xl={3} style={{ display: "flex", justifyContent: "center"}} >
-          <ProductItem />
+        <Col xl={3} style={{ display: "flex", justifyContent: "center" }}>
+          {products && <ProductItem product={products[3]} />}
         </Col>
-        <Col xl={3} style={{ display: "flex", justifyContent: "center"}} >
-          <ProductItem />
+        <Col xl={3} style={{ display: "flex", justifyContent: "center" }}>
+          {products && <ProductItem product={products[4]} />}
         </Col>
         <Col xl={6}>
           <img
@@ -58,9 +83,8 @@ function HomePage() {
           />
         </Col>
       </Row>
-      
 
-      <ProductCarousel label="TOP SELLERS" />
+      {/* <ProductCarousel label="TOP SELLERS" /> */}
     </div>
   );
 }

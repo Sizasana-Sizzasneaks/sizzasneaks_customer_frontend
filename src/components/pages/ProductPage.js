@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 /* import '@fortawesome/fontawesome-free/css/all.min.css'; 
 import 'bootstrap-css-only/css/bootstrap.min.css'; 
 import 'mdbreact/dist/css/mdb.css'; */
@@ -6,40 +7,82 @@ import 'mdbreact/dist/css/mdb.css'; */
 import Styles from "./ProductPage.module.css";
 import { Row, Col } from "react-bootstrap";
 
-import { Grid, Typography } from "@material-ui/core";
-// import ImageGrid from "../general/ImageGrid";
-// //import MainImage from "../general/MainImage";
-// import Info from "../general/Info";
-// import Reviews from "../general/Reviews";
-// import ProductItem from "../general/ProductItem.js";
-
 import ProductCarousel from "../general/ProductsCarousel.js";
 
-// const images = [
-//   "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/560-Nike-Air-Force-1-Hello-CZ0327-100-side-075.jpg",
-//   "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/80c-Nike-Air-Force-1-Hello-CZ0327-100-close-up-1-6ab.jpg",
-//   "https://res.cloudinary.com/shelflife-online/image/upload/c_fill,f_auto,q_auto:best,w_681/v1575961299/uploads/assets/867-Nike-Air-Force-1-Hello-CZ0327-100-close-up-2-380.jpg",
-// ];
-
-// const product = {
-//   title: "Airforce 1",
-//   description:
-//     "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
-//   price: 1999,
-//   brand: "Nike",
-// };
-
-// const reviews = {
-//   name: "Levi Ackerman",
-// };
+import { getProduct } from "../../api/products.js";
 
 import image from "../../images/product-item-image.png";
 import { Style } from "@material-ui/icons";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 function ProductPage() {
+  var [product, setProduct] = React.useState(null);
+  var [error, setError] = React.useState(null);
+  var [loading, setLoading] = React.useState(true);
+  var { id } = useParams();
+
+  React.useEffect(() => {
+    console.log("Use Effct");
+
+    getTheProduct(id);
+  }, []);
+
+  async function getTheProduct(productId) {
+    var getProductsResult = await getProduct(productId);
+
+    if (getProductsResult.ok === true) {
+      console.log("Worked");
+      console.log(getProductsResult);
+      setLoading(false);
+      setProduct(getProductsResult.data[0]);
+      console.log(getProductsResult.data[0]);
+    } else {
+      console.log("Failed");
+      setLoading(false);
+      console.log(getProductsResult);
+      setError(getProductsResult);
+    }
+  }
+
   return (
     <>
-      <ProductDisplayCard />
+      {loading && (
+        <div
+          style={{
+            height: "300px",
+            width: "100%",
+            textAlign: "center",
+            marginTop: "30vh",
+            color: "red",
+          }}
+        >
+          {" "}
+          <CircularProgress size="5rem" />
+        </div>
+      )}
+      {product && (
+        <>
+          
+          <ProductDisplayCard product={product} />{" "}
+        </>
+      )}
+      {error && (
+        <div
+          style={{
+            height: "300px",
+            width: "100%",
+            textAlign: "center",
+            marginTop: "30vh",
+            color: "red",
+          }}
+        >
+          {" "}
+          <p style={{ fontSize: "20px" }}>{error.message}</p>
+          <span class="material-icons" style={{ fontSize: "100px" }}>
+            error
+          </span>{" "}
+        </div>
+      )}
     </>
   );
 }
@@ -48,39 +91,32 @@ function ProductDisplayCard(props) {
   return (
     <div className={Styles.currentProductCard}>
       <Row>
-        <Col className={Styles.currentProductImagesSegment} xs={5}>
+        <Col className={Styles.currentProductImagesSegment} xs={6}>
           <Row>
             <Col className={Styles.imageOptionsSegment} xl={4} xs={4}>
-              <img src={image} />
-              <img src={image} />
-              <img src={image} />
-              <img src={image} />
-              <img src={image} />
-              <img src={image} />
+              <img src={props.product.imgURls[1]} />
+              <img src={props.product.imgURls[2]} />
+              <img src={props.product.imgURls[3]} />
             </Col>
             <Col className={Styles.mainImageSegment} xl={8} xs={8}>
-              <img src={image} />
+              <img src={props.product.imgURls[0]} />
             </Col>
           </Row>
         </Col>
         <Col className={Styles.currentProductDetailsSegment}>
           <Row>
             <Col className={Styles.brand}>
-              <p>Nike</p>
+              <p>{props.product.brand}</p>
             </Col>
           </Row>
           <Row>
             <Col className={Styles.productName}>
-              <p>Product Name</p>
+              <p>{props.product.productName}</p>
             </Col>
           </Row>
           <Row>
             <Col className={Styles.productDescription}>
-              <p>
-                The Nike Jordan 11 is made from premium leather and the finest
-                materials. This shoes uses Nike's patented zoom technology to
-                deliver a next level feeling of comfort.
-              </p>
+              <p>{props.product.productDescription}</p>
             </Col>
           </Row>
           <Row>
@@ -108,7 +144,7 @@ function ProductDisplayCard(props) {
           </Row>
           <Row className={Styles.priceAndButtons}>
             <Col className={Styles.productPrice}>
-              <p>R 1,389.00</p>
+              <p>R {props.product.sellingPrice}</p>
             </Col>
             <Col className={Styles.cardButtons}>
               <Button label="ADD TO CART" color="#F3D63C" />

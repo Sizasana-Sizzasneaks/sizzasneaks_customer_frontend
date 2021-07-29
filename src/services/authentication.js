@@ -159,6 +159,7 @@ export const signOutCurrentUser = () => {
     .auth()
     .signOut()
     .then(() => {
+      createGuestUser();
       return { ok: true, message: "Sign Out Succesfull" };
     })
     .catch((error) => {
