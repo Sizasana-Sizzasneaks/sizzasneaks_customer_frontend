@@ -41,8 +41,46 @@ function SignUpPage() {
   var [errorPassword, setErrorPassword] = React.useState(null);
   var [errorRetypePsw, setErrorRetypePsw] = React.useState(null);
   var [signUpState, setSignUpState] = React.useState(null);
+  var [formValid, setFormValid] = React.useState(false);
 
   const classes = useStyles();
+
+  React.useEffect(() => {
+    checkFormValid()
+  }, [
+    errorFirstName,
+    errorLastName,
+    errorEmail,
+    errorMobile,
+    errorPassword,
+    errorRetypePsw,
+  ]);
+
+  function checkFormValid() {
+    if (
+      errorFirstName &&
+      errorLastName &&
+      errorEmail &&
+      errorMobile &&
+      errorPassword &&
+      errorRetypePsw
+    ) {
+      if (
+        errorFirstName.valid === true &&
+        errorLastName.valid === true &&
+        errorEmail.valid === true &&
+        errorMobile.valid === true &&
+        errorPassword.valid === true &&
+        errorRetypePsw.valid === true
+      ) {
+        setFormValid(true);
+      } else {
+        setFormValid(false);
+      }
+    } else {
+      setFormValid(false);
+    }
+  }
   return (
     <div>
       <p style={{ margin: "40px 0px 0px 0px", padding: "0px 50px 0px" }}>
@@ -58,9 +96,15 @@ function SignUpPage() {
         <MDBRow>
           <MDBCol md="8" className={classes.card} style={{ margin: "0 auto" }}>
             <form>
-              <p>
-                {signUpState && signUpState.message}
-              </p>
+                {signUpState && (
+                  <>
+                    {signUpState.ok === true ? (
+                      <p className="success-prompt">{signUpState.message}</p>
+                    ) : (
+                      <p className="error-prompt">{signUpState.message}</p>
+                    )}
+                  </>
+                )}
               <p className="h4 text-left mb-4">Personal Details</p>
               <MDBRow>
                 <MDBCol md="6">
@@ -77,7 +121,7 @@ function SignUpPage() {
                       setErrorFirstName(firstNameValidationResult);
                     }}
                   />
-                  <p>
+                  <p className="p-errors">
                     {errorFirstName &&
                       (!errorFirstName.valid ? errorFirstName.message : "")}
                   </p>
@@ -97,7 +141,7 @@ function SignUpPage() {
                       setErrorLastName(lastNameValidationResult);
                     }}
                   />
-                  <p>
+                  <p className="p-errors">
                     {errorLastName &&
                       (!errorLastName.valid ? errorLastName.message : "")}
                   </p>
@@ -120,7 +164,7 @@ function SignUpPage() {
                       setErrorEmail(emailValidationResult);
                     }}
                   />
-                  <p>
+                  <p className="p-errors">
                     {errorEmail &&
                       (!errorEmail.valid ? errorEmail.message : "")}
                   </p>
@@ -144,7 +188,7 @@ function SignUpPage() {
                       setErrorMobile(mobileNumberValidationResult);
                     }}
                   />
-                  <p>
+                  <p className="p-errors">
                     {errorMobile &&
                       (!errorMobile.valid ? errorMobile.message : "")}
                   </p>
@@ -168,7 +212,7 @@ function SignUpPage() {
                       setErrorPassword(passwordValidationResult);
                     }}
                   />
-                  <p>
+                  <p className="p-errors">
                     {errorPassword &&
                       (!errorPassword.valid ? errorPassword.message : "")}
                   </p>
@@ -192,7 +236,7 @@ function SignUpPage() {
                       setErrorRetypePsw(retypePasswordValidationResult);
                     }}
                   />
-                  <p>
+                  <p className="p-errors">
                     {errorRetypePsw &&
                       (!errorRetypePsw.valid ? errorRetypePsw.message : "")}
                   </p>
@@ -201,11 +245,12 @@ function SignUpPage() {
 
               <div className="text-center mt-4">
                 <MDBBtn
+                disabled={!formValid}
                   color="red-text"
                   className="rounded amber"
                   onClick={async (event) => {
                     event.preventDefault();
-                   
+
                     var signUpResult = await signUp({
                       firstName,
                       lastName,
