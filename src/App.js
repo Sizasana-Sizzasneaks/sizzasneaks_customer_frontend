@@ -1,5 +1,7 @@
+import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 //App Components
 import Navbar from "./components/general/Navbar.js";
@@ -13,38 +15,81 @@ import HomePage from "./components/pages/HomePage.js";
 import SignUpPage from "./components/pages/SignUpPage.js";
 import LogInComponent from "./components/general/LogInComponent.js";
 
+import store from "./redux/index.js";
+import { isLoaded, isEmpty } from "react-redux-firebase";
+import { createGuestUser } from "./services/authentication.js";
+import { getUserProfile } from "./redux/actions/profile.js";
+
 function App() {
+  var [loading, setLoading] = React.useState(true);
+
+  const subscription = store.subscribe(appStart);
+
+  async function appStart() {
+    if (isLoaded(store.getState().firebase.auth)) {
+      if (isEmpty(store.getState().firebase.auth)) {
+        //Has Loaded & Is Empty - No User
+        //We create a Guest User Now
+        await createGuestUser();
+        //setLoading(false);
+      } else {
+        const state = store.getState();
+
+        if (!state.firebase.auth.isAnonymous) {
+          await store.dispatch(getUserProfile());
+          console.log("Profile Retrieved");
+        }
+        //Has Loaded & Not Empty - Has User
+        //We Close the Listener
+        subscription();
+        console.log("Called ME");
+        setLoading(false);
+      }
+    }
+  }
 
   return (
     <>
-      {/* <p>Customer Front-End</p> */}
-      <Router>
-        <Navbar /> {/* Mata */}
-        <Container fluid="xl" style={{ padding: "0" }}>
-          <Switch>
-            <Route exact path="/product">
-              <ProductPage /> {/* Lukumo */}
-            </Route>
-            <Route exact path="/products">
-              <ProductsPage /> {/* Ameer */}
-            </Route>
-            <Route exact path="/sign-up">
-              {" "}
-              {/* Lara */}
-              <SignUpPage />
-            </Route>
-            <Route exact path="/log-in">
-              {" "}
-              {/* Lara */}
-              <LogInComponent />  
-            </Route>
-            <Route exact path="/">
-              <HomePage /> {/* Lusanda */}
-            </Route>
-          </Switch>
-        </Container>
-        <Footer /> {/* Mata */}
-      </Router>
+      {loading ? (
+        <div
+          style={{ height: "100vh", width: "100%", textAlign: "center", marginTop: "30vh",color:"#007bff" }}
+        >
+          <p className="logo-banner"  style={{marginBottom: "40px", fontSize:"60px"}}>SIZZASNEAKS</p>
+          <CircularProgress size="5rem" />
+        </div>
+      ) : (
+        <Router>
+          <Navbar /> {/* Mata */}
+          <Container fluid="xl" style={{ padding: "0" }}>
+            <Switch>
+              <Route exact path="/products/:id">
+                <ProductPage /> {/* Lukumo */}
+              </Route>
+              <Route
+                exact
+                path="/products/:searchBy/:category"
+                children={<ProductsPage />}
+              >
+                {/* Ameer */}
+              </Route>
+              <Route exact path="/sign-up">
+                {" "}
+                {/* Lara */}
+                <SignUpPage />
+              </Route>
+              <Route exact path="/log-in">
+                {" "}
+                {/* Lara */}
+                <LogInComponent />
+              </Route>
+              <Route exact path="/">
+                <HomePage /> {/* Lusanda */}
+              </Route>
+            </Switch>
+          </Container>
+          <Footer /> {/* Mata */}
+        </Router>
+      )}
     </>
   );
 }

@@ -1,22 +1,33 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { signOutCurrentUser } from "../../services/authentication.js";
+import { clearUserProfile } from "../../redux/actions/profile.js";
+
 
 import LogIn from "./LogInComponent";
 
 function Navbar() {
-  const handleClick =()=>{
-    handleLoginClick()
-}
+  const handleClick = () => {
+    handleLoginClick();
+  };
 
-// declare a variable to use State Hook: isShowLogin
-const [isShowLogin, setIsShowLogin]=useState(false)
-  
-//function setIsShowLogin to update our state 
-const handleLoginClick=()=>{
-setIsShowLogin((isShowLogin)=>!isShowLogin)
-}
+  const dispatch = useDispatch();
 
+  // declare a variable to use State Hook: isShowLogin
+  const [isShowLogin, setIsShowLogin] = useState(false);
+
+  //function setIsShowLogin to update our state
+  const handleLoginClick = () => {
+    setIsShowLogin((isShowLogin) => !isShowLogin);
+  };
+
+ 
+
+  const authState = useSelector((state) => state.firebase.auth);
+  const profileState = useSelector((state) => state.profile);
   return (
     <nav>
       <div className="navbar-banner">
@@ -32,7 +43,10 @@ setIsShowLogin((isShowLogin)=>!isShowLogin)
         >
           <Row>
             <Col xs={4} style={{ padding: "0" }}>
-            <Link to="/"> <p className="logo-banner">SIZZASNEAKS</p> </Link>
+              <Link to="/">
+                {" "}
+                <p className="logo-banner">SIZZASNEAKS</p>{" "}
+              </Link>
             </Col>
 
             <Col xs={5} style={{ padding: "0" }}>
@@ -47,36 +61,67 @@ setIsShowLogin((isShowLogin)=>!isShowLogin)
 
             <Col xs={3} style={{ padding: "0" }}>
               <Row className="top-right-nav-banner-links">
-                <Col
-                  xs={2}
-                  className="top-right-nav-banner-linky"
-                  style={{ marginLeft: "auto" }}
-                >   
-                  <p onClick={handleClick}> Log In</p>  
-                  <div className="top-right-nav-banner-linkyy"><LogIn isShowLogin={isShowLogin} /></div>                
-                </Col>               
-                
-                <Col xs={1}>
-                  <div className="vertical-divider"></div>
-                </Col>
-                <Col xs={3} className="top-right-nav-banner-link">
-                <Link to="/sign-up"> <p>Sign Up</p> </Link>
-                </Col>
-                <Col xs={1}>
-                  <div className="vertical-divider"></div>
-                </Col>
-                <Col xs={3} className="top-right-nav-banner-link">
-                  
-                    <div className="shopping-cart-banner">
-                      <span
-                        style={{ float: "left" }}
-                        className="material-icons"
+            
+                {authState.isAnonymous ? (
+                  <>
+                    <Col
+                      xs={2}
+                      className="top-right-nav-banner-linky"
+                      style={{ marginLeft: "auto" }}
+                    >
+                      <p onClick={handleClick}> Log In</p>
+                      <div className="top-right-nav-banner-linkyy">
+                        <LogIn isShowLogin={isShowLogin} />
+                      </div>
+                    </Col>
+                    <Col xs={1}>
+                      <div className="vertical-divider"></div>
+                    </Col>
+                    <Col xs={3} className="top-right-nav-banner-link">
+                      <Link to="/sign-up">
+                        {" "}
+                        <p>Sign Up</p>{" "}
+                      </Link>
+                    </Col>{" "}
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <Col xs={3} className="top-right-nav-banner-link">
+                      {" "}
+                      <p>
+                        {profileState ? profileState.displayName : "User"}
+                      </p>{" "}
+                    </Col>{" "}
+                    <Col xs={1}>
+                      <div className="vertical-divider"></div>
+                    </Col>
+                    <Col xs={3} className="top-right-nav-banner-link">
+                      {" "}
+                      <p
+                        onClick={async () => {
+                          
+                          await signOutCurrentUser();
+                          await dispatch(clearUserProfile());
+                         
+                        }}
                       >
-                        shopping_cart
-                      </span>
-                      <p>Cart</p>
-                    </div>
-                 
+                        Log Out
+                      </p>{" "}
+                    </Col>
+                  </>
+                )}
+
+                <Col xs={1}>
+                  <div className="vertical-divider"></div>
+                </Col>
+                <Col xs={3} className="top-right-nav-banner-link">
+                  <div className="shopping-cart-banner">
+                    <span style={{ float: "left" }} className="material-icons">
+                      shopping_cart
+                    </span>
+                    <p>Cart</p>
+                  </div>
                 </Col>
               </Row>
             </Col>
@@ -114,20 +159,20 @@ setIsShowLogin((isShowLogin)=>!isShowLogin)
 
 function NavabarNavigationLink(props) {
   return (
-    <Link to="/products">
-    <div
-      className="navbarNavigationLink"
-      // onClick={function () {
-      //   alert("Coming Soon");
-      // }}
-    >
-      <p style={{}}>{props.label}</p>
-      {props.expandable && (
-        <span class="material-icons" style={{ marginLeft: "10px" }}>
-          expand_more
-        </span>
-      )}
-    </div>
+    <Link to={"/products/" + "CATEGORY/" + props.label}>
+      <div
+        className="navbarNavigationLink"
+        // onClick={function () {
+        //   alert("Coming Soon");
+        // }}
+      >
+        <p style={{}}>{props.label}</p>
+        {props.expandable && (
+          <span class="material-icons" style={{ marginLeft: "10px" }}>
+            expand_more
+          </span>
+        )}
+      </div>
     </Link>
   );
 }

@@ -9,6 +9,8 @@ const profileState = function (state = data, action) {
   switch (action.type) {
     case "GET_USER_PROFILE":
       return action.payload;
+    case "CLEAR_USER_PROFILE":
+      return data
     default:
       return state;
   }

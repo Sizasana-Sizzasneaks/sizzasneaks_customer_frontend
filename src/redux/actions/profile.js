@@ -15,3 +15,9 @@ export const getUserProfile = () => async (dispatch) => {
     });
   }
 };
+
+export const clearUserProfile = () => {
+  return {
+    type: "ClEAR_USER_PROFILE",
+  };
+};
