@@ -19,7 +19,9 @@ export const updateUserDetails = async (data) => {
 
   if (getTokenResult.ok === true) {
     const config = {
-      headers: { Authorization: "Bearer " + getTokenResult.data },
+      headers: {credentialclaims: "customer",
+       Authorization: "Bearer " + getTokenResult.data
+      },
     };
     return axios
       .patch(API_CONSTANTS.USER_ROUTE, data, config)
@@ -43,7 +45,9 @@ export const getUserDetails = async () => {
 
   if (getTokenResult.ok === true) {
     const config = {
-      headers: { Authorization: "Bearer " + getTokenResult.data },
+      headers: {credentialclaims: "customer",
+       Authorization: "Bearer " + getTokenResult.data
+      },
     };
     return axios
       .get(API_CONSTANTS.USER_ROUTE, config)
@@ -68,7 +72,9 @@ export const createNewUser = async (userData) => {
   if (getTokenResult.ok === true) {
     console.log(getTokenResult.data);
     const config = {
-      headers: { Authorization: "Bearer " + getTokenResult.data },
+      headers: {credentialclaims: "customer",
+       Authorization: "Bearer " + getTokenResult.data
+      },
     };
 
     return axios

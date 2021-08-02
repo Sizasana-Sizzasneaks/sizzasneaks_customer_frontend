@@ -62,7 +62,7 @@ function Navbar() {
             <Col xs={4} style={{ padding: "0" }}>
               <Row className="top-right-nav-banner-links">
             
-                {authState.isAnonymous ? (
+                {(authState.isEmpty || authState.isAnonymous) ? (
                   <>
                     <Col
                       xs={2}
@@ -103,7 +103,6 @@ function Navbar() {
                           
                           await signOutCurrentUser();
                           await dispatch(clearUserProfile());
-                          await createGuestUser();
                          
                         }}
                       >

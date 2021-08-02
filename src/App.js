@@ -17,7 +17,6 @@ import LogInComponent from "./components/general/LogInComponent.js";
 
 import store from "./redux/index.js";
 import { isLoaded, isEmpty } from "react-redux-firebase";
-import { createGuestUser } from "./services/authentication.js";
 import { getUserProfile } from "./redux/actions/profile.js";
 
 function App() {
@@ -28,20 +27,13 @@ function App() {
   async function appStart() {
     if (isLoaded(store.getState().firebase.auth)) {
       if (isEmpty(store.getState().firebase.auth)) {
-        //Has Loaded & Is Empty - No User
-        //We create a Guest User Now
-        await createGuestUser();
-        //setLoading(false);
-      } else {
-        const state = store.getState();
-
-        if (!state.firebase.auth.isAnonymous) {
-          await store.dispatch(getUserProfile());
-          console.log("Profile Retrieved");
-        }
-        //Has Loaded & Not Empty - Has User
-        //We Close the Listener
         subscription();
+        console.log("Called ME");
+        setLoading(false);
+      } else {
+      
+        subscription();
+        await store.dispatch(getUserProfile());
         console.log("Called ME");
         setLoading(false);
       }
@@ -52,9 +44,20 @@ function App() {
     <>
       {loading ? (
         <div
-          style={{ height: "100vh", width: "100%", textAlign: "center", marginTop: "30vh",color:"#007bff" }}
+          style={{
+            height: "100vh",
+            width: "100%",
+            textAlign: "center",
+            marginTop: "30vh",
+            color: "#007bff",
+          }}
         >
-          <p className="logo-banner"  style={{marginBottom: "40px", fontSize:"60px"}}>SIZZASNEAKS</p>
+          <p
+            className="logo-banner"
+            style={{ marginBottom: "40px", fontSize: "60px" }}
+          >
+            SIZZASNEAKS
+          </p>
           <CircularProgress size="5rem" />
         </div>
       ) : (
