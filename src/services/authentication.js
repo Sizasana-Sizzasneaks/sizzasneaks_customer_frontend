@@ -159,7 +159,6 @@ export const signOutCurrentUser = () => {
     .auth()
     .signOut()
     .then(() => {
-      createGuestUser();
       return { ok: true, message: "Sign Out Succesfull" };
     })
     .catch((error) => {
@@ -175,6 +174,7 @@ export const getCurrentUserIdToken = async () => {
     .auth()
     .currentUser.getIdToken(true)
     .then((idToken) => {
+      console.log(idToken);
       output = { ok: true, data: idToken };
     })
     .catch((error) => {

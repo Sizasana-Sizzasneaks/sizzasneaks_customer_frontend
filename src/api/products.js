@@ -1,13 +1,10 @@
 import axios from "axios";
-import { getCurrentUserIdToken } from "../services/authentication.js";
 import * as API_CONSTANTS from "./index.js";
 
 export const getProducts = async (queryObject) => {
-  var getTokenResult = await getCurrentUserIdToken();
 
-  if (getTokenResult.ok === true) {
     const config = {
-      headers: { Authorization: "Bearer " + getTokenResult.data },
+      headers: {},
       params: queryObject,
     };
 
@@ -27,17 +24,13 @@ export const getProducts = async (queryObject) => {
         }
         return { ok: false, message: "Error getting products" };
       });
-  } else {
-    return getTokenResult;
-  }
+ 
 };
 
 export const getProduct = async (id) => {
-  var getTokenResult = await getCurrentUserIdToken();
 
-  if (getTokenResult.ok === true) {
     const config = {
-      headers: { Authorization: "Bearer " + getTokenResult.data },
+      headers: {},
     };
     return axios
       .get(API_CONSTANTS.PRODUCTS_ROUTE + "/" + id, config)
@@ -55,7 +48,5 @@ export const getProduct = async (id) => {
         }
         return { ok: false, message: "Error getting products" };
       });
-  } else {
-    return getTokenResult;
-  }
+ 
 };

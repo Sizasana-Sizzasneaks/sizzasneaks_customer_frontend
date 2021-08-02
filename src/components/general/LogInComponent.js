@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function LogInComponent({ isShowLogin }) {
-
   //Form State
   var [email, setEmail] = React.useState("");
   var [password, setPassword] = React.useState("");
@@ -26,8 +25,25 @@ function LogInComponent({ isShowLogin }) {
   var [errorEmail, setErrorEmail] = React.useState(null);
   var [errorPassword, setErrorPassword] = React.useState(null);
   var [logInState, setLogInState] = React.useState(null);
+  var [formValid, setFormValid] = React.useState(false);
 
   const classes = useStyles();
+
+  React.useEffect(() => {
+    checkFormValid();
+  }, [errorEmail && errorPassword]);
+
+  function checkFormValid() {
+    if (errorEmail && errorPassword) {
+      if (errorEmail.valid === true && errorPassword.valid === true) {
+        setFormValid(true);
+      } else {
+        setFormValid(false);
+      }
+    } else {
+      setFormValid(false);
+    }
+  }
 
   return (
     <div className={`${!isShowLogin ? "active" : ""} show`}>
@@ -38,9 +54,16 @@ function LogInComponent({ isShowLogin }) {
               <form>
                 <p className="h4 text-center py-4">LOGIN</p>
                 <div>
-                  <p>
-                    {logInState && logInState.message}
-                  </p>
+                {logInState && (
+                  <>
+                    {logInState.ok === true ? (
+                      <p className="success-prompt">{logInState.message}</p>
+                    ) : (
+                      <p className="error-prompt">{logInState.message}</p>
+                    )}
+                  </>
+                )}
+                 
                 </div>
                 <MDBRow>
                   <MDBCol md="12">
@@ -60,7 +83,7 @@ function LogInComponent({ isShowLogin }) {
                         setErrorEmail(emailValidationResult);
                       }}
                     />
-                    <p>
+                    <p  className="p-errors">
                       {errorEmail &&
                         (!errorEmail.valid ? errorEmail.message : "")}
                     </p>
@@ -88,7 +111,7 @@ function LogInComponent({ isShowLogin }) {
                         setErrorPassword(passwordValidationResult);
                       }}
                     />
-                    <p>
+                    <p  className="p-errors">
                       {errorPassword &&
                         (!errorPassword.valid ? errorPassword.message : "")}
                     </p>
@@ -101,13 +124,17 @@ function LogInComponent({ isShowLogin }) {
                 </MDBRow>
 
                 <div className="text-center mt-4">
-                  <MDBBtn color="red-text" className="rounded amber"
-                  onClick={async (event) => {
-                    event.preventDefault();
-                    var logInResult =await logIn(email, password);
-                    setLogInState(logInResult);
-                    console.log(logInResult);
-                  }}>
+                  <MDBBtn
+                  disabled={!formValid}
+                    color="red-text"
+                    className="rounded amber"
+                    onClick={async (event) => {
+                      event.preventDefault();
+                      var logInResult = await logIn(email, password);
+                      setLogInState(logInResult);
+                      console.log(logInResult);
+                    }}
+                  >
                     LOGIN
                   </MDBBtn>
                   <p>

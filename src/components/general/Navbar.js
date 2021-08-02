@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { signOutCurrentUser } from "../../services/authentication.js";
+import { signOutCurrentUser, createGuestUser } from "../../services/authentication.js";
 import { clearUserProfile } from "../../redux/actions/profile.js";
 
 
@@ -49,7 +49,7 @@ function Navbar() {
               </Link>
             </Col>
 
-            <Col xs={5} style={{ padding: "0" }}>
+            <Col xs={4} style={{ padding: "0" }}>
               <div className="search-bar-box">
                 <input
                   id="search-input"
@@ -59,10 +59,10 @@ function Navbar() {
               </div>
             </Col>
 
-            <Col xs={3} style={{ padding: "0" }}>
+            <Col xs={4} style={{ padding: "0" }}>
               <Row className="top-right-nav-banner-links">
             
-                {authState.isAnonymous ? (
+                {(authState.isEmpty || authState.isAnonymous) ? (
                   <>
                     <Col
                       xs={2}
