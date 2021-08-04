@@ -3,6 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import ProductItemImage from "../../images/product-item-image.png";
+import {addToCart} from "../../api/cart.js";
 
 function ProductItem(props) {
   return (
@@ -37,7 +38,7 @@ function ProductItem(props) {
             <p>R {props.product.sellingPrice} </p>
           </Col>
           <Col xl={5} style={{ padding: "0px" }}>
-            <div
+            <div 
               style={{
                 backgroundColor: "#FADA35",
                 fontSize: "12px",

@@ -91,6 +91,7 @@ export const signUp = async ({
             lastName,
             email,
             mobileNumber,
+            isAnonymous:false
           });
 
           if (updateDetailsCallResult.ok === false) {
@@ -193,7 +194,7 @@ export const createGuestUser = async () => {
       //Anonyomous Account Created
       // Use Backend and Create New User in Database
 
-      USER_API.createNewUser({});
+      USER_API.createNewUser({isAnonymous:true});
 
       console.log("Anonyomous User");
     });
