@@ -12,7 +12,7 @@ export const addToCart = async (productId) => {
   if (isLoaded(store.getState().firebase.auth)) {
     if (isEmpty(store.getState().firebase.auth)) {
       //Create Guest Account
-      await createGuestUser();
+     // await createGuestUser();
     }
 
     // Add to Cart Logic

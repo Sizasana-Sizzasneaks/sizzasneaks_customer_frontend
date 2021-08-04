@@ -1,12 +1,20 @@
 import { getUserDetails } from "../../api/users.js";
 
 export const getUserProfile = () => async (dispatch) => {
+
+  dispatch({
+    type: "USER_PROFILE_LOADING",
+  });
+
+
+
+
   var getUserDetailsResult = await getUserDetails();
 
   if (getUserDetailsResult.ok === true) {
     dispatch({
       type: "GET_USER_PROFILE",
-      payload: getUserDetailsResult.data,
+      payload: {...getUserDetailsResult.data, loading:false },
     });
   } else {
     dispatch({

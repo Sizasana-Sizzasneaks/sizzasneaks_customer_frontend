@@ -54,7 +54,7 @@ export const signUp = async ({
 
   const state = store.getState();
 
-  if (!state.firebase.auth.isAnonymous) {
+  if (state.firebase.auth.isEmpty || !state.firebase.auth.isAnonymous) {
     var vanillaSignUpResult = await vanillaSignUp(email, password);
 
     console.log(vanillaSignUpResult);
@@ -65,6 +65,7 @@ export const signUp = async ({
         lastName,
         email,
         mobileNumber,
+        isAnonymous: false,
       });
 
       if (createNewUserResult.ok === false) {
@@ -91,7 +92,7 @@ export const signUp = async ({
             lastName,
             email,
             mobileNumber,
-            isAnonymous:false
+            isAnonymous: false,
           });
 
           if (updateDetailsCallResult.ok === false) {
@@ -110,8 +111,6 @@ export const signUp = async ({
       return upgradeAnonymousAccountResult;
     }
   }
-
-  await store.dispatch(getUserProfile());
 
   return { ok: true, message: "Sign Up Succesfull" };
 };
@@ -194,7 +193,7 @@ export const createGuestUser = async () => {
       //Anonyomous Account Created
       // Use Backend and Create New User in Database
 
-      USER_API.createNewUser({isAnonymous:true});
+      USER_API.createNewUser({ isAnonymous: true });
 
       console.log("Anonyomous User");
     });

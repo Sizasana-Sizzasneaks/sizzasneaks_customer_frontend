@@ -3,6 +3,7 @@ var data = {
   lastName: null,
   displayName: null,
   email: null,
+  loading: false
 };
 
 const profileState = function (state = data, action) {
@@ -11,6 +12,8 @@ const profileState = function (state = data, action) {
       return action.payload;
     case "ClEAR_USER_PROFILE":
       return data
+      case "USER_PROFILE_LOADING":
+        return {loading: true}
     default:
       return state;
   }

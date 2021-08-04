@@ -5,6 +5,7 @@ import { useFirebase } from "react-redux-firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-react-ui-kit";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { getUserProfile } from "../../redux/actions/profile";
 
@@ -41,6 +42,7 @@ function SignUpPage() {
   var [errorPassword, setErrorPassword] = React.useState(null);
   var [errorRetypePsw, setErrorRetypePsw] = React.useState(null);
   var [signUpState, setSignUpState] = React.useState(null);
+  var [loading, setLoading] = React.useState(false);
   var [formValid, setFormValid] = React.useState(false);
 
   const classes = useStyles();
@@ -96,6 +98,8 @@ function SignUpPage() {
         <MDBRow>
           <MDBCol md="8" className={classes.card} style={{ margin: "0 auto" }}>
             <form>
+
+            {loading && <div style={{paddingTop:"10px", paddingBottom: "20px" }}><LinearProgress/></div>}
                 {signUpState && (
                   <>
                     {signUpState.ok === true ? (
@@ -250,6 +254,8 @@ function SignUpPage() {
                   className="rounded amber"
                   onClick={async (event) => {
                     event.preventDefault();
+                    setSignUpState(null);
+                    setLoading(true);
 
                     var signUpResult = await signUp({
                       firstName,
@@ -258,9 +264,10 @@ function SignUpPage() {
                       mobileNumber,
                       password,
                     });
-
+                    setLoading(false);
                     setSignUpState(signUpResult);
                     console.log(signUpResult);
+                    dispatch(getUserProfile());
                   }}
                 >
                   Register

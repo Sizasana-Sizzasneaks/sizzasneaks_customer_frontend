@@ -39,6 +39,9 @@ function ProductItem(props) {
           </Col>
           <Col xl={5} style={{ padding: "0px" }}>
             <div 
+            onClick={()=>{
+              addToCart();
+            }}
               style={{
                 backgroundColor: "#FADA35",
                 fontSize: "12px",

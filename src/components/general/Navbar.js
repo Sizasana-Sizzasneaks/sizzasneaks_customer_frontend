@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { signOutCurrentUser, createGuestUser } from "../../services/authentication.js";
+import {
+  signOutCurrentUser,
+  createGuestUser,
+} from "../../services/authentication.js";
 import { clearUserProfile } from "../../redux/actions/profile.js";
-
 
 import LogIn from "./LogInComponent";
 
@@ -23,8 +26,6 @@ function Navbar() {
   const handleLoginClick = () => {
     setIsShowLogin((isShowLogin) => !isShowLogin);
   };
-
- 
 
   const authState = useSelector((state) => state.firebase.auth);
   const profileState = useSelector((state) => state.profile);
@@ -59,72 +60,87 @@ function Navbar() {
               </div>
             </Col>
 
-            <Col xs={4} style={{ padding: "0" }}>
-              <Row className="top-right-nav-banner-links">
-            
-                {(authState.isEmpty || authState.isAnonymous) ? (
-                  <>
-                    <Col
-                      xs={2}
-                      className="top-right-nav-banner-linky"
-                      style={{ marginLeft: "auto" }}
-                    >
-                      <p onClick={handleClick}> Log In</p>
-                      <div className="top-right-nav-banner-linkyy">
-                        <LogIn isShowLogin={isShowLogin} />
-                      </div>
-                    </Col>
-                    <Col xs={1}>
-                      <div className="vertical-divider"></div>
-                    </Col>
-                    <Col xs={3} className="top-right-nav-banner-link">
-                      <Link to="/sign-up">
-                        {" "}
-                        <p>Sign Up</p>{" "}
-                      </Link>
-                    </Col>{" "}
-                  </>
-                ) : (
-                  <>
-                    {" "}
-                    <Col xs={3} className="top-right-nav-banner-link">
-                      {" "}
-                      <p>
-                        {profileState ? profileState.displayName : "User"}
-                      </p>{" "}
-                    </Col>{" "}
-                    <Col xs={1}>
-                      <div className="vertical-divider"></div>
-                    </Col>
-                    <Col xs={3} className="top-right-nav-banner-link">
-                      {" "}
-                      <p
-                        onClick={async () => {
-                          
-                          await signOutCurrentUser();
-                          await dispatch(clearUserProfile());
-                         
-                        }}
+            {profileState.loading && (
+              <Col
+                xs={4}
+                style={{ padding: "0", display: "flex", alignItems: "center" }}
+              >
+                <div style={{ margin: "auto", marginTop: "18px" }}>
+                  <CircularProgress size={30} />
+                </div>
+              </Col>
+            )}
+            {!profileState.loading && (
+              <Col xs={4} style={{ padding: "0" }}>
+                <Row className="top-right-nav-banner-links">
+                  {authState.isEmpty || authState.isAnonymous ? (
+                    <>
+                      <Col
+                        xs={2}
+                        className="top-right-nav-banner-linky"
+                        style={{ marginLeft: "auto" }}
                       >
-                        Log Out
-                      </p>{" "}
-                    </Col>
-                  </>
-                )}
+                        <p onClick={handleClick}> Log In</p>
+                        <div className="top-right-nav-banner-linkyy">
+                          <LogIn isShowLogin={isShowLogin} />
+                        </div>
+                      </Col>
+                      <Col xs={1}>
+                        <div className="vertical-divider"></div>
+                      </Col>
+                      <Col xs={3} className="top-right-nav-banner-link">
+                        <Link to="/sign-up">
+                          {" "}
+                          <p>Sign Up</p>{" "}
+                        </Link>
+                      </Col>{" "}
+                      <Col xs={1}>
+                        <div className="vertical-divider"></div>
+                      </Col>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <Col xs={3} className="top-right-nav-banner-link">
+                        {" "}
+                        <p>
+                          {profileState ? profileState.displayName : "User"}
+                        </p>{" "}
+                      </Col>{" "}
+                      <Col xs={1}>
+                        <div className="vertical-divider"></div>
+                      </Col>
+                      <Col xs={3} className="top-right-nav-banner-link">
+                        {" "}
+                        <p
+                          onClick={async () => {
+                            await signOutCurrentUser();
+                            await dispatch(clearUserProfile());
+                          }}
+                        >
+                          Log Out
+                        </p>{" "}
+                      </Col>
+                      <Col xs={1}>
+                        <div className="vertical-divider"></div>
+                      </Col>
+                    </>
+                  )}
 
-                <Col xs={1}>
-                  <div className="vertical-divider"></div>
-                </Col>
-                <Col xs={3} className="top-right-nav-banner-link">
-                  <div className="shopping-cart-banner">
-                    <span style={{ float: "left" }} className="material-icons">
-                      shopping_cart
-                    </span>
-                    <p>Cart</p>
-                  </div>
-                </Col>
-              </Row>
-            </Col>
+                  <Col xs={3} className="top-right-nav-banner-link">
+                    <div className="shopping-cart-banner">
+                      <span
+                        style={{ float: "left" }}
+                        className="material-icons"
+                      >
+                        shopping_cart
+                      </span>
+                      <p>Cart</p>
+                    </div>
+                  </Col>
+                </Row>
+              </Col>
+            )}
           </Row>
         </Container>
       </div>
