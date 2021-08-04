@@ -5,6 +5,7 @@ import { logIn } from "../../services/authentication.js";
 //Styles & Themes
 import { MDBRow, MDBCol, MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
 import { makeStyles } from "@material-ui/core/styles";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +27,7 @@ function LogInComponent({ isShowLogin }) {
   var [errorPassword, setErrorPassword] = React.useState(null);
   var [logInState, setLogInState] = React.useState(null);
   var [formValid, setFormValid] = React.useState(false);
+  var [loading, setLoading] = React.useState(false);
 
   const classes = useStyles();
 
@@ -54,16 +56,20 @@ function LogInComponent({ isShowLogin }) {
               <form>
                 <p className="h4 text-center py-4">LOGIN</p>
                 <div>
-                {logInState && (
-                  <>
-                    {logInState.ok === true ? (
-                      <p className="success-prompt">{logInState.message}</p>
-                    ) : (
-                      <p className="error-prompt">{logInState.message}</p>
-                    )}
-                  </>
-                )}
-                 
+                  {loading && (
+                    <div style={{ paddingTop: "10px", paddingBottom: "20px" }}>
+                      <LinearProgress />
+                    </div>
+                  )}
+                  {logInState && (
+                    <>
+                      {logInState.ok === true ? (
+                        <p className="success-prompt">{logInState.message}</p>
+                      ) : (
+                        <p className="error-prompt">{logInState.message}</p>
+                      )}
+                    </>
+                  )}
                 </div>
                 <MDBRow>
                   <MDBCol md="12">
@@ -83,7 +89,7 @@ function LogInComponent({ isShowLogin }) {
                         setErrorEmail(emailValidationResult);
                       }}
                     />
-                    <p  className="p-errors">
+                    <p className="p-errors">
                       {errorEmail &&
                         (!errorEmail.valid ? errorEmail.message : "")}
                     </p>
@@ -111,7 +117,7 @@ function LogInComponent({ isShowLogin }) {
                         setErrorPassword(passwordValidationResult);
                       }}
                     />
-                    <p  className="p-errors">
+                    <p className="p-errors">
                       {errorPassword &&
                         (!errorPassword.valid ? errorPassword.message : "")}
                     </p>
@@ -125,12 +131,15 @@ function LogInComponent({ isShowLogin }) {
 
                 <div className="text-center mt-4">
                   <MDBBtn
-                  disabled={!formValid}
+                    disabled={!formValid}
                     color="red-text"
                     className="rounded amber"
                     onClick={async (event) => {
                       event.preventDefault();
+                      setLogInState(null);
+                      setLoading(true);
                       var logInResult = await logIn(email, password);
+                      setLoading(false);
                       setLogInState(logInResult);
                       console.log(logInResult);
                     }}
