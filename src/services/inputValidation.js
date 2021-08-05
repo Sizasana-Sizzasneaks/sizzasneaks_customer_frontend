@@ -2,10 +2,10 @@ import * as Yup from "yup";
 
 //First Name & Last Name validation Schema and Function Logic
 const nameSchema = Yup.object().shape({
-  name: Yup.string("Please enter a string").required("Required")
+  name: Yup.string("Please enter a string")
+    .required("Required")
     .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
-    .max(50)
-    
+    .max(50),
 });
 
 export const validateName = (name) => {
@@ -98,7 +98,6 @@ export const validateLogInPassword = (password) => {
 
 //Retype Password Validation Schema and Fuction Logic
 export const validateRetypePassword = (password, retypePassword) => {
-
   const retypePasswordSchema = Yup.object().shape({
     retypePassword: Yup.string()
       .test("mactch", "Password does not match", (retypePasswordCheck) => {
@@ -109,6 +108,52 @@ export const validateRetypePassword = (password, retypePassword) => {
 
   return retypePasswordSchema
     .validate({ retypePassword: retypePassword })
+    .then(() => {
+      return { valid: true, message: null };
+    })
+    .catch((error) => {
+      return { valid: false, message: error.errors[0] };
+    });
+};
+
+//Input Validation for Write Review Field
+
+//Rating Score
+
+
+
+export const validateRatingScore = (rating) => {
+
+  const ratingScoreSchema = Yup.object().shape({
+    rating: Yup.number("Rating must be an Intager number.")
+      .test("mactch", "Rating Required", () => {
+        return rating !== 0;
+      })
+      .min(1, "Score must be between 1 & 5")
+      .max(5,"Score must be between 1 & 5")
+      .required("Required"),
+  });
+
+
+  return ratingScoreSchema
+    .validate({ rating: rating })
+    .then(() => {
+      return { valid: true, message: null };
+    })
+    .catch((error) => {
+      return { valid: false, message: error.errors[0] };
+    });
+};
+
+//Rating Body(Message)
+
+const ratingBodySchema = Yup.object().shape({
+  ratingBody: Yup.string("Please enter a string").required("Required"),
+});
+
+export const validateRatingBody = (ratingBody) => {
+  return ratingBodySchema
+    .validate({ ratingBody: ratingBody })
     .then(() => {
       return { valid: true, message: null };
     })

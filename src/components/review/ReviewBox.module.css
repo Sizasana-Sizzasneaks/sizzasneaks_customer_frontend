@@ -1,0 +1,31 @@
+.reviewBox {
+  padding: 20px 30px;
+  background-color: white;
+  display: flexbox;
+  margin-bottom: 30px;
+}
+
+.reviewCount{
+  color: #FF6158;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.averageRating {
+  color: #FF6158;
+  display: flex;
+  align-items: baseline;
+  font-weight: 400;
+}
+
+.averageRating p {
+  margin: 0px 5px;
+}
+
+
+.divider{
+
+  height: 6px;
+  width: 100%;
+  background-color: #707070;
+}
