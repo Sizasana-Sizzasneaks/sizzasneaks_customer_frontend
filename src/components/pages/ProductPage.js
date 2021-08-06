@@ -8,6 +8,7 @@ import Styles from "./ProductPage.module.css";
 import { Row, Col } from "react-bootstrap";
 
 import ProductCarousel from "../general/ProductsCarousel.js";
+import ReviewBox from "../review/ReviewBox.js";
 
 import { getProduct } from "../../api/products.js";
 
@@ -66,6 +67,7 @@ function ProductPage() {
           <ProductDisplayCard product={product} />{" "}
         </>
       )}
+      <ReviewBox productId={id}/>
       {error && (
         <div
           style={{
@@ -89,6 +91,7 @@ function ProductPage() {
 
 function ProductDisplayCard(props) {
   return (
+    <>
     <div className={Styles.currentProductCard}>
       <Row>
         <Col className={Styles.currentProductImagesSegment} xs={6}>
@@ -154,6 +157,9 @@ function ProductDisplayCard(props) {
         </Col>
       </Row>
     </div>
+
+    
+    </>
   );
 }
 

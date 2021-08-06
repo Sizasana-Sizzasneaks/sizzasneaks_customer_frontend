@@ -1,0 +1,7 @@
+.Star {
+  margin-right: 5px;
+}
+
+.Star:hover {
+  cursor: pointer;
+}

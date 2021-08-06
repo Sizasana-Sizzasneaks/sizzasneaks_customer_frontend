@@ -1,0 +1,65 @@
+.WriteReview {
+  margin: 20px 0px;
+  padding: 15px;
+  background-color: white;
+  box-shadow: 0px 0px 3px 0.5px #888888;
+}
+
+.WriteReviewHeader {
+  display: flex;
+}
+
+.WriteReviewHeader p {
+  margin-right: 10px;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.TextAreaWrapper {
+  /* box-shadow: 0px 0px 3px 0.5px #888888; */
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  padding: 5px 5px;
+}
+.TextArea {
+  border-style: none;
+  resize: none;
+  width: 100%;
+}
+
+.TextArea:focus-visible {
+  outline: none;
+}
+
+.WriteReviewBody {
+}
+
+.ErrorMessage {
+  margin-top: 5px;
+}
+
+.ErrorMessage p {
+  margin: 0px;
+  color: red;
+}
+
+.ScoreErrorMessage {
+  margin: 0px;
+  color: red;
+  font-weight: 300;
+}
+/* .WriteReviewSuccess {
+  color: green;
+  margin-left: auto;
+  font-size: 20px;
+} */
+
+.WriteReviewFaliure {
+  color: red;
+  margin-left: auto;
+}
+
+.WriteReviewPublishSection {
+  margin-top: 10px;
+}
