@@ -44,10 +44,6 @@ function ReviewBox(props) {
         review_id
       );
 
-      if (deleteReviewByReviewIdResult.ok === true) {
-        getReviews();
-      }
-
       return deleteReviewByReviewIdResult;
     } else {
       return { ok: false, message: " Insufficient Information Supplied" };
@@ -64,6 +60,7 @@ function ReviewBox(props) {
       review.product_id = props.productId;
 
       var writeAReviewResult = await sendAReview(review);
+      getReviews();
 
       return writeAReviewResult;
       //Send Review

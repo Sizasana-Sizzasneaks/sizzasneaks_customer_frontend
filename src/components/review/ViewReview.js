@@ -23,16 +23,16 @@ function ViewReview(props) {
           <Col className={Styles.name}>
             <p>{props.fullName}</p>
             {deleteLoad ? (
-              <CircularProgress style={{ marginRight: "10px" }} size={22} />
+              <CircularProgress style={{ marginLeft: "10px" }} size={22} />
             ) : (
               ""
             )}
             {deletReviewState && (
               <>
                 {deletReviewState.ok === true ? (
-                  <p style={{ color: "green" }}>{deletReviewState.message}</p>
+                  <p style={{ color: "green", marginLeft: "10px" }}>{deletReviewState.message}</p>
                 ) : (
-                  <p style={{ color: "red" }}>{deletReviewState.message}</p>
+                  <p style={{ color: "red", marginLeft: "10px" }}>{deletReviewState.message}</p>
                 )}
               </>
             )}
