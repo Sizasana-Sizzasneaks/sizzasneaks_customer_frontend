@@ -32,6 +32,8 @@ function ReviewBox(props) {
     setReviewLoad(false);
     if (getReviewsByProductIdResult.ok === true) {
       setReviews(getReviewsByProductIdResult.data);
+
+     
       console.log(getReviewsByProductIdResult);
     } else {
       setGetReviewError(getReviewsByProductIdResult);

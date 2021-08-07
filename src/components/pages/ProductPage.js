@@ -16,10 +16,14 @@ import image from "../../images/product-item-image.png";
 import { Style } from "@material-ui/icons";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
+import Rating from "../review/Rating.js";
+import Button from "../general/Button.js";
+
 function ProductPage() {
   var [product, setProduct] = React.useState(null);
   var [error, setError] = React.useState(null);
   var [loading, setLoading] = React.useState(true);
+
   var { id } = useParams();
 
   React.useEffect(() => {
@@ -63,11 +67,10 @@ function ProductPage() {
       )}
       {product && (
         <>
-          
           <ProductDisplayCard product={product} />{" "}
         </>
       )}
-      <ReviewBox productId={id}/>
+      <ReviewBox productId={id} />
       {error && (
         <div
           style={{
@@ -90,91 +93,105 @@ function ProductPage() {
 }
 
 function ProductDisplayCard(props) {
-  return (
-    <>
-    <div className={Styles.currentProductCard}>
-      <Row>
-        <Col className={Styles.currentProductImagesSegment} xs={6}>
-          <Row>
-            <Col className={Styles.imageOptionsSegment} xl={4} xs={4}>
-              <img src={props.product.imgURls[1]} />
-              <img src={props.product.imgURls[2]} />
-              <img src={props.product.imgURls[3]} />
-            </Col>
-            <Col className={Styles.mainImageSegment} xl={8} xs={8}>
-              <img src={props.product.imgURls[0]} />
-            </Col>
-          </Row>
-        </Col>
-        <Col className={Styles.currentProductDetailsSegment}>
-          <Row>
-            <Col className={Styles.brand}>
-              <p>{props.product.brand}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col className={Styles.productName}>
-              <p>{props.product.productName}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col className={Styles.productDescription}>
-              <p>{props.product.productDescription}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col className={Styles.productRating}>
-              <span class="material-icons">star</span>
-              <span class="material-icons">star</span>
-              <span class="material-icons">star</span>
-              <span class="material-icons">star_outline</span>
-              <span class="material-icons">star_outline</span>
-            </Col>
-          </Row>
-          <Row>
-            <Col className={Styles.colorSelector}>
-              {" "}
-              <OptionSelector
-                label="Color"
-                options={["Blue", "Red", "Green"]}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col className={Styles.sizeSelector}>
-              <OptionSelector label="Size" options={[4, 3, 8]} />
-            </Col>
-          </Row>
-          <Row className={Styles.priceAndButtons}>
-            <Col className={Styles.productPrice}>
-              <p>R {props.product.sellingPrice}</p>
-            </Col>
-            <Col className={Styles.cardButtons}>
-              <Button label="ADD TO CART" color="#F3D63C" />
-              <Button label="ADD TO WISHLIST" color="#E3E3E3" />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </div>
+  var [selectedOption, setSelectedOption] = React.useState(null);
 
-    
-    </>
-  );
-}
+  function addToCart() {
+    console.log(selectedOption);
+  }
 
-function Button(props) {
   return (
-    <div
-      className={Styles.productPageButton}
-      style={{ backgroundColor: props.color }}
-    >
-      {props.label}
-    </div>
+    <Row className={Styles.currentProductCard}>
+      <Col className={Styles.imageOptionsSegment} xs={2}>
+        <Row>
+          <Col>
+            <img src={props.product.imgURls[1]} />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <img src={props.product.imgURls[2]} />
+          </Col>
+        </Row>
+      </Col>
+
+      <Col xs={1} className={Styles.mainImageSegment}>
+        <Row>
+          <Col>
+            <img src={props.product.imgURls[0]} />
+          </Col>
+        </Row>
+      </Col>
+
+      <Col className={Styles.currentProductDetailsSegment}>
+        <Row>
+          <Col className={Styles.brand}>
+            <p>{props.product.brand}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={Styles.productName}>
+            <p>{props.product.productName}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col className={Styles.productDescription}>
+            <p>{props.product.productDescription}</p>
+          </Col>
+        </Row>
+
+        {/* <Rating value={2} /> */}
+
+        <Row>
+          <Col>
+            {" "}
+            <OptionSelector
+              label="Color"
+              options={props.product.options}
+              sendOptions={(option) => {
+                setSelectedOption(option);
+              }}
+            />
+          </Col>
+        </Row>
+
+        <Row className={Styles.priceAndButtons}>
+          <Col className={Styles.productPrice} xs={5}>
+            <p>R {props.product.sellingPrice}</p>
+          </Col>
+          <Col className={Styles.cardButtons} xs={7}>
+            <Button
+              label="ADD TO CART"
+              styles={{ backgroundColor: "#F3D63C" }}
+              onClick={() => {
+                addToCart();
+              }}
+            />
+            <Button
+              label="ADD TO WISHLIST"
+              styles={{ backgroundColor: "#E3E3E3", float: "right" }}
+            />
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   );
 }
 
 function OptionSelector(props) {
+  var [options, setOptions] = React.useState(props.options || []);
+
+  var [selectedColor, setSelectedColor] = React.useState(0);
+  var [selectedSize, setSelectedSize] = React.useState(null);
+
+  function sendSelectedOption(variant) {
+    if (typeof props.sendOptions !== "undefined") {
+      props.sendOptions({
+        color: options[selectedColor].color,
+        variant: options[selectedColor].variants[variant],
+      });
+    }
+  }
+
   return (
     <div>
       <div className={Styles.optionSelectorBanner}>
@@ -183,15 +200,53 @@ function OptionSelector(props) {
       </div>
 
       <div className={Styles.optionSelectorOptions}>
-        <div className={Styles.optionItem}>
-          <p>{props.options[0]}</p>
-        </div>
-        <div className={Styles.optionItem}>
-          <p>{props.options[1]}</p>
-        </div>
-        <div className={Styles.optionItem}>
-          <p>{props.options[2]}</p>
-        </div>
+        {options.map((option, index) => {
+          return (
+            <div
+              onClick={() => {
+                setSelectedColor(index);
+                setSelectedSize(null);
+                setSelectedSize(null);
+              }}
+              className={
+                index === selectedColor
+                  ? Styles.optionSelected
+                  : Styles.optionItem
+              }
+            >
+              <p>{option.color}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className={Styles.optionSelectorBanner}>
+        <p>Size</p>
+        <span class="material-icons">arrow_drop_down</span>
+      </div>
+
+      <div className={Styles.optionSelectorOptions}>
+        {options[selectedColor].variants.map((variant, index) => {
+          return variant.quantity >= 1 ? (
+            <div
+              onClick={async () => {
+                await setSelectedSize(index);
+                sendSelectedOption(index);
+              }}
+              className={
+                index === selectedSize
+                  ? Styles.optionSelected
+                  : Styles.optionItem
+              }
+            >
+              <p>{"UK " + variant.size}</p>
+            </div>
+          ) : (
+            <div className={Styles.UnavailableOption}>
+              <p>{"UK " + variant.size}</p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
