@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+
+import Styles from "./Navbar.module.css";
+
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -31,7 +34,7 @@ function Navbar() {
   const profileState = useSelector((state) => state.profile);
   return (
     <nav>
-      <div className="navbar-banner">
+      <div className={Styles.NavbarBanner}>
         <Container
           fluid="xl"
           style={{
@@ -46,14 +49,14 @@ function Navbar() {
             <Col xs={4} style={{ padding: "0" }}>
               <Link to="/">
                 {" "}
-                <p className="logo-banner">SIZZASNEAKS</p>{" "}
+                <p className={Styles.LogoBanner }>SIZZASNEAKS</p>{" "}
               </Link>
             </Col>
 
             <Col xs={4} style={{ padding: "0" }}>
-              <div className="search-bar-box">
+              <div className={Styles.SearchBarBox}>
                 <input
-                  id="search-input"
+                className={Styles.SearchInput}
                   type="text"
                   placeholder="Search Products"
                 />
@@ -72,45 +75,45 @@ function Navbar() {
             )}
             {!profileState.loading && (
               <Col xs={4} style={{ padding: "0" }}>
-                <Row className="top-right-nav-banner-links">
+                <Row className={Styles.TopRightNavBannerLinks }>
                   {authState.isEmpty || authState.isAnonymous ? (
                     <>
                       <Col
                         xs={2}
-                        className="top-right-nav-banner-linky"
+                        className={Styles.TopRightNavBannerLinky}
                         style={{ marginLeft: "auto" }}
                       >
                         <p onClick={handleClick}> Log In</p>
-                        <div className="top-right-nav-banner-linkyy">
+                        <div className={Styles.TopRightNavBannerLinkyy}>
                           <LogIn isShowLogin={isShowLogin} />
                         </div>
                       </Col>
                       <Col xs={1}>
-                        <div className="vertical-divider"></div>
+                        <div className={Styles.VerticalDivider}></div>
                       </Col>
-                      <Col xs={3} className="top-right-nav-banner-link">
+                      <Col xs={3} className={Styles.TopRightNavBannerLink}>
                         <Link to="/sign-up">
                           {" "}
                           <p>Sign Up</p>{" "}
                         </Link>
                       </Col>{" "}
                       <Col xs={1}>
-                        <div className="vertical-divider"></div>
+                        <div className={Styles.VerticalDivider}></div>
                       </Col>
                     </>
                   ) : (
                     <>
                       {" "}
-                      <Col xs={3} className="top-right-nav-banner-link">
+                      <Col xs={3} className={Styles.TopRightNavBannerLink}>
                         {" "}
                         <p>
                           {profileState ? profileState.displayName : "User"}
                         </p>{" "}
                       </Col>{" "}
                       <Col xs={1}>
-                        <div className="vertical-divider"></div>
+                        <div className={Styles.VerticalDivider}></div>
                       </Col>
-                      <Col xs={3} className="top-right-nav-banner-link">
+                      <Col xs={3} className={Styles.TopRightNavBannerLink}>
                         {" "}
                         <p
                           onClick={async () => {
@@ -122,13 +125,13 @@ function Navbar() {
                         </p>{" "}
                       </Col>
                       <Col xs={1}>
-                        <div className="vertical-divider"></div>
+                        <div className={Styles.VerticalDivider}></div>
                       </Col>
                     </>
                   )}
 
-                  <Col xs={3} className="top-right-nav-banner-link">
-                    <div className="shopping-cart-banner">
+                  <Col xs={3} className={Styles.TopRightNavBannerLink}>
+                    <div className={Styles.ShoppingCartBanner}>
                       <span
                         style={{ float: "left" }}
                         className="material-icons"
@@ -144,7 +147,7 @@ function Navbar() {
           </Row>
         </Container>
       </div>
-      <div className="navbar-links-segment">
+      <div className={Styles.NavbarLinksSegment}>
         <Container
           fluid="xl"
           style={{ height: "100%", paddingLeft: "0", paddingRight: "0" }}
@@ -177,7 +180,7 @@ function NavabarNavigationLink(props) {
   return (
     <Link to={"/products/" + "CATEGORY/" + props.label}>
       <div
-        className="navbarNavigationLink"
+        className={Styles.NavbarNavigationLink}
         // onClick={function () {
         //   alert("Coming Soon");
         // }}
