@@ -5,7 +5,7 @@ import { logIn } from "../../services/authentication.js";
 //Styles & Themes
 import { MDBRow, MDBCol, MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
 import { makeStyles } from "@material-ui/core/styles";
-import LinearProgress from '@material-ui/core/LinearProgress';
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -141,7 +141,12 @@ function LogInComponent({ isShowLogin }) {
                       var logInResult = await logIn(email, password);
                       setLoading(false);
                       setLogInState(logInResult);
-                      console.log(logInResult);
+
+                      // if (logInResult.ok === true) {
+                      //   console.log(logInResult);
+                      // }
+
+                      
                     }}
                   >
                     LOGIN

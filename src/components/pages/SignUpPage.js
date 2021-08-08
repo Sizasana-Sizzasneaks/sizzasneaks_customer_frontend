@@ -5,7 +5,7 @@ import { useFirebase } from "react-redux-firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-react-ui-kit";
-import LinearProgress from '@material-ui/core/LinearProgress';
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import { getUserProfile } from "../../redux/actions/profile";
 
@@ -48,7 +48,7 @@ function SignUpPage() {
   const classes = useStyles();
 
   React.useEffect(() => {
-    checkFormValid()
+    checkFormValid();
   }, [
     errorFirstName,
     errorLastName,
@@ -98,17 +98,20 @@ function SignUpPage() {
         <MDBRow>
           <MDBCol md="8" className={classes.card} style={{ margin: "0 auto" }}>
             <form>
-
-            {loading && <div style={{paddingTop:"10px", paddingBottom: "20px" }}><LinearProgress/></div>}
-                {signUpState && (
-                  <>
-                    {signUpState.ok === true ? (
-                      <p className="success-prompt">{signUpState.message}</p>
-                    ) : (
-                      <p className="error-prompt">{signUpState.message}</p>
-                    )}
-                  </>
-                )}
+              {loading && (
+                <div style={{ paddingTop: "10px", paddingBottom: "20px" }}>
+                  <LinearProgress />
+                </div>
+              )}
+              {signUpState && (
+                <>
+                  {signUpState.ok === true ? (
+                    <p className="success-prompt">{signUpState.message}</p>
+                  ) : (
+                    <p className="error-prompt">{signUpState.message}</p>
+                  )}
+                </>
+              )}
               <p className="h4 text-left mb-4">Personal Details</p>
               <MDBRow>
                 <MDBCol md="6">
@@ -207,6 +210,7 @@ function SignUpPage() {
                     type="password"
                     id="defaultFormRegisterPasswordEx"
                     className="form-control"
+                    value={password}
                     onChange={async (event) => {
                       await setPassword(event.target.value);
                       var passwordValidationResult =
@@ -228,6 +232,7 @@ function SignUpPage() {
                   </label>
                   <input
                     type="password"
+                    value={retypePsw}
                     id="defaultFormRegisterPasswordEx"
                     className="form-control"
                     onChange={async (event) => {
@@ -249,7 +254,7 @@ function SignUpPage() {
 
               <div className="text-center mt-4">
                 <MDBBtn
-                disabled={!formValid}
+                  disabled={!formValid}
                   color="red-text"
                   className="rounded amber"
                   onClick={async (event) => {
@@ -266,8 +271,34 @@ function SignUpPage() {
                     });
                     setLoading(false);
                     setSignUpState(signUpResult);
-                    console.log(signUpResult);
-                    dispatch(getUserProfile());
+
+                    if (signUpResult.ok === true) {
+                      //Clear Fields
+                      setFirstName("");
+                      setLastName("");
+                      setEmail("");
+                      setMobileNumber("");
+                      setPassword("");
+                      setRetypePsw("");
+
+                      setErrorFirstName(null);
+                      setErrorLastName(null);
+                      setErrorEmail(null);
+                      setErrorMobile(null);
+                      setErrorPassword(null);
+                      setErrorRetypePsw(null);
+
+                      dispatch(getUserProfile());
+                    } else {
+                      setEmail("");
+                      setPassword("");
+                      setRetypePsw("");
+
+                      setErrorEmail(null);
+                      setErrorPassword(null);
+                      setErrorRetypePsw(null);
+                      
+                    }
                   }}
                 >
                   Register

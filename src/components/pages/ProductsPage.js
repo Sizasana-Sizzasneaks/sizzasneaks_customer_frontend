@@ -16,9 +16,11 @@ function ProductsPage(props) {
     console.log("Use Effct");
 
     getTheProducts();
-  }, []);
+  }, [searchBy, category]);
 
   async function getTheProducts() {
+    setProducts(null);
+    setLoading(true);
     var getProductsResult = await getProducts({
       searchBy: searchBy,
       value: category,
@@ -40,12 +42,26 @@ function ProductsPage(props) {
   return (
     <>
       <div>
-        <div style={{ display: "flex", marginTop:"25px", marginLeft:" 30px" }}>
-          <p style={{marginRight: "10px"}}>Home</p>
-          <span style={{marginRight: "10px"}} class="material-icons">chevron_right</span>
+        <div
+          style={{ display: "flex", marginTop: "25px", marginLeft: " 30px" }}
+        >
+          <p style={{ marginRight: "10px" }}>Home</p>
+          <span style={{ marginRight: "10px" }} class="material-icons">
+            chevron_right
+          </span>
           <p>{category}</p>
         </div>{" "}
-        <p style={{fontSize:"22px", fontWeight:"400", marginLeft:"45px", marginBottom: "30px", marginTop:"15px"}}>{category}</p>
+        <p
+          style={{
+            fontSize: "22px",
+            fontWeight: "400",
+            marginLeft: "45px",
+            marginBottom: "30px",
+            marginTop: "15px",
+          }}
+        >
+          {category}
+        </p>
       </div>
       <Grid container spacing={5} style={{ height: "500px" }}>
         {products &&
@@ -91,18 +107,6 @@ function ProductsPage(props) {
           </div>
         )}
       </Grid>
-
-      {/* <Grid container>
-        <div className="page-number-indicator-section">
-          <PageNumberHolder pageNumber={1} activePage={true} />
-          <PageNumberHolder pageNumber={2} activePage={true} />
-          <PageNumberHolder pageNumber={3} />
-          <PageNumberHolder pageNumber={4} />
-          <PageNumberHolder pageNumber={5} />
-          <PageNumberHolder pageNumber={">"} />
-          <PageNumberHolder pageNumber={">>"} />
-        </div>
-      </Grid> */}
     </>
   );
 }
