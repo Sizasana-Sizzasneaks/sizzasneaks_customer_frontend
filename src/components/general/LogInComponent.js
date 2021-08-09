@@ -1,6 +1,7 @@
 import React from "react";
 import * as InputValidation from "../../services/inputValidation.js";
 import { logIn } from "../../services/authentication.js";
+import { Link } from "react-router-dom";
 
 //Styles & Themes
 import { MDBRow, MDBCol, MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
@@ -121,11 +122,11 @@ function LogInComponent({ isShowLogin }) {
                       {errorPassword &&
                         (!errorPassword.valid ? errorPassword.message : "")}
                     </p>
-                    <p className="font-small blue-text d-flex justify-content-end pb-3">
+                    {/* <p className="font-small blue-text d-flex justify-content-end pb-3">
                       <a href="/src/components/pages/ProductPage.js">
                         Forgot Password?
                       </a>
-                    </p>
+                    </p> */}
                   </MDBCol>
                 </MDBRow>
 
@@ -142,17 +143,20 @@ function LogInComponent({ isShowLogin }) {
                       setLoading(false);
                       setLogInState(logInResult);
 
-                      // if (logInResult.ok === true) {
-                      //   console.log(logInResult);
-                      // }
-
-                      
+                      if (logInResult.ok !== true) {
+                        setErrorPassword(null);
+                        setPassword("");
+                      }
                     }}
                   >
                     LOGIN
                   </MDBBtn>
+
                   <p>
-                    New Customer? <a href="/sign-up">Register Now</a>
+                    New Customer?{" "}
+                    <Link to="/sign-up">
+                      <span> Register Now</span>
+                    </Link>
                   </p>
                 </div>
               </form>

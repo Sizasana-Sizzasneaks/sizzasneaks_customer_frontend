@@ -19,6 +19,7 @@ function ProductsPage(props) {
   }, [searchBy, category]);
 
   async function getTheProducts() {
+    setError(null);
     setProducts(null);
     setLoading(true);
     var getProductsResult = await getProducts({
