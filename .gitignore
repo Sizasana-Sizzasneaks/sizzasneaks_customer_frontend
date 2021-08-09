@@ -26,5 +26,11 @@ yarn-error.log*
 # Environment
 .env
 
+firebase.json
+.firebaserc
+
 #Secrets
 src/secrets.js
+
+.*
+.firebase
