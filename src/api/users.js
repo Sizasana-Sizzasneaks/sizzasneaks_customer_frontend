@@ -78,7 +78,7 @@ export const createNewUser = async (userData) => {
     };
 
     return axios
-      .post("http://localhost:5000/user", { ...userData }, config)
+      .post(API_CONSTANTS.USER_ROUTE, { ...userData }, config)
       .then((res) => {
         return { ok: true };
       })
