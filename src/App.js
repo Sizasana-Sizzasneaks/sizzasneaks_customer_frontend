@@ -14,6 +14,7 @@ import ProductPage from "./components/pages/ProductPage.js";
 import HomePage from "./components/pages/HomePage.js";
 import SignUpPage from "./components/pages/SignUpPage.js";
 import LogInComponent from "./components/general/LogInComponent.js";
+import ShoppingCartPage from "./components/pages/ShoppingCartPage.js";
 
 import store from "./redux/index.js";
 import { isLoaded, isEmpty } from "react-redux-firebase";
@@ -74,6 +75,11 @@ function App() {
                 children={<ProductsPage />}
               >
                 {/* Ameer */}
+              </Route>
+              <Route exact path="/cart">
+                {" "}
+                {/* Lara */}
+                <ShoppingCartPage />
               </Route>
               <Route exact path="/sign-up">
                 {" "}

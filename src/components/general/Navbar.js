@@ -49,14 +49,14 @@ function Navbar() {
             <Col xs={4} style={{ padding: "0" }}>
               <Link to="/">
                 {" "}
-                <p className={Styles.LogoBanner }>SIZZASNEAKS</p>{" "}
+                <p className={Styles.LogoBanner}>SIZZASNEAKS</p>{" "}
               </Link>
             </Col>
 
             <Col xs={4} style={{ padding: "0" }}>
               <div className={Styles.SearchBarBox}>
                 <input
-                className={Styles.SearchInput}
+                  className={Styles.SearchInput}
                   type="text"
                   placeholder="Search Products"
                 />
@@ -75,7 +75,7 @@ function Navbar() {
             )}
             {!profileState.loading && (
               <Col xs={4} style={{ padding: "0" }}>
-                <Row className={Styles.TopRightNavBannerLinks }>
+                <Row className={Styles.TopRightNavBannerLinks}>
                   {authState.isEmpty || authState.isAnonymous ? (
                     <>
                       <Col
@@ -131,15 +131,17 @@ function Navbar() {
                   )}
 
                   <Col xs={3} className={Styles.TopRightNavBannerLink}>
-                    <div className={Styles.ShoppingCartBanner}>
-                      <span
-                        style={{ float: "left" }}
-                        className="material-icons"
-                      >
-                        shopping_cart
-                      </span>
-                      <p>Cart</p>
-                    </div>
+                    <Link to="/cart">
+                      <div className={Styles.ShoppingCartBanner}>
+                        <span
+                          style={{ float: "left" }}
+                          className="material-icons"
+                        >
+                          shopping_cart
+                        </span>
+                        <p>Cart</p>
+                      </div>
+                    </Link>
                   </Col>
                 </Row>
               </Col>
