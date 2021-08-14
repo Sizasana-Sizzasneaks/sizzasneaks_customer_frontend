@@ -1,6 +1,7 @@
 import React from "react"
 import { Row, Col } from "react-bootstrap";
 import Styles from "./ProductDisplayCard.module.css";
+import { addToCart } from "../../api/cart";
 
 import OptionSelector from "./OptionSelector";
 import Button from "../general/Button.js"
@@ -19,7 +20,7 @@ function ProductDisplayCard(props) {
       };
     }
   
-    function addToCart() {
+    async function addProductToCart() {
       setSizeSelectedError(null);
       setColorSelectedError(null);
       var selectedOption = getSelectedOption();
@@ -27,7 +28,20 @@ function ProductDisplayCard(props) {
         if (typeof selectedOption.variant !== "undefined") {
           // Add to Cart Call
           console.log("Add to Cart");
-          console.log(selectedOption);
+          var variant = {};
+          variant.color = selectedOption.color;
+          variant.size = selectedOption.variant.size;
+          var addToCartResult = await addToCart(props.product._id, variant);
+          if(addToCartResult.ok === true){
+            console.log("It Worked");
+            console.log(addToCartResult);
+          }else{
+            console.log("It Did Not Work");
+            console.log(addToCartResult);
+          }
+
+
+         // console.log(selectedOption);
         } else {
           setSizeSelectedError("Size Required");
         }
@@ -107,7 +121,7 @@ function ProductDisplayCard(props) {
                 label="ADD TO CART"
                 styles={{ backgroundColor: "#F3D63C" }}
                 onClick={() => {
-                  addToCart();
+                  addProductToCart();
                 }}
               />
               <Button
