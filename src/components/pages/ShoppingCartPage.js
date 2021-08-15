@@ -1,10 +1,15 @@
 import React from "react";
-import { getCart, updateCartItemQuantity } from "../../api/cart.js";
+import {
+  getCart,
+  updateCartItemQuantity,
+  deleteSingleCartItem,
+} from "../../api/cart.js";
 
 function ShoppingCartPage(props) {
   React.useEffect(() => {
     // getShoppingCart();
     //updateItemQuantity("6101340adc7a0305bc700018",{color:"Blue", size:7}, 2);
+   // deleteCartItem("6101340adc7a0305bc700017", { color: "Green", size: 2 });
   }, []);
 
   async function getShoppingCart() {
@@ -16,6 +21,21 @@ function ShoppingCartPage(props) {
     } else {
       console.log("Sad");
       console.log(getCartResult);
+    }
+  }
+
+  async function deleteCartItem(product_id, option) {
+    var deleteSingleCartItemResult = await deleteSingleCartItem(
+      product_id,
+      option
+    );
+
+    if (deleteSingleCartItemResult.ok === true) {
+      console.log("It Worked");
+      console.log(deleteSingleCartItemResult);
+    } else {
+      console.log("Sad");
+      console.log(deleteSingleCartItemResult);
     }
   }
 
