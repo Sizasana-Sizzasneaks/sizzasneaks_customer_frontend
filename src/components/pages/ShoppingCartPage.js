@@ -1,13 +1,13 @@
 import React from "react";
-import { getCart } from "../../api/cart.js";
+import { getCart, updateCartItemQuantity } from "../../api/cart.js";
 
 function ShoppingCartPage(props) {
   React.useEffect(() => {
-      getShoppingCart();
+    // getShoppingCart();
+    //updateItemQuantity("6101340adc7a0305bc700018",{color:"Blue", size:7}, 2);
   }, []);
 
-  async function getShoppingCart () {
-      
+  async function getShoppingCart() {
     var getCartResult = await getCart();
 
     if (getCartResult.ok === true) {
@@ -16,6 +16,22 @@ function ShoppingCartPage(props) {
     } else {
       console.log("Sad");
       console.log(getCartResult);
+    }
+  }
+
+  async function updateItemQuantity(product_id, option, newQuantity) {
+    var updateCartItemQuantityResult = await updateCartItemQuantity(
+      product_id,
+      option,
+      newQuantity
+    );
+
+    if (updateCartItemQuantityResult.ok === true) {
+      console.log("It Worked");
+      console.log(updateCartItemQuantityResult);
+    } else {
+      console.log("Sad");
+      console.log(updateCartItemQuantityResult);
     }
   }
 

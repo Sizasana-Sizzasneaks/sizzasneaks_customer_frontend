@@ -9,7 +9,7 @@ import { createGuestUser } from "../services/authentication.js";
 
 //Build Two
 //Add to Cart function
-export const addToCart = async (productId,variant) => {
+export const addToCart = async (productId, variant) => {
   if (isLoaded(store.getState().firebase.auth)) {
     if (isEmpty(store.getState().firebase.auth)) {
       //Create Guest Account
@@ -20,13 +20,18 @@ export const addToCart = async (productId,variant) => {
     if (getTokenResult.ok === true) {
       console.log(getTokenResult.data);
       const config = {
-        headers: {credentialclaims: "customer",
-        Authorization: "Bearer " + getTokenResult.data
+        headers: {
+          credentialclaims: "customer",
+          Authorization: "Bearer " + getTokenResult.data,
         },
       };
 
       return axios
-        .put(API_CONSTANTS.CART_ROUTE, { product_id:productId, variant: variant  }, config)
+        .post(
+          API_CONSTANTS.CART_ROUTE + "/cart_item",
+          { product_id: productId, variant: variant },
+          config
+        )
         .then((res) => {
           return { ok: true };
         })
@@ -79,3 +84,46 @@ export const getCart = async () => {
   }
 };
 
+export const updateCartItemQuantity = async (
+  product_id,
+  option,
+  newQuantity
+) => {
+  if (isLoaded(store.getState().firebase.auth)) {
+    if (!isEmpty(store.getState().firebase.auth)) {
+      var getTokenResult = await getCurrentUserIdToken();
+
+      if (getTokenResult.ok === true) {
+        const config = {
+          headers: {
+            credentialclaims: "customer",
+            Authorization: "Bearer " + getTokenResult.data,
+          },
+        };
+        return axios
+          .patch(
+            API_CONSTANTS.CART_ROUTE + "/cart_item",
+            { product_id: product_id, option: option, newQuantity },
+            config
+          )
+          .then((res) => {
+            // Request Succesfull
+            //Handle Different HTTP Status Codes and Responses
+            return res.data;
+          })
+          .catch((error) => {
+            //Request Unsuccesfull
+            return { ok: false, error: error };
+          });
+      } else {
+        //Failed to get Token
+        return getTokenResult;
+      }
+    } else {
+      return { ok: false, message: "No User Signed In" };
+    }
+    // Add to Cart Logic
+  } else {
+    return { ok: false, message: "Add to Cart Failed - Try again" };
+  }
+};
