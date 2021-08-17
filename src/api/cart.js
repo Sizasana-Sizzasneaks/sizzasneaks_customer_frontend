@@ -33,7 +33,7 @@ export const addToCart = async (productId, variant) => {
           config
         )
         .then((res) => {
-          return { ok: true };
+          return res.data;
         })
         .catch((error) => {
           return { ok: false, error: error };

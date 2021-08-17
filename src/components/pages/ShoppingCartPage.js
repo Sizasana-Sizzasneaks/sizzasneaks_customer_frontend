@@ -8,7 +8,7 @@ import {
 function ShoppingCartPage(props) {
   React.useEffect(() => {
     // getShoppingCart();
-    //updateItemQuantity("6101340adc7a0305bc700018",{color:"Blue", size:7}, 2);
+   // updateItemQuantity("6101340adc7a0305bc700017",{color:"Red", size:3}, 4);
    // deleteCartItem("6101340adc7a0305bc700017", { color: "Green", size: 2 });
   }, []);
 
