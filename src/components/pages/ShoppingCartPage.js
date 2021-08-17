@@ -16,10 +16,8 @@ function ShoppingCartPage(props) {
     var getCartResult = await getCart();
 
     if (getCartResult.ok === true) {
-      console.log("It Worked");
       console.log(getCartResult);
     } else {
-      console.log("Sad");
       console.log(getCartResult);
     }
   }
@@ -31,10 +29,8 @@ function ShoppingCartPage(props) {
     );
 
     if (deleteSingleCartItemResult.ok === true) {
-      console.log("It Worked");
       console.log(deleteSingleCartItemResult);
     } else {
-      console.log("Sad");
       console.log(deleteSingleCartItemResult);
     }
   }
@@ -47,10 +43,8 @@ function ShoppingCartPage(props) {
     );
 
     if (updateCartItemQuantityResult.ok === true) {
-      console.log("It Worked");
       console.log(updateCartItemQuantityResult);
     } else {
-      console.log("Sad");
       console.log(updateCartItemQuantityResult);
     }
   }

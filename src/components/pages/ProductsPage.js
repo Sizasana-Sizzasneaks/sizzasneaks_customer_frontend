@@ -28,12 +28,10 @@ function ProductsPage(props) {
     });
 
     if (getProductsResult.ok === true) {
-      console.log("Worked");
       console.log(getProductsResult);
       setLoading(false);
       setProducts(getProductsResult.data);
     } else {
-      console.log("Failed");
       setLoading(false);
       console.log(getProductsResult);
       setError(getProductsResult);

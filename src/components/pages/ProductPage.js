@@ -30,13 +30,11 @@ function ProductPage() {
     var getProductsResult = await getProduct(productId);
 
     if (getProductsResult.ok === true) {
-      console.log("Worked");
       console.log(getProductsResult);
       setLoading(false);
       setProduct(getProductsResult.data[0]);
       console.log(getProductsResult.data[0]);
     } else {
-      console.log("Failed");
       setLoading(false);
       console.log(getProductsResult);
       setError(getProductsResult);

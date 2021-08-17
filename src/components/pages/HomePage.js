@@ -28,11 +28,9 @@ function HomePage() {
     });
 
     if (getProductsResult.ok === true) {
-      console.log("Worked");
       console.log(getProductsResult);
       setProducts(getProductsResult.data);
     } else {
-      console.log("Failed");
       console.log(getProductsResult);
     }
   }

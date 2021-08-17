@@ -29,13 +29,11 @@ function App() {
     if (isLoaded(store.getState().firebase.auth)) {
       if (isEmpty(store.getState().firebase.auth)) {
         subscription();
-        console.log("Called ME");
         setLoading(false);
       } else {
       
         subscription();
         await store.dispatch(getUserProfile());
-        console.log("Called ME");
         setLoading(false);
       }
     }
