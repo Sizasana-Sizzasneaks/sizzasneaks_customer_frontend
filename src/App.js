@@ -88,6 +88,11 @@ function App() {
               <Route exact path="/">
                 <HomePage /> {/* Lusanda */}
               </Route>
+
+              <Route exact path="/cart">
+                <CartPage /> 
+              </Route>
+
             </Switch>
           </Container>
           <Footer /> {/* Mata */}
