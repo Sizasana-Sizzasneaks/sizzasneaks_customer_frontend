@@ -61,32 +61,38 @@ export const getCart = async () => {
 
       // checks whether the current user's token was retrieved successfully 
       if (getTokenResult.ok === true) {
+        
         const config = {
+          // sets the necessary header information based on the user's token 
           headers: {
             credentialclaims: "customer",
             Authorization: "Bearer " + getTokenResult.data,
           },
         };
+
+        //returns the cart object from the user 
         return axios
           .get(API_CONSTANTS.CART_ROUTE, config)
           .then((res) => {
             // Request Succesfull
             //Handle Different HTTP Status Codes and Responses
             return res.data;
-          })
+          })// returns the corresponding data for a signed in user's cart
           .catch((error) => {
-            //Request Unsuccesfull
+            // returns general error when trying to getting art is unsuccessful
             return { ok: false, error: error };
           });
       } else {
-        //Failed to get Token
+        //returns a general error when the system has failed to get the user's token 
         return getTokenResult;
       }
     } else {
+      //returns a message if the current user is not signed into the platform
       return { ok: false, message: "No User Signed In" };
     }
-    // Add to Cart Logic
+   
   } else {
+    //returns a message when data has not been loaded from the redux store.
     return { ok: false, message: "Getting Cart Failed - Try again" };
   }
 };
