@@ -11,7 +11,8 @@ import ProductCarousel from "../general/ProductsCarousel.js";
 import PromotionlBannerImgOne from "../../images/homepage-promotion-banner-one.png";
 import PromotionlBannerImgTwo from "../../images/homepage-promotion-banner-image-two.png";
 import PromotionalBannerImgThree from "../../images/homepage-promotion-banner-image-three.png";
-
+//HomePage 
+// Get the porducts on a home page using homepage() fuction 
 function HomePage() {
   var [products, setProducts] = React.useState(null);
 
@@ -20,13 +21,14 @@ function HomePage() {
 
     getTheProducts();
   }, []);
+  // getProductsResult Awaits the getProducts 
 
   async function getTheProducts() {
     var getProductsResult = await getProducts({
-      searchBy: "NONE",
+      searchBy: "NONE", // getting the products by getProducts does not uses searchBy or value
       value: "NONE",
     });
-
+    //if getProductsResult is true setProducts will equal getProductsResult.data otherwise if false it will print getProductResult in terminal
     if (getProductsResult.ok === true) {
       console.log(getProductsResult);
       setProducts(getProductsResult.data);
@@ -34,7 +36,7 @@ function HomePage() {
       console.log(getProductsResult);
     }
   }
-
+//below are the visual code the banner in the home page 
   return (
     <div className="homepage">
       <Row>

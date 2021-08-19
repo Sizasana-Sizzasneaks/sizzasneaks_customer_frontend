@@ -11,7 +11,7 @@ import { getUserProfile } from "../../redux/actions/profile";
 
 import * as InputValidation from "../../services/inputValidation.js";
 import { signUp } from "../../services/authentication.js";
-
+// This is the Sign up page 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -34,7 +34,7 @@ function SignUpPage() {
   var [password, setPassword] = React.useState("");
   var [retypePsw, setRetypePsw] = React.useState("");
 
-  //Validation
+  //input Validation
   var [errorFirstName, setErrorFirstName] = React.useState(null);
   var [errorLastName, setErrorLastName] = React.useState(null);
   var [errorEmail, setErrorEmail] = React.useState(null);
@@ -57,10 +57,10 @@ function SignUpPage() {
     errorPassword,
     errorRetypePsw,
   ]);
-
+//function below checks if all the feilds are filled or no and if the data provided is in correct format
   function checkFormValid() {
     if (
-      errorFirstName &&
+      errorFirstName && //if all the fields are provided only then proceed to next if statemen
       errorLastName &&
       errorEmail &&
       errorMobile &&
@@ -68,19 +68,19 @@ function SignUpPage() {
       errorRetypePsw
     ) {
       if (
-        errorFirstName.valid === true &&
+        errorFirstName.valid === true && //this checks if all the information provided is in right format
         errorLastName.valid === true &&
         errorEmail.valid === true &&
         errorMobile.valid === true &&
         errorPassword.valid === true &&
         errorRetypePsw.valid === true
       ) {
-        setFormValid(true);
+        setFormValid(true); //if everything is fine then setFormValid is set to true otherwise false
       } else {
         setFormValid(false);
       }
     } else {
-      setFormValid(false);
+      setFormValid(false); //setFormValid is set false all the info in not provided
     }
   }
   return (
@@ -125,7 +125,7 @@ function SignUpPage() {
                       await setFirstName(event.target.value);
                       var firstNameValidationResult =
                         await InputValidation.validateName(event.target.value);
-                      setErrorFirstName(firstNameValidationResult);
+                      setErrorFirstName(firstNameValidationResult);//checks the FirstName for input validation shows error if not in correct format
                     }}
                   />
                   <p className="p-errors">
@@ -145,7 +145,7 @@ function SignUpPage() {
                       await setLastName(event.target.value);
                       var lastNameValidationResult =
                         await InputValidation.validateName(event.target.value);
-                      setErrorLastName(lastNameValidationResult);
+                      setErrorLastName(lastNameValidationResult);//checks the LastName for input validation shows error if not in correct format
                     }}
                   />
                   <p className="p-errors">
@@ -168,7 +168,7 @@ function SignUpPage() {
                       await setEmail(event.target.value);
                       var emailValidationResult =
                         await InputValidation.validateEmail(event.target.value);
-                      setErrorEmail(emailValidationResult);
+                      setErrorEmail(emailValidationResult); //checks the Email for input validation throgh validateEmail shows error if not in correct format
                     }}
                   />
                   <p className="p-errors">
@@ -191,7 +191,7 @@ function SignUpPage() {
                       var mobileNumberValidationResult =
                         await InputValidation.validateMobileNumber(
                           event.target.value
-                        );
+                        );//checks the MobileNumber for input validation shows error if not in correct format
                       setErrorMobile(mobileNumberValidationResult);
                     }}
                   />
@@ -216,7 +216,7 @@ function SignUpPage() {
                       var passwordValidationResult =
                         await InputValidation.validateSignUpPassword(
                           event.target.value
-                        );
+                        ); //checks the Passord for input validation shows error if all the requiured criteria is not met 
                       setErrorPassword(passwordValidationResult);
                     }}
                   />
@@ -241,7 +241,7 @@ function SignUpPage() {
                         await InputValidation.validateRetypePassword(
                           password,
                           event.target.value
-                        );
+                        ); //checks if both the passwords are same or not
                       setErrorRetypePsw(retypePasswordValidationResult);
                     }}
                   />
@@ -261,7 +261,7 @@ function SignUpPage() {
                     event.preventDefault();
                     setSignUpState(null);
                     setLoading(true);
-
+                    //signUpResult is used to see if the sign was sucessfull 
                     var signUpResult = await signUp({
                       firstName,
                       lastName,

@@ -5,19 +5,20 @@ import { useParams } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { getProducts } from "../../api/products.js";
-
+//page that shows many products
 function ProductsPage(props) {
   var [products, setProducts] = React.useState(null);
   var [error, setError] = React.useState(null);
   var [loading, setLoading] = React.useState(true);
-  var { searchBy, category } = useParams();
+  var { searchBy, category } = useParams(); //products can be shown by category
 
   React.useEffect(() => {
     console.log("Use Effct");
 
     getTheProducts();
-  }, [searchBy, category]);
+  }, [searchBy, category]); //get the products from search
 
+  //This function will get the products by whatever the user serches by e.g. category, searchBy
   async function getTheProducts() {
     setError(null);
     setProducts(null);
@@ -26,7 +27,7 @@ function ProductsPage(props) {
       searchBy: searchBy,
       value: category,
     });
-
+    // shows the products if true else setError
     if (getProductsResult.ok === true) {
       console.log(getProductsResult);
       setLoading(false);
@@ -37,7 +38,7 @@ function ProductsPage(props) {
       setError(getProductsResult);
     }
   }
-
+//this function will return page with multiple products below is how all the products will be shown on the page. 
   return (
     <>
       <div>
@@ -111,7 +112,7 @@ function ProductsPage(props) {
 }
 
 export default ProductsPage;
-
+//number of page function - tracks what page the usse is on 
 function PageNumberHolder(props) {
   var className = props.activePage
     ? "page-number-holder active-page"

@@ -9,7 +9,7 @@ import Button from "../general/Button.js";
 import Rating from "./Rating.js";
 
 import { convertDateToString } from "../../services/dateManipulationFunctions.js";
-
+//fucntion used to show reviews of the products previously published
 function ViewReview(props) {
   const authState = useSelector((state) => state.firebase.auth);
 
@@ -30,7 +30,7 @@ function ViewReview(props) {
             {deletReviewState && (
               <>
                 {deletReviewState.ok === true ? (
-                  <p style={{ color: "green", marginLeft: "10px" }}>{deletReviewState.message}</p>
+                  <p style={{ color: "green", marginLeft: "10px" }}>{deletReviewState.message}</p> //wehn a review is deleted message
                 ) : (
                   <p style={{ color: "red", marginLeft: "10px" }}>{deletReviewState.message}</p>
                 )}
@@ -65,14 +65,14 @@ function ViewReview(props) {
                       typeof props.id !== "undefined" &&
                       typeof props.deleteReview !== "undefined"
                     ) {
-                      setDeleteLoad(true);
+                      setDeleteLoad(true); //deleteReviewResult awaits for deleteReview 
                       var deleteReviewResult = await props.deleteReview(
                         props.id
                       );
 
                       setDeleteLoad(false);
                       if (deleteReviewResult.ok === true) {
-                        setDeletReviewState(deleteReviewResult);
+                        setDeletReviewState(deleteReviewResult); //deletes review of deleteReviewResult us true 
 
                         if (typeof props.callGetReviews !== "undefined") {
                           setTimeout(() => {
