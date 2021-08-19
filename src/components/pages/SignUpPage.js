@@ -1,17 +1,17 @@
 import React from "react";
-import axios from "axios";
+import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
 import { useFirebase } from "react-redux-firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-react-ui-kit";
 import LinearProgress from "@material-ui/core/LinearProgress";
-
 import { getUserProfile } from "../../redux/actions/profile";
-
 import * as InputValidation from "../../services/inputValidation.js";
 import { signUp } from "../../services/authentication.js";
-// This is the Sign up page 
+import Button from "../general/Button.js";
+
+// This is the Sign up page
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SignUpPage() {
+  const history = useHistory();
   const firebase = useFirebase();
   const dispatch = useDispatch();
 
@@ -57,7 +58,7 @@ function SignUpPage() {
     errorPassword,
     errorRetypePsw,
   ]);
-//function below checks if all the feilds are filled or no and if the data provided is in correct format
+  //function below checks if all the feilds are filled or no and if the data provided is in correct format
   function checkFormValid() {
     if (
       errorFirstName && //if all the fields are provided only then proceed to next if statemen
@@ -125,7 +126,7 @@ function SignUpPage() {
                       await setFirstName(event.target.value);
                       var firstNameValidationResult =
                         await InputValidation.validateName(event.target.value);
-                      setErrorFirstName(firstNameValidationResult);//checks the FirstName for input validation shows error if not in correct format
+                      setErrorFirstName(firstNameValidationResult); //checks the FirstName for input validation shows error if not in correct format
                     }}
                   />
                   <p className="p-errors">
@@ -145,7 +146,7 @@ function SignUpPage() {
                       await setLastName(event.target.value);
                       var lastNameValidationResult =
                         await InputValidation.validateName(event.target.value);
-                      setErrorLastName(lastNameValidationResult);//checks the LastName for input validation shows error if not in correct format
+                      setErrorLastName(lastNameValidationResult); //checks the LastName for input validation shows error if not in correct format
                     }}
                   />
                   <p className="p-errors">
@@ -191,7 +192,7 @@ function SignUpPage() {
                       var mobileNumberValidationResult =
                         await InputValidation.validateMobileNumber(
                           event.target.value
-                        );//checks the MobileNumber for input validation shows error if not in correct format
+                        ); //checks the MobileNumber for input validation shows error if not in correct format
                       setErrorMobile(mobileNumberValidationResult);
                     }}
                   />
@@ -216,7 +217,7 @@ function SignUpPage() {
                       var passwordValidationResult =
                         await InputValidation.validateSignUpPassword(
                           event.target.value
-                        ); //checks the Passord for input validation shows error if all the requiured criteria is not met 
+                        ); //checks the Passord for input validation shows error if all the requiured criteria is not met
                       setErrorPassword(passwordValidationResult);
                     }}
                   />
@@ -253,15 +254,20 @@ function SignUpPage() {
               </MDBRow>
 
               <div className="text-center mt-4">
-                <MDBBtn
+                <Button
                   disabled={!formValid}
-                  color="red-text"
+                  label="Sign Up"
                   className="rounded amber"
+                  styles={{
+                    backgroundColor: "#FFC107",
+                    padding: "15px 25px",
+                    fontSize: "16px",
+                  }}
                   onClick={async (event) => {
-                    event.preventDefault();
+                    // event.preventDefault();
                     setSignUpState(null);
                     setLoading(true);
-                    //signUpResult is used to see if the sign was sucessfull 
+                    //signUpResult is used to see if the sign was sucessfull
                     var signUpResult = await signUp({
                       firstName,
                       lastName,
@@ -289,6 +295,10 @@ function SignUpPage() {
                       setErrorRetypePsw(null);
 
                       dispatch(getUserProfile());
+
+                      setTimeout(() => {
+                        history.push("/");
+                      }, 2000);
                     } else {
                       setEmail("");
                       setPassword("");
@@ -297,12 +307,9 @@ function SignUpPage() {
                       setErrorEmail(null);
                       setErrorPassword(null);
                       setErrorRetypePsw(null);
-                      
                     }
                   }}
-                >
-                  Register
-                </MDBBtn>
+                />
               </div>
             </form>
           </MDBCol>

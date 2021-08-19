@@ -1,12 +1,13 @@
 import React from "react";
 import * as InputValidation from "../../services/inputValidation.js";
 import { logIn } from "../../services/authentication.js";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 //Styles & Themes
 import { MDBRow, MDBCol, MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
 import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Button from "./Button.js";
 // This used to make style of the log in component
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,14 +18,15 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-//Taking in UserName and Password from the user 
+//Taking in UserName and Password from the user
 function LogInComponent({ isShowLogin }) {
+  const history = useHistory();
   //Form State
   var [email, setEmail] = React.useState("");
   var [password, setPassword] = React.useState("");
 
   //Form Validation State
-  //input validation 
+  //input validation
   var [errorEmail, setErrorEmail] = React.useState(null);
   var [errorPassword, setErrorPassword] = React.useState(null);
   var [logInState, setLogInState] = React.useState(null);
@@ -40,15 +42,15 @@ function LogInComponent({ isShowLogin }) {
   function checkFormValid() {
     if (errorEmail && errorPassword) {
       if (errorEmail.valid === true && errorPassword.valid === true) {
-        setFormValid(true);// if the Username and password is matches then set setFormValid to true 
+        setFormValid(true); // if the Username and password is matches then set setFormValid to true
       } else {
-        setFormValid(false);// if the Username and password is matches then set setFormValid to false 
+        setFormValid(false); // if the Username and password is matches then set setFormValid to false
       }
     } else {
       setFormValid(false); //this if and else statement checks inputvalidation for Username and Password
     }
   }
-//Code under here is visual components of log-in card 
+  //Code under here is visual components of log-in card
   return (
     <div className={`${!isShowLogin ? "active" : ""} show`}>
       <div className="login-form">
@@ -132,26 +134,33 @@ function LogInComponent({ isShowLogin }) {
                 </MDBRow>
 
                 <div className="text-center mt-4">
-                  <MDBBtn
+                  <Button
+                    label="LOGIN"
                     disabled={!formValid}
-                    color="red-text"
+                    styles={{
+                      backgroundColor: "#FFC107",
+                      padding: "15px 25px",
+                      fontSize: "16px",
+                    }}
                     className="rounded amber"
                     onClick={async (event) => {
-                      event.preventDefault(); 
+                      // event.preventDefault();
                       setLogInState(null);
-                      setLoading(true); //function checks if email and password are correct and sets 
+                      setLoading(true); //function checks if email and password are correct and sets
                       var logInResult = await logIn(email, password);
                       setLoading(false); //
                       setLogInState(logInResult);
 
                       if (logInResult.ok !== true) {
-                        setErrorPassword(null);//if password or Username is false set both feilds to null
+                        setErrorPassword(null); //if password or Username is false set both feilds to null
                         setPassword("");
+                      } else {
+                        setTimeout(() => {
+                          history.push("/");
+                        }, 2000);
                       }
                     }}
-                  >
-                    LOGIN
-                  </MDBBtn>
+                  />
 
                   <p>
                     New Customer?{" "}
