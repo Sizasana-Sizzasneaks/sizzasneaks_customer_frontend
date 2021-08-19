@@ -1,0 +1,17 @@
+.Message {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: rgb(1, 136, 1);
+  text-align: center;
+}
+
+.Message p {
+  margin-bottom: 0px;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.MessageError{
+    background-color: #FF6158;
+
+}

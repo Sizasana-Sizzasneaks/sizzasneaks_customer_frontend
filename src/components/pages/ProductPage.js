@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-// import Styles from "./ProductPage.module.css";
+import Styles from "./ProductPage.module.css";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -11,11 +11,16 @@ import ProductCarousel from "../general/ProductsCarousel.js";
 
 import { getProduct } from "../../api/products.js";
 
+import { StylesProvider } from "@material-ui/core";
+
+
 //This is the page that shows when a user clicks a products
+
 function ProductPage() {
   var [product, setProduct] = React.useState(null);
   var [error, setError] = React.useState(null);
   var [loading, setLoading] = React.useState(true);
+  var [addToCartState, setAddToCartState] = React.useState(null);
 
   var { id } = useParams();
 //use effects
@@ -42,6 +47,17 @@ function ProductPage() {
 //this method will return a display card for a single product
   return (
     <>
+      {addToCartState &&
+        (addToCartState.ok ? (
+          <div className={Styles.Message}>
+            <p>{addToCartState.message}</p>
+          </div>
+        ) : (
+          <div className={Styles.MessageError}>
+            <p>{addToCartState.message}</p>
+          </div>
+        ))}
+
       {loading && (
         <div
           style={{
@@ -58,7 +74,12 @@ function ProductPage() {
       )}
       {product && (
         <>
-          <ProductDisplayCard product={product} />{" "}
+          <ProductDisplayCard
+            product={product}
+            addToCartState={(state) => {
+              setAddToCartState(state);
+            }}
+          />{" "}
         </>
       )}
       <ReviewBox productId={id} />

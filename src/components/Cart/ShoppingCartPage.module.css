@@ -1,0 +1,37 @@
+.container {
+  margin-bottom: 50px;
+}
+.RightText {
+  margin-left: 220px;
+}
+.RightTextPrice {
+  margin-left: 260px;
+}
+
+.LeftText {
+  margin-right: 170px;
+  width: fit-content;
+}
+.Name {
+  font-weight: bold;
+  margin-top: revert;
+  font-size: larger;
+}
+
+.SubName {
+  font-weight: bold;
+  margin-top: revert;
+}
+
+.btn {
+  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-top: 15px;
+}
+
+.NoCartItems {
+  margin: 150px 0px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 400;
+}
