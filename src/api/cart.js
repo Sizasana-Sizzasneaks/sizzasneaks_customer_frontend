@@ -18,6 +18,7 @@ export const addToCart = async (productId, variant) => {
       // await createGuestUser();
     }
     var getTokenResult = await getCurrentUserIdToken();
+
     // checks whether the current user's token was retrieved successfully 
     if (getTokenResult.ok === true) {
       const config = {
@@ -35,7 +36,7 @@ export const addToCart = async (productId, variant) => {
           API_CONSTANTS.CART_ROUTE + "/cart_item",
           { product_id: productId, variant: variant },
           config
-        ) //sends the data of the selected product to the current user's cart using the backend cart api
+        ) //sends the data of the selected product to the current user's cart 
         .then((res) => {
           return res.data; // returns the corresponding data for the product that has been added to the cart 
         })
@@ -80,7 +81,7 @@ export const getCart = async () => {
             return res.data;
           })// returns the corresponding data for a signed in user's cart
           .catch((error) => {
-            // returns general error when trying to getting art is unsuccessful
+            // returns general error when trying to getting cart is unsuccessful
             return { ok: false, error: error };
           });
       } else {
