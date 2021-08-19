@@ -4,6 +4,7 @@ import Styles from "./ProductDisplayCard.module.css";
 import { addToCart } from "../../api/cart";
 
 import OptionSelector from "./OptionSelector";
+
 import Button from "../general/Button.js";
 
 function ProductDisplayCard(props) {
@@ -12,6 +13,7 @@ function ProductDisplayCard(props) {
 
   var [sizeSelectedError, setSizeSelectedError] = React.useState(null);
   var [colorSelectedError, setColorSelectedError] = React.useState(null);
+
 
   function getSelectedOption() {
     return {
@@ -52,6 +54,91 @@ function ProductDisplayCard(props) {
     } else {
       setColorSelectedError("Color Required");
     }
+
+  //below return fucntion shows how images will be shows of the product
+    return (
+      <Row className={Styles.currentProductCard}>
+        <Col className={Styles.imageOptionsSegment} xs={2}>
+          <Row>
+            <Col>
+              <img src={props.product.imgURls[1]} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <img src={props.product.imgURls[2]} />
+            </Col>
+          </Row>
+        </Col>
+  
+        <Col xs={1} className={Styles.mainImageSegment}>
+          <Row>
+            <Col>
+              <img src={props.product.imgURls[0]} />
+            </Col>
+          </Row>
+        </Col>
+  
+        <Col className={Styles.currentProductDetailsSegment}>
+          <Row>
+            <Col className={Styles.brand}>
+              <p>{props.product.brand}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col className={Styles.productName}>
+              <p>{props.product.productName}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col className={Styles.productDescription}>
+              <p>{props.product.productDescription}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              {" "}
+              <OptionSelector
+                options={props.product.options}
+                selectedColor={selectedColor}
+                selectedSize={selectedSize}
+                selectColor={(color) => {
+                  setSizeSelectedError(null); //checks color selected
+                  setColorSelectedError(null);
+                  setSelectedColor(color);
+                }}
+                selectSize={(size) => {
+                  setSizeSelectedError(null);//checks size selected
+                  setColorSelectedError(null);
+                  setSelectedSize(size);
+                }}
+                sizeSelectedError={sizeSelectedError}
+                colorSelectedError={colorSelectedError}
+              />
+            </Col>
+          </Row> 
+  
+          <Row className={Styles.priceAndButtons}>
+            <Col className={Styles.productPrice} xs={5}>
+              <p>R {props.product.sellingPrice}</p>
+            </Col>
+            <Col  xs={7}>
+              <Button
+                label="ADD TO CART"
+                styles={{ backgroundColor: "#F3D63C" }}// Add to cart button formation and style 
+                onClick={() => {
+                  addProductToCart();
+                }}
+              />
+              <Button
+                label="ADD TO WISHLIST"
+                styles={{ backgroundColor: "#E3E3E3", float: "right" }} // Add to Wishlist button formation and style 
+              />
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    );
   }
 
   return (

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { MDBRow, MDBCol, MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
 import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
-
+// This used to make style of the log in component
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -17,13 +17,14 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
 }));
-
+//Taking in UserName and Password from the user 
 function LogInComponent({ isShowLogin }) {
   //Form State
   var [email, setEmail] = React.useState("");
   var [password, setPassword] = React.useState("");
 
   //Form Validation State
+  //input validation 
   var [errorEmail, setErrorEmail] = React.useState(null);
   var [errorPassword, setErrorPassword] = React.useState(null);
   var [logInState, setLogInState] = React.useState(null);
@@ -39,15 +40,15 @@ function LogInComponent({ isShowLogin }) {
   function checkFormValid() {
     if (errorEmail && errorPassword) {
       if (errorEmail.valid === true && errorPassword.valid === true) {
-        setFormValid(true);
+        setFormValid(true);// if the Username and password is matches then set setFormValid to true 
       } else {
-        setFormValid(false);
+        setFormValid(false);// if the Username and password is matches then set setFormValid to false 
       }
     } else {
-      setFormValid(false);
+      setFormValid(false); //this if and else statement checks inputvalidation for Username and Password
     }
   }
-
+//Code under here is visual components of log-in card 
   return (
     <div className={`${!isShowLogin ? "active" : ""} show`}>
       <div className="login-form">
@@ -82,11 +83,11 @@ function LogInComponent({ isShowLogin }) {
                       className="form-control"
                       value={email}
                       onChange={async (event) => {
-                        await setEmail(event.target.value);
+                        await setEmail(event.target.value); //Taking in the new email and await emailValidationResult
                         var emailValidationResult =
                           await InputValidation.validateEmail(
                             event.target.value
-                          );
+                          ); //input validation takes place for emailValidationResult
                         setErrorEmail(emailValidationResult);
                       }}
                     />
@@ -110,12 +111,12 @@ function LogInComponent({ isShowLogin }) {
                       className="form-control"
                       value={password}
                       onChange={async (event) => {
-                        await setPassword(event.target.value);
+                        await setPassword(event.target.value); //checks the password
                         var passwordValidationResult =
                           await InputValidation.validateLogInPassword(
                             event.target.value
                           );
-                        setErrorPassword(passwordValidationResult);
+                        setErrorPassword(passwordValidationResult); //password must match the password stores in the DB
                       }}
                     />
                     <p className="p-errors">
@@ -136,15 +137,15 @@ function LogInComponent({ isShowLogin }) {
                     color="red-text"
                     className="rounded amber"
                     onClick={async (event) => {
-                      event.preventDefault();
+                      event.preventDefault(); 
                       setLogInState(null);
-                      setLoading(true);
+                      setLoading(true); //function checks if email and password are correct and sets 
                       var logInResult = await logIn(email, password);
-                      setLoading(false);
+                      setLoading(false); //
                       setLogInState(logInResult);
 
                       if (logInResult.ok !== true) {
-                        setErrorPassword(null);
+                        setErrorPassword(null);//if password or Username is false set both feilds to null
                         setPassword("");
                       }
                     }}

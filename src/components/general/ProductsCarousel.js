@@ -5,7 +5,7 @@ import { Row, Col } from "react-bootstrap";
 import Styles from "./ProductsCarousel.module.css";
 
 import ProductItem from "./ProductItem.js";
-
+//This page conatins a functionality that determines how the products will look on a page 
 function ProductCarousel(props) {
   return (
     <div className={Styles.coursel_segment}>
@@ -26,7 +26,7 @@ function ProductCarousel(props) {
         </Grid>
       </Grid>
     </div>
-  );
+  );//in the code above we created a conatiner and a grid inside the container that holds 4 items in a row
 }
 
 export default ProductCarousel;

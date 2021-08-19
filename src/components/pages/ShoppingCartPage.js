@@ -33,13 +33,13 @@ function ShoppingCartPage(props) {
     //updateItemQuantity();
     // deleteCartItem("6101340adc7a0305bc700017", { color: "Green", size: 2 });
   }, []);
-
+//getShoppingCart is used to get the shopping cart that belong to the current user 
   async function getShoppingCart() {
     setError(null);
     setCart(null);
     setLoading(true);
     var getCartResult = await getCart();
-
+    
     if (getCartResult.ok === true) {
       setLoading(false);
       setCart(getCartResult.data);
@@ -48,7 +48,7 @@ function ShoppingCartPage(props) {
       setError(getCartResult);
     }
   }
-
+//deleteCartItem is used when the cutomer deletes a certain product from his cart
   async function deleteCartItem(product_id, option) {
     var deleteSingleCartItemResult = await deleteSingleCartItem(
       product_id,
@@ -62,7 +62,7 @@ function ShoppingCartPage(props) {
       console.log(deleteSingleCartItemResult);
     }
   }
-
+// updateItemQuantity is used to update the product quantity when a customer add or deletes the amount of products 
   async function updateItemQuantity(product_id, option, newQuantity) {
     var updateCartItemQuantityResult = await updateCartItemQuantity(
       product_id,

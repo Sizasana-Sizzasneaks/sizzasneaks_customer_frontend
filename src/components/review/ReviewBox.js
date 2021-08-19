@@ -21,11 +21,12 @@ function ReviewBox(props) {
   React.useEffect(() => {
     getReviews();
   }, []);
-
+//Functtion used to get all the reviews for the certain product
   async function getReviews() {
     setGetReviewError(null);
     setReviews(null);
     setReviewLoad(true);
+    //Variable getReviewsByProductIdResult gets the reviews of the product by ID
     var getReviewsByProductIdResult = await getReviewsByProductId(
       props.productId
     );
@@ -39,8 +40,9 @@ function ReviewBox(props) {
       setGetReviewError(getReviewsByProductIdResult);
     }
   }
-
+//deleteReview functions is used to delete a review by a customer only if he publish the review 
   async function deleteReview(review_id) {
+    //if the reviewId id defined only then delete the review else show error message
     if (typeof review_id !== "undefined") {
       var deleteReviewByReviewIdResult = await deleteReviewByReviewId(
         review_id
@@ -51,7 +53,7 @@ function ReviewBox(props) {
       return { ok: false, message: " Insufficient Information Supplied" };
     }
   }
-
+//function used to write review by cutomer 
   async function writeAReview(review) {
     if (
       typeof review.rating !== "undefined" &&
@@ -70,7 +72,7 @@ function ReviewBox(props) {
       return { ok: false, message: "Review Fields Insufficient" };
     }
   }
-
+//below shows average rating of a product with stars, 
   return (
     <div className={Styles.reviewBox}>
       <Row>
@@ -83,7 +85,7 @@ function ReviewBox(props) {
       </Row>
       {reviews && (
         <Row>
-          <Col className={Styles.averageRating}>
+          <Col className={Styles.averageRating}> 
             <span
               style={{ fontSize: "25px", alignItems: "baseline" }}
               class="material-icons"
@@ -107,7 +109,7 @@ function ReviewBox(props) {
         reviews.reviews.map((review) => {
           return (
             <ViewReview
-              fullName={review.customerFullName}
+              fullName={review.customerFullName} //All the information is saved even though some of it is shown on the publish review
               rating={review.rating}
               body={review.body}
               createdAt={review.createdAt}
@@ -118,11 +120,10 @@ function ReviewBox(props) {
             />
           );
         })}
-
       {getReviewError && (
         <p style={{ color: "red", fontSize: "20px", marginTop: "15px" }}>
           {getReviewError.message}
-        </p>
+        </p>//delete review button 
       )}
 
       {reviewLoad && (

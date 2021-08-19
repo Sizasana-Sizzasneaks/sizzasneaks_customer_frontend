@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import ProductItemImage from "../../images/product-item-image.png";
 import {addToCart} from "../../api/cart.js";
-
+//page that shows when a user clicks on a product
 function ProductItem(props) {
   return (
     <Link to={"/products/" + props.product._id}>
@@ -40,8 +40,8 @@ function ProductItem(props) {
           <Col xl={5} style={{ padding: "0px" }}>
             <div 
             onClick={()=>{
-              addToCart();
-            }}
+              addToCart();//when the button is clicked add to cart functionality takes place
+            }}//Button for Add to cart functionality 
               style={{
                 backgroundColor: "#FADA35",
                 fontSize: "12px",

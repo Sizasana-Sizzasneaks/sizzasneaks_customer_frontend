@@ -1,9 +1,11 @@
 import React from "react";
 import Styles from "./Button.module.css";
-
+//making a button component 
 function Button(props) {
-  var backgroundColor;
-  var color;
+  var backgroundColor; //backgroud color of the button 
+  var color; // main color of the button 
+  //if the button is disabled color will red
+  //else the button will be dark red
   if (typeof props.disabled === "undefined" || props.disabled !== true) {
     backgroundColor = "#FF6158FF";
     color = "#000000FF";
@@ -11,7 +13,7 @@ function Button(props) {
     backgroundColor = "#FF61584D";
     color = "#0000004D";
   }
-
+// when the button is pressed these actions will take place
   return (
     <div
       onClick={() => {
