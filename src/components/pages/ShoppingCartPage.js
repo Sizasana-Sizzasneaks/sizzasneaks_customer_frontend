@@ -96,109 +96,114 @@ function ShoppingCartPage(props) {
           <LinearProgress />
         </div>
       )}
-      {cart && (
-        <Container className={Styles.container}>
-          <Row>
-            {/* cart Items component */}
-            <Col xs={12} md={8}>
-              {/* <p>Shopping Cart</p> */}
-              <Card>
-                {/* <Card.Img variant="top" src="../../images/holder.js/100px270" alt="Image Placeholder" /> */}
-                <ListGroup variant="flush">
-                  {/*cart item needs a formula to create a cart */}
-                  <ListGroup.Item>
-                    {/*check first if cart is empty  */}
-                    {/* if(cart.cartCount===0){
+      {cart &&
+        (cart.cart.length !== 0 ? (
+          <Container className={Styles.container}>
+            <Row>
+              {/* cart Items component */}
+              <Col xs={12} md={8}>
+                {/* <p>Shopping Cart</p> */}
+                <Card>
+                  {/* <Card.Img variant="top" src="../../images/holder.js/100px270" alt="Image Placeholder" /> */}
+                  <ListGroup variant="flush">
+                    {/*cart item needs a formula to create a cart */}
+                    <ListGroup.Item>
+                      {/*check first if cart is empty  */}
+                      {/* if(cart.cartCount===0){
                       <emptyCard/>
                     } */}
-                    {cart.cart.map((cartItem) => {
-                      return (
-                        <>
-                          <hr />
-                          <CartItemLine
-                            cartItemImage={cartItem.imgURls}
-                            cartItemName={cartItem.productName}
-                            cartItemQuantity={cartItem.quantity}
-                            cartItemColor={cartItem.option.color}
-                            cartItemSize={cartItem.option.size}
-                            cartItemSellingPrice={
-                              cartItem.sellingPrice * cartItem.quantity
-                            }
-                            pushToShoppingCartPage={() => {
-                              history.push("/cart/");
-                            }}
-                            // passing down the updateItemQuantity function
-                            update={(value) => {
-                              updateItemQuantity(
-                                cartItem.product_id,
-                                cartItem.option,
-                                value
-                              );
-                            }}
-                            delete={(value) => {
-                              deleteCartItem(
-                                cartItem.product_id,
-                                cartItem.option
-                              );
-                            }}
-                          />
-                        </>
-                      );
-                    })}
-                  </ListGroup.Item>
-                </ListGroup>
-              </Card>
-            </Col>
+                      {cart.cart.map((cartItem) => {
+                        return (
+                          <>
+                            <hr />
+                            <CartItemLine
+                              cartItemImage={cartItem.imgURls}
+                              cartItemName={cartItem.productName}
+                              cartItemQuantity={cartItem.quantity}
+                              cartItemColor={cartItem.option.color}
+                              cartItemSize={cartItem.option.size}
+                              cartItemSellingPrice={
+                                cartItem.sellingPrice * cartItem.quantity
+                              }
+                              pushToShoppingCartPage={() => {
+                                history.push("/cart/");
+                              }}
+                              // passing down the updateItemQuantity function
+                              update={(value) => {
+                                updateItemQuantity(
+                                  cartItem.product_id,
+                                  cartItem.option,
+                                  value
+                                );
+                              }}
+                              delete={(value) => {
+                                deleteCartItem(
+                                  cartItem.product_id,
+                                  cartItem.option
+                                );
+                              }}
+                            />
+                          </>
+                        );
+                      })}
+                    </ListGroup.Item>
+                  </ListGroup>
+                </Card>
+              </Col>
 
-            {/* Summary detail card component */}
-            <Col xs={6} md={4}>
-              <Card className="cardStyle">
-                <Card.Header className={Styles.Name}>Summary</Card.Header>
-                <ListGroup variant="flush">
-                  {/* replace 2 with the cart count total */}
-                  <ListGroup.Item>
-                    <Row>
-                      <Col xs={6}> Price ({cart.cartCount} Items) </Col>
-                      <Col xs={6} md={2} />
-                      <Col xs={6} md={4}>
-                        R {cart.cartTotal}
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col xs={6}> Delivery Charges </Col>
-                      <Col xs={6} md={2} />
-                      <Col xs={6} md={4}>
-                        R {cart.cartDeliveryCharge}
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col xs={6}>Total Price </Col>
-                      <Col xs={6} md={2} />
-                      <Col xs={6} md={4}>
-                        R {cart.cartTotal + cart.cartDeliveryCharge}
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                </ListGroup>
-                <ButtonToolbar className={Styles.btn}>
-                  <ButtonGroup>
-                    <Button>Place Order</Button>
-                  </ButtonGroup>
-                  <ButtonGroup>
-                    <Link to="/">
-                      <Button>Continue Shopping</Button>
-                    </Link>
-                  </ButtonGroup>
-                </ButtonToolbar>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      )}
+              {/* Summary detail card component */}
+              <Col xs={6} md={4}>
+                <Card className="cardStyle">
+                  <Card.Header className={Styles.Name}>Summary</Card.Header>
+                  <ListGroup variant="flush">
+                    {/* replace 2 with the cart count total */}
+                    <ListGroup.Item>
+                      <Row>
+                        <Col xs={6}> Price ({cart.cartCount} Items) </Col>
+                        <Col xs={6} md={2} />
+                        <Col xs={6} md={4}>
+                          R {cart.cartTotal}
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                    <ListGroup.Item>
+                      <Row>
+                        <Col xs={6}> Delivery Charges </Col>
+                        <Col xs={6} md={2} />
+                        <Col xs={6} md={4}>
+                          R {cart.cartDeliveryCharge}
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                    <ListGroup.Item>
+                      <Row>
+                        <Col xs={6}>Total Price </Col>
+                        <Col xs={6} md={2} />
+                        <Col xs={6} md={4}>
+                          R {cart.cartTotal + cart.cartDeliveryCharge}
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  </ListGroup>
+                  <ButtonToolbar className={Styles.btn}>
+                    <ButtonGroup>
+                      <Button>Place Order</Button>
+                    </ButtonGroup>
+                    <ButtonGroup>
+                      <Link to="/">
+                        <Button>Continue Shopping</Button>
+                      </Link>
+                    </ButtonGroup>
+                  </ButtonToolbar>
+                </Card>
+              </Col>
+            </Row>
+          </Container>
+        ) : (
+          <div className={Styles.NoCartItems}>
+            <p>No Cart Items </p>
+          </div>
+        ))}
     </div>
   );
 }

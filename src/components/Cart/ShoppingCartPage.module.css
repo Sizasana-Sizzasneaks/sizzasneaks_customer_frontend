@@ -1,30 +1,37 @@
-.container{
-    margin-bottom: 50px;
+.container {
+  margin-bottom: 50px;
 }
-.RightText{
+.RightText {
   margin-left: 220px;
 }
-.RightTextPrice{
-    margin-left: 260px;
+.RightTextPrice {
+  margin-left: 260px;
 }
 
-.LeftText{
-    margin-right: 170px;
-    width:fit-content;
+.LeftText {
+  margin-right: 170px;
+  width: fit-content;
 }
-.Name{
-    font-weight: bold;
-    margin-top: revert;
-    font-size: larger;
-}
-
-.SubName{
-    font-weight: bold;
-    margin-top: revert;
+.Name {
+  font-weight: bold;
+  margin-top: revert;
+  font-size: larger;
 }
 
-.btn{
-    margin-left: 20px;
-    margin-bottom: 20px;
-    margin-top: 15px;
+.SubName {
+  font-weight: bold;
+  margin-top: revert;
+}
+
+.btn {
+  margin-left: 20px;
+  margin-bottom: 20px;
+  margin-top: 15px;
+}
+
+.NoCartItems {
+  margin: 150px 0px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 400;
 }

@@ -16,6 +16,7 @@ function ProductPage() {
   var [product, setProduct] = React.useState(null);
   var [error, setError] = React.useState(null);
   var [loading, setLoading] = React.useState(true);
+  var [addToCartState, setAddToCartState] = React.useState(null);
 
   var { id } = useParams();
 
@@ -44,11 +45,16 @@ function ProductPage() {
 
   return (
     <>
-      {error && (
-        <div className={Styles.Message}>
-          <p>Added To Cart</p>
-        </div>
-      )}
+      {addToCartState &&
+        (addToCartState.ok ? (
+          <div className={Styles.Message}>
+            <p>{addToCartState.message}</p>
+          </div>
+        ) : (
+          <div className={Styles.MessageError}>
+            <p>{addToCartState.message}</p>
+          </div>
+        ))}
 
       {loading && (
         <div
@@ -66,7 +72,12 @@ function ProductPage() {
       )}
       {product && (
         <>
-          <ProductDisplayCard product={product} />{" "}
+          <ProductDisplayCard
+            product={product}
+            addToCartState={(state) => {
+              setAddToCartState(state);
+            }}
+          />{" "}
         </>
       )}
       <ReviewBox productId={id} />

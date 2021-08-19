@@ -18,38 +18,45 @@ function CartItemLine(props) {
       }}
     >
       {/* cart items image display */}
-      <Col xs={2}>
+      <Col xl={2}>
         <img width="100px" src={props.cartItemImage} alt="ProductImage"></img>
       </Col>
       <Col>
         {/* Product details & variants*/}
         <Row>
           {/* Product name */}
-          <Col xs={6}>
+          <Col xl={6}>
             {" "}
-            <p className={Styles.Name} >{props.cartItemName}</p>{" "}
+            <p className={Styles.Name}>{props.cartItemName}</p>{" "}
           </Col>
           {/* delete cart item button */}
           <Col className={Styles.RightText}>
-            <Button variant="outline-dark" size="sm" onClick={()=>{
+            <Button
+              variant="outline-dark"
+              size="sm"
+              onClick={() => {
                 if (typeof props.delete !== "undefined") {
-                    props.delete();
-                  }
-            }}> Remove</Button>
+                  props.delete();
+                }
+              }}
+            >
+              {" "}
+              Remove
+            </Button>
           </Col>
           <Row>
             {/* product variants */}
-            <Col xs={2}>
+            <Col xl={2}>
               {" "}
               <p className={Styles.SubName}>Color: {props.cartItemColor}</p>
             </Col>
-            <Col xs={2} className={Styles.LeftText}>
+            <Col xl={2} className={Styles.LeftText}>
               {" "}
               <p className={Styles.SubName}>Size: {props.cartItemSize}</p>
             </Col>
           </Row>
           {/* product quantity & price */}
-          <Col xs={6}>
+          <Col xl={6}>
             {" "}
             <QuantityCart
               value={props.cartItemQuantity}
@@ -65,7 +72,7 @@ function CartItemLine(props) {
           </Col>
         </Row>
       </Col>
-    </Row>    
+    </Row>
   );
 }
 
