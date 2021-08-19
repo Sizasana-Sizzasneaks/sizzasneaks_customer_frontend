@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-// import Styles from "./ProductPage.module.css";
+import Styles from "./ProductPage.module.css";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -10,8 +10,7 @@ import ReviewBox from "../review/ReviewBox.js";
 import ProductCarousel from "../general/ProductsCarousel.js";
 
 import { getProduct } from "../../api/products.js";
-
-
+import { StylesProvider } from "@material-ui/core";
 
 function ProductPage() {
   var [product, setProduct] = React.useState(null);
@@ -45,6 +44,12 @@ function ProductPage() {
 
   return (
     <>
+      {error && (
+        <div className={Styles.Message}>
+          <p>Added To Cart</p>
+        </div>
+      )}
+
       {loading && (
         <div
           style={{
