@@ -24,7 +24,7 @@ export const updateUserDetails = async (data) => {
       },
     };
     return axios
-      .patch(API_CONSTANTS.USER_ROUTE, data, config)
+      .patch(API_CONSTANTS.USER_ROUTE, data, config) 
       .then((res) => {
         //Request Succesfull
         //Handle Different HTTP Status Codes and Responses
