@@ -11,38 +11,35 @@ import ProductCarousel from "../general/ProductsCarousel.js";
 
 import { getProduct } from "../../api/products.js";
 
-
-
+//This is the page that shows when a user clicks a products
 function ProductPage() {
   var [product, setProduct] = React.useState(null);
   var [error, setError] = React.useState(null);
   var [loading, setLoading] = React.useState(true);
 
   var { id } = useParams();
-
+//use effects
   React.useEffect(() => {
     console.log("Use Effct");
 
     getTheProduct(id);
   }, []);
-
+  //function used to get products by its id
   async function getTheProduct(productId) {
     var getProductsResult = await getProduct(productId);
-
+//if the getProductsResult is true show the products 
     if (getProductsResult.ok === true) {
-      console.log("Worked");
       console.log(getProductsResult);
-      setLoading(false);
+      setLoading(false);// loading is canceled
       setProduct(getProductsResult.data[0]);
-      console.log(getProductsResult.data[0]);
+      console.log(getProductsResult.data[0]);// print the getProductsResult to the terminal
     } else {
-      console.log("Failed");
-      setLoading(false);
-      console.log(getProductsResult);
-      setError(getProductsResult);
+      setLoading(false);// loading is canceled
+      console.log(getProductsResult);// print the getProductsResult to the terminal
+      setError(getProductsResult); //will show error
     }
   }
-
+//this method will return a display card for a single product
   return (
     <>
       {loading && (

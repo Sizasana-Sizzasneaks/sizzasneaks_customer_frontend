@@ -50,7 +50,7 @@ export const signUp = async ({
   mobileNumber,
   password,
 }) => {
-  console.log("SignUp Method");
+
 
   const state = store.getState();
 

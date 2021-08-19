@@ -12,28 +12,28 @@ import {
 } from "../../services/inputValidation.js";
 import {getCurrentDateAsString} from "../../services/dateManipulationFunctions.js"
 import { CircularProgress } from "@material-ui/core";
-
+//Function used for Writing a review 
 function WriteReview(props) {
   const authState = useSelector((state) => state.firebase.auth);
   const profileState = useSelector((state) => state.profile);
 
-  var [rating, setRating] = React.useState(0);
-  var [body, setBody] = React.useState("");
+  var [rating, setRating] = React.useState(0);// initail state of Rating set to 0
+  var [body, setBody] = React.useState(""); // initail state of body set to nothing
 
-  var [ratingValid, setRatingValid] = React.useState(null);
-  var [bodyValid, setBodyValid] = React.useState(null);
+  var [ratingValid, setRatingValid] = React.useState(null); //Used to check if the rating is valid
+  var [bodyValid, setBodyValid] = React.useState(null); //Used to check if the body is valid
 
-  var [formValid, setFormValid] = React.useState(false);
+  var [formValid, setFormValid] = React.useState(false); //Used to check if the Form is valid
 
   var [loading, setloading] = React.useState(false);
   var [writeReviewState, setWriteReviewState] = React.useState(null);
 
   React.useEffect(() => {
     checkFormValidity();
-  }, [ratingValid, bodyValid]);
+  }, [ratingValid, bodyValid]); //Refreshes the screen
 
   var currentDate = getCurrentDateAsString();
-
+//Function to check Input Validation for rating and Body
   async function checkInputValidity() {
     var validateRatingScoreResult = await validateRatingScore(rating);
     await setRatingValid(validateRatingScoreResult);
@@ -41,7 +41,7 @@ function WriteReview(props) {
     await setBodyValid(validateRatingBodyResult);
     await checkFormValidity();
   }
-
+//function to check validation for Form e.g. Both Rating and body is required to publish a review
   async function checkFormValidity() {
     if (ratingValid && bodyValid) {
       if (ratingValid.valid === true && bodyValid.valid === true) {
@@ -51,7 +51,7 @@ function WriteReview(props) {
       }
     }
   }
-
+//Clears the feilds once the review is publised or deleted
   function clearFields() {
     setRating(0);
     setBody("");
@@ -60,7 +60,8 @@ function WriteReview(props) {
     setWriteReviewState(null);
     setFormValid(false);
   }
-
+//visual aspect of how the Write Review fucntion will show
+// Visual functionalities of a review will be published
   return (
     <Row className={Styles.WriteReview}>
       <Col>
@@ -156,9 +157,9 @@ function WriteReview(props) {
             <Row>
               <Col className={Styles.WriteReviewPublishSection}>
                 <Button
-                  disabled={!formValid}
+                  disabled={!formValid} 
                   onClick={async () => {
-                    await checkInputValidity();
+                    await checkInputValidity(); //Awaits checkInputValidity before publishing a review
 
                     if (formValid === true) {
                       if (typeof props.writeReview !== "undefined") {
@@ -172,7 +173,7 @@ function WriteReview(props) {
                         if (writeAReviewResult.ok === true) {
                           setWriteReviewState(writeAReviewResult);
                           setTimeout(() => {
-                            clearFields();
+                            clearFields();//clear filds after a review is published 
                           }, 1000);
                         } else {
                           setRatingValid(writeAReviewResult);

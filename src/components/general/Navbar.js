@@ -117,7 +117,7 @@ function Navbar() {
                         {" "}
                         <p
                           onClick={async () => {
-                            await signOutCurrentUser();
+                            await signOutCurrentUser(); //When the user clicks sign outb button its signs user out and clears the profile
                             await dispatch(clearUserProfile());
                           }}
                         >
@@ -177,7 +177,7 @@ function Navbar() {
     </nav>
   );
 }
-
+//Above are the links on the Navbar to catogoroze products
 function NavabarNavigationLink(props) {
   return (
     <Link to={"/products/" + "CATEGORY/" + props.label}>
