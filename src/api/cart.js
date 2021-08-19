@@ -98,7 +98,7 @@ export const getCart = async () => {
   }
 };
 
-//changes the quantity of a specific item in a user's cart
+//changes the quantity of a specific item in a user's cart based on an item's product id, option and a users input
 export const updateCartItemQuantity = async (
   product_id,
   option,
@@ -149,18 +149,24 @@ export const updateCartItemQuantity = async (
   }
 };
 
+//deletes an item from the user's cart based on its product id and selected option
 export const deleteSingleCartItem = async (product_id, option) => {
+  //Checks whether data from the redux store has been loaded
   if (isLoaded(store.getState().firebase.auth)) {
+    // Checks whether the item loaded is not empty
     if (!isEmpty(store.getState().firebase.auth)) {
       var getTokenResult = await getCurrentUserIdToken();
 
+      // checks whether the current user's token was retrieved successfully
       if (getTokenResult.ok === true) {
         const config = {
           headers: {
+            //sets the necessary header information for authentication using the user's token
             credentialclaims: "customer",
             Authorization: "Bearer " + getTokenResult.data,
           },
           data: {
+            //sets the product id and option values of the item being deleted
             product_id: product_id,
             option: option,
           },
@@ -171,20 +177,21 @@ export const deleteSingleCartItem = async (product_id, option) => {
             // Request Succesfull
             //Handle Different HTTP Status Codes and Responses
             return res.data;
-          })
+          })//returns the corresponding data of an item being deleted from a user's cart
           .catch((error) => {
             //Request Unsuccesfull
-            return { ok: false, error: error };
+            return { ok: false, error: error };//returns a general error when the system is unsuccessful with the deletion process
           });
       } else {
-        //Failed to get Token
+        //returns a general error when the system has failed to get the user's token 
         return getTokenResult;
       }
     } else {
+      //returns a message if the current user is not signed into the platform
       return { ok: false, message: "No User Signed In" };
     }
-    // Add to Cart Logic
   } else {
+    //returns a message when data has not been loaded from the redux store.
     return { ok: false, message: "Deleting a Cart Item Failed - Try again" };
   }
 };
