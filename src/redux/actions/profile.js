@@ -1,5 +1,5 @@
 import { getUserDetails } from "../../api/users.js";
-//This fuction is used to get profile of a user once he logs in sucessfully 
+//This function is used to get profile of a user once he logs in successfully 
 
 export const getUserProfile = () => async (dispatch) => {
 
@@ -9,7 +9,7 @@ export const getUserProfile = () => async (dispatch) => {
 
 
 
-//getUserDetailsResult Aawaits getUserDetails 
+//getUserDetailsResult Awaits getUserDetails 
   var getUserDetailsResult = await getUserDetails();
   //if true this 
   if (getUserDetailsResult.ok === true) {
@@ -20,7 +20,7 @@ export const getUserProfile = () => async (dispatch) => {
   } else {
     dispatch({
       type: "GET_USER_PROFILE",
-      payload: { ok: false, error: "Failed Geting Details From backend" },
+      payload: { ok: false, error: "Failed Getting Details From backend" },
     });
   }
 };
