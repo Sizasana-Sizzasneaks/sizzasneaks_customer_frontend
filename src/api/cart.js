@@ -67,7 +67,7 @@ export const getCart = async () => {
         const config = {
           // sets the necessary header information for authentication based on the user's token 
           headers: {
-            credentialclaims: "customer",
+            credentialClaims: "customer",
             Authorization: "Bearer " + getTokenResult.data,
           },
         };
