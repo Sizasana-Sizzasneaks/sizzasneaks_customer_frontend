@@ -13,7 +13,7 @@ function ProductItem(props) {
           <Col>
             <img
               className="product-item-image"
-              src={props.product.imgURls[0]}
+              src={props.product.imgURls[0].imgURL}
               alt={props.product.productName}
             />
           </Col>

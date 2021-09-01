@@ -61,12 +61,12 @@ function ProductDisplayCard(props) {
         <Col className={Styles.imageOptionsSegment} xs={2}>
           <Row>
             <Col>
-              <img src={props.product.imgURls[1]} />
+              <img src={props.product.imgURls[1].imgURL} />
             </Col>
           </Row>
           <Row>
             <Col>
-              <img src={props.product.imgURls[2]} />
+              <img src={props.product.imgURls[2].imgURL} />
             </Col>
           </Row>
         </Col>
@@ -74,7 +74,7 @@ function ProductDisplayCard(props) {
         <Col xs={1} className={Styles.mainImageSegment}>
           <Row>
             <Col>
-              <img src={props.product.imgURls[0]} />
+              <img src={props.product.imgURls[0].imgURL} />
             </Col>
           </Row>
         </Col>
@@ -146,12 +146,12 @@ function ProductDisplayCard(props) {
       <Col className={Styles.imageOptionsSegment} xs={2}>
         <Row>
           <Col>
-            <img src={props.product.imgURls[1]} />
+            <img src={props.product.imgURls[1].imgURL} />
           </Col>
         </Row>
         <Row>
           <Col>
-            <img src={props.product.imgURls[2]} />
+            <img src={props.product.imgURls[2].imgURL} />
           </Col>
         </Row>
       </Col>
@@ -159,7 +159,7 @@ function ProductDisplayCard(props) {
       <Col xs={1} className={Styles.mainImageSegment}>
         <Row>
           <Col>
-            <img src={props.product.imgURls[0]} />
+            <img src={props.product.imgURls[0].imgURL} />
           </Col>
         </Row>
       </Col>

@@ -117,7 +117,7 @@ function ShoppingCartPage(props) {
                         <>
                           <hr />
                           <CartItemLine
-                            cartItemImage={cartItem.imgURls}
+                            cartItemImage={cartItem.imgURls.imgURL}
                             cartItemName={cartItem.productName}
                             cartItemQuantity={cartItem.quantity}
                             cartItemColor={cartItem.option.color}
