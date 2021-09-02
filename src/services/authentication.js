@@ -2,42 +2,65 @@ import { getFirebase } from "react-redux-firebase";
 import * as USER_API from "../api/users.js";
 import store from "../redux/index.js";
 import { getUserProfile } from "../redux/actions/profile.js";
+import { getCart, addToCart } from "../api/cart.js";
 
 // Firebase Fuction for Logging In a User.
 export const logIn = async (email, password) => {
-  var firebase = getFirebase();
+  try {
+    var wasAnonymous = false;
+    var anonymousUserCart = {};
+    const state = store.getState();
 
-  var output;
-  await firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((user) => {
-      /* Build Two
-         Copy Shopping Cart of Anonyomous user that was there
-         before and add to Logged In account's shopping cart.
-         Then delete the Anonymouse Account. */
+    if (!state.firebase.auth.isEmpty && state.firebase.auth.isAnonymous) {
+      wasAnonymous = true;
 
-      store.dispatch(getUserProfile());
-      output = { ok: true, message: "Log In Succesfull" };
-    })
-    .catch((error) => {
-      console.log(error.code);
-      console.log(error.message);
-      if (
-        error.code === "auth/user-not-found" ||
-        error.code === "auth/wrong-password" ||
-        error.code === "auth/too-many-requests"
-      ) {
-        output = {
-          ok: false,
-          message: "Invalid Log In Credentials, Try Again",
-        };
+      var getAnonymousUserCartResult = await getCart();
+
+      if (getAnonymousUserCartResult.ok === true) {
+        anonymousUserCart = getAnonymousUserCartResult.data;
       } else {
-        output = { ok: false, message: "Log In Unsuccesfull" };
+        wasAnonymous = false;
       }
-    });
+    }
+    var output = {};
+    var firebase = getFirebase();
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        console.log("Credential Log In Done");
+        store.dispatch(getUserProfile());
+        output = { ok: true, message: "Log In Successful" };
+      })
+      .catch((error) => {
+        output = authErrorHandling(error);
+      });
 
-  return output;
+    while (!state.firebase.auth.isLoaded) {
+      setTimeout(() => {
+        console.log("Logged In Auth State Not Ready");
+      }, 1000);
+    }
+
+    if (wasAnonymous) {
+      await anonymousUserCart.cart.forEach(async (cartItem) => {
+        var addToCartResult = await addToCart(
+          cartItem.product_id,
+          cartItem.option
+        );
+
+        if (!addToCartResult.ok) {
+          console.log(
+            "Failed to transfer Anonymous User Cart Item to Known User Cart"
+          );
+        }
+      });
+    }
+
+    return output;
+  } catch {
+    return { ok: false, message: "Error When Logging In User" };
+  }
 };
 
 // Firebase Fuction for Signing Up a New User.
@@ -50,8 +73,6 @@ export const signUp = async ({
   mobileNumber,
   password,
 }) => {
-
-
   const state = store.getState();
 
   if (state.firebase.auth.isEmpty || !state.firebase.auth.isAnonymous) {
@@ -183,19 +204,31 @@ export const getCurrentUserIdToken = async () => {
 };
 
 export const createGuestUser = async () => {
-  const firebase = getFirebase();
+  try {
+    const firebase = getFirebase();
+    await firebase
+      .auth()
+      .signInAnonymously()
+      .then(async () => {
+        //Anonyomous Account Created
+        // Use Backend and Create New User in Database
 
-  firebase
-    .auth()
-    .signInAnonymously()
-    .then(() => {
-      //Anonyomous Account Created
-      // Use Backend and Create New User in Database
+        await USER_API.createNewUser({ isAnonymous: true });
+      });
 
-      USER_API.createNewUser({ isAnonymous: true });
+    const state = store.getState();
 
-      console.log("Anonyomous User");
-    });
+    //Making Sure that the Anonymous User is created and fully authenticated before returning.
+    while (!state.firebase.auth.isLoaded || !state.firebase.auth.isAnonymous) {
+      setTimeout(() => {
+        console.log("Anonymous Auth State Not Ready");
+      }, 1000);
+    }
+
+    return { ok: true, message: "Anonymous User Fully Signed In" };
+  } catch {
+    return { ok: false, message: "Failed To Authenticate Anonymous User" };
+  }
 };
 
 //Helper Functions
