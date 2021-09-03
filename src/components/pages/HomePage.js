@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
+import Styles from "./HomePage.module.css"; 
 
 import { getProducts } from "../../api/products.js";
 // import LogInComponent from '../general/LogInComponent';
@@ -17,7 +18,6 @@ function HomePage() {
   var [products, setProducts] = React.useState(null);
 
   React.useEffect(() => {
-    console.log("Use Effct");
 
     getTheProducts();
   }, []);

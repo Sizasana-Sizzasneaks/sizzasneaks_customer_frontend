@@ -6,17 +6,17 @@ import Styles from "./Navbar.module.css";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import SearchInputField from "./SearchInputField.js";
 
-import {
-  signOutCurrentUser,
-  createGuestUser,
-} from "../../services/authentication.js";
+import { signOutCurrentUser } from "../../services/authentication.js";
 import { clearUserProfile } from "../../redux/actions/profile.js";
 
 import LogIn from "./LogInComponent";
 
 function Navbar() {
   const history = useHistory();
+  var [search, setSearch] = React.useState(null);
+
   const handleClick = () => {
     handleLoginClick();
   };
@@ -55,21 +55,18 @@ function Navbar() {
             </Col>
 
             <Col xs={4} style={{ padding: "0" }}>
-              <div className={Styles.SearchBarBox}>
-                <input
-                  className={Styles.SearchInput}
-                  type="text"
-                  placeholder="Search Products"
-                  onChange={(event) => {
-                    if(event.target.value === ""){
-                      history.push("/");
-                    }else{
-                      history.push("/products/SEARCH/" + event.target.value);
-                    }
-                    
-                  }}
-                />
-              </div>
+              <SearchInputField
+                value={search}
+                placeHolderText="Search"
+                onChange={(value) => {
+                  setSearch(value);
+                  if (value === "") {
+                    history.push("/");
+                  } else {
+                    history.push("/products/SEARCH/" + value);
+                  }
+                }}
+              />
             </Col>
 
             {profileState.loading && (
@@ -101,7 +98,7 @@ function Navbar() {
                         <div className={Styles.VerticalDivider}></div>
                       </Col>
                       <Col xs={3} className={Styles.TopRightNavBannerLink}>
-                        <Link to="/sign-up">
+                        <Link to="/sign-up" style={{ color: "Black" }}>
                           {" "}
                           <p>Sign Up</p>{" "}
                         </Link>
@@ -140,7 +137,7 @@ function Navbar() {
                   )}
 
                   <Col xs={3} className={Styles.TopRightNavBannerLink}>
-                    <Link to="/cart">
+                    <Link to="/cart" style={{ color: "Black" }}>
                       <div className={Styles.ShoppingCartBanner}>
                         <span
                           style={{ float: "left" }}
@@ -189,14 +186,14 @@ function Navbar() {
 //Above are the links on the Navbar to catogoroze products
 function NavabarNavigationLink(props) {
   return (
-    <Link to={"/products/" + "CATEGORY/" + props.label}>
+    <Link to={"/products/CATEGORY/" + props.label} style={{ color: "Black" }}>
       <div
         className={Styles.NavbarNavigationLink}
         // onClick={function () {
         //   alert("Coming Soon");
         // }}
       >
-        <p style={{}}>{props.label}</p>
+        <p style={{ fontWeight: "300" }}>{props.label}</p>
         {props.expandable && (
           <span class="material-icons" style={{ marginLeft: "10px" }}>
             expand_more
