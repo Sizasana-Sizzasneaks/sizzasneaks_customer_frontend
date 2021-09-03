@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import ProtectedRoute from "./components/general/ProtectedRoute.js";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 //App Components
@@ -31,7 +32,6 @@ function App() {
         subscription();
         setLoading(false);
       } else {
-      
         subscription();
         await store.dispatch(getUserProfile());
         setLoading(false);
@@ -61,40 +61,34 @@ function App() {
         </div>
       ) : (
         <Router>
-          <Navbar /> {/* Mata */}
+          <Navbar />
           <Container fluid="xl" style={{ padding: "0" }}>
             <Switch>
               <Route exact path="/products/:id">
-                <ProductPage /> {/* Lukumo */}
+                <ProductPage />
               </Route>
               <Route
                 exact
                 path="/products/:searchBy/:category"
                 children={<ProductsPage />}
-              >
-                {/* Ameer */}
-              </Route>
+              ></Route>
+              {/* Example of a Protected Route */}
+              {/* <ProtectedRoute exact path="/cart" component={ShoppingCartPage} /> */}
               <Route exact path="/cart">
-                {" "}
-                {/* Lara */}
                 <ShoppingCartPage />
               </Route>
               <Route exact path="/sign-up">
-                {" "}
-                {/* Lara */}
                 <SignUpPage />
               </Route>
               <Route exact path="/log-in">
-                {" "}
-                {/* Lara */}
                 <LogInComponent />
               </Route>
               <Route exact path="/">
-                <HomePage /> {/* Lusanda */}
+                <HomePage />
               </Route>
             </Switch>
           </Container>
-          <Footer /> {/* Mata */}
+          <Footer />
         </Router>
       )}
     </>
