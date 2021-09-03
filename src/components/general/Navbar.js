@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 
 import Styles from "./Navbar.module.css";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -16,6 +16,7 @@ import { clearUserProfile } from "../../redux/actions/profile.js";
 import LogIn from "./LogInComponent";
 
 function Navbar() {
+  const history = useHistory();
   const handleClick = () => {
     handleLoginClick();
   };
@@ -59,6 +60,14 @@ function Navbar() {
                   className={Styles.SearchInput}
                   type="text"
                   placeholder="Search Products"
+                  onChange={(event) => {
+                    if(event.target.value === ""){
+                      history.push("/");
+                    }else{
+                      history.push("/products/SEARCH/" + event.target.value);
+                    }
+                    
+                  }}
                 />
               </div>
             </Col>

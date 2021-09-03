@@ -3,6 +3,7 @@ import * as USER_API from "../api/users.js";
 import store from "../redux/index.js";
 import { getUserProfile } from "../redux/actions/profile.js";
 import { getCart, addToCart } from "../api/cart.js";
+import { logInUser } from "../api/users.js";
 
 // Firebase Fuction for Logging In a User.
 export const logIn = async (email, password) => {
@@ -30,6 +31,7 @@ export const logIn = async (email, password) => {
       .then((user) => {
         console.log("Credential Log In Done");
         store.dispatch(getUserProfile());
+        logInUser();
         output = { ok: true, message: "Log In Successful" };
       })
       .catch((error) => {
