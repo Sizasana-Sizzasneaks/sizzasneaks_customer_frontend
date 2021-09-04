@@ -6,15 +6,17 @@
   width: 100%;
   height: 140px;
   object-fit: cover;
+  margin-top: 15px;
 }
 
 .HomeSectionHeader {
-  margin-top: 30px;
+  margin-top: 35px;
 }
 
 .HomeSectionHeader p {
   display: inline;
   font-size: 18px;
+  margin-bottom: 0px;
 }
 
 .HomepagePromotionBannerImageTwo {
@@ -23,12 +25,21 @@
   object-fit: cover;
 }
 
-.HomepageBannerProduct-Segment {
-  margin: 50px 0px;
+.HomepageBannerProductSegment {
+  margin-top: 25px;
 }
 
 .ProductCoursel {
   display: flex;
   justify-content: space-around;
   margin: 40px 0px;
+}
+
+.SeeAllText {
+  text-decoration: underline;
+  margin-left: 10px;
+}
+
+.SeeAllText:hover {
+  cursor: pointer;
 }

@@ -63,7 +63,7 @@ function App() {
         <Router>
           <Navbar />
           <Container fluid="xl" style={{ padding: "0" }}>
-            <Switch>
+          <Switch>
               <Route exact path="/products/:id">
                 <ProductPage />
               </Route>
@@ -72,8 +72,7 @@ function App() {
                 path="/products/:searchBy/:category"
                 children={<ProductsPage />}
               ></Route>
-              {/* Example of a Protected Route */}
-              {/* <ProtectedRoute exact path="/cart" component={ShoppingCartPage} /> */}
+           
               <Route exact path="/cart">
                 <ShoppingCartPage />
               </Route>

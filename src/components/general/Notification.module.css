@@ -1,0 +1,29 @@
+.ContactButton {
+  text-align: center;
+  background-color: #e4b849;
+  height: min-content;
+  width: auto;
+
+  align-items: center;
+  display: inline-flex;
+  padding: 20px 10px;
+  color: #065faa;
+  justify-content: center;
+  align-items: center;
+}
+
+.ContactButton:hover {
+  cursor: pointer;
+}
+
+.ContactButton p {
+  font-family: "Raleway", sans-serif;
+  margin: 0px;
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.ContactButton span {
+  font-size: 26px;
+  float: right;
+}

@@ -1,13 +1,17 @@
 import React from "react";
 import * as InputValidation from "../../services/inputValidation.js";
-import { logIn } from "../../services/authentication.js";
-import { Link, useHistory } from "react-router-dom";
-
+import { logIn, requestResetPassword } from "../../services/authentication.js";
+import { useHistory } from "react-router-dom";
+import Notification from "./Notification.js";
+import Styles from "./LogInComponent.module.css";
 //Styles & Themes
-import { MDBRow, MDBCol, MDBBtn, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
+import { MDBRow, MDBCol, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
 import { makeStyles } from "@material-ui/core/styles";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Button from "./Button.js";
+
+import ResetPasswordForm from "./ResetPasswordForm.js";
+
 // This used to make style of the log in component
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,11 +23,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 //Taking in UserName and Password from the user
-function LogInComponent({ isShowLogin }) {
+function LogInComponent(props) {
   const history = useHistory();
   //Form State
   var [email, setEmail] = React.useState("");
   var [password, setPassword] = React.useState("");
+
+  //Show Forgot Password Form
+  var [showForgotPasswordForm, setShowForgotPasswordForm] =
+    React.useState(false);
 
   //Form Validation State
   //input validation
@@ -36,140 +44,225 @@ function LogInComponent({ isShowLogin }) {
   const classes = useStyles();
 
   React.useEffect(() => {
-    checkFormValid();
+    checkFormValidity();
   }, [errorEmail && errorPassword]);
 
-  function checkFormValid() {
+  async function checkFormFieldsValidity() {
+    //Check Email
+    var emailValidationResult = await InputValidation.validateEmail(email); //input validation takes place for emailValidationResult
+    await setErrorEmail(emailValidationResult);
+
+    //Check Password
+    var passwordValidationResult = await InputValidation.validateLogInPassword(
+      password
+    );
+    await setErrorPassword(passwordValidationResult);
+
+    return { ok: true };
+  }
+
+  function checkFormValidity() {
     if (errorEmail && errorPassword) {
       if (errorEmail.valid === true && errorPassword.valid === true) {
         setFormValid(true); // if the Username and password is matches then set setFormValid to true
+        return true;
       } else {
         setFormValid(false); // if the Username and password is matches then set setFormValid to false
+        return false;
       }
     } else {
-      setFormValid(false); //this if and else statement checks inputvalidation for Username and Password
+      setFormValid(false); //this if and else statement checks input validation for Username and Password
+      return false;
     }
   }
   //Code under here is visual components of log-in card
   return (
-    <div className={`${!isShowLogin ? "active" : ""} show`}>
+    <div style={{ marginTop: "10px", zIndex: 1 }}>
       <div className="login-form">
         <div className="form-box solid">
           <MDBCard>
             <MDBCardBody className={classes.root}>
-              <form>
-                <p className="h4 text-center py-4">LOGIN</p>
-                <div>
-                  {loading && (
-                    <div style={{ paddingTop: "10px", paddingBottom: "20px" }}>
-                      <LinearProgress />
-                    </div>
-                  )}
-                  {logInState && (
-                    <>
-                      {logInState.ok === true ? (
-                        <p className="success-prompt">{logInState.message}</p>
-                      ) : (
-                        <p className="error-prompt">{logInState.message}</p>
-                      )}
-                    </>
-                  )}
-                </div>
-                <MDBRow>
-                  <MDBCol md="12">
-                    <label htmlFor="defaultFormRegisterNameEx">Email</label>
-                    <input
-                      type="text"
-                      id="defaultFormRegisterNameEx"
-                      placeholder="Enter username"
-                      className="form-control"
-                      value={email}
-                      onChange={async (event) => {
-                        await setEmail(event.target.value); //Taking in the new email and await emailValidationResult
-                        var emailValidationResult =
-                          await InputValidation.validateEmail(
-                            event.target.value
-                          ); //input validation takes place for emailValidationResult
-                        setErrorEmail(emailValidationResult);
+              <div
+                className={Styles.PopUpClose}
+                onClick={() => {
+                  if (typeof props.setShowLogInForm !== "undefined") {
+                    props.setShowLogInForm(false);
+                    setEmail(null);
+                    setPassword(null);
+                    setErrorEmail(null);
+                    setErrorPassword(null);
+                  }
+                }}
+              >
+                <span class="material-icons">close</span>
+              </div>
+
+              {!showForgotPasswordForm ? (
+                <form>
+                  <p className={Styles.LoginBanner}>LOG IN</p>
+                  <MDBRow>
+                    <MDBCol
+                      md={8}
+                      style={{
+                        margin: "0 auto",
+                        marginBottom: "10px",
+                        padding: "0px 12px",
+                        width: "100%",
+                      }}
+                    >
+                      <div style={{ marginBottom: "10px" }}>
+                        {loading && (
+                          <div
+                            style={{
+                              paddingTop: "10px",
+                              paddingBottom: "20px",
+                            }}
+                          >
+                            <LinearProgress />
+                          </div>
+                        )}
+                        {logInState && (
+                          <>
+                            {logInState.ok === true ? (
+                              <Notification
+                                state="success"
+                                label={logInState.message}
+                                styles={{ width: "100%" }}
+                              />
+                            ) : (
+                              <Notification
+                                state="error"
+                                label={logInState.message}
+                                styles={{ width: "100%" }}
+                              />
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </MDBCol>{" "}
+                  </MDBRow>
+                  <MDBRow>
+                    <MDBCol md="12">
+                      <label htmlFor="defaultFormRegisterNameEx">Email</label>
+                      <input
+                        type="text"
+                        id="defaultFormRegisterNameEx"
+                        placeholder="Enter username"
+                        className="form-control"
+                        value={email}
+                        onChange={async (event) => {
+                          await setEmail(event.target.value); //Taking in the new email and await emailValidationResult
+                          var emailValidationResult =
+                            await InputValidation.validateEmail(
+                              event.target.value
+                            ); //input validation takes place for emailValidationResult
+                          setErrorEmail(emailValidationResult);
+                        }}
+                      />
+                      <p className="p-errors">
+                        {errorEmail &&
+                          (!errorEmail.valid ? errorEmail.message : "")}
+                      </p>
+                      <br />
+                    </MDBCol>
+                  </MDBRow>
+                  <MDBRow>
+                    <MDBCol md="12">
+                      <label htmlFor="defaultFormRegisterPasswordEx">
+                        Password
+                      </label>
+
+                      <input
+                        type="password"
+                        id="defaultFormRegisterPasswordEx"
+                        placeholder="Enter Password"
+                        className="form-control"
+                        value={password}
+                        onChange={async (event) => {
+                          await setPassword(event.target.value); //checks the password
+                          var passwordValidationResult =
+                            await InputValidation.validateLogInPassword(
+                              event.target.value
+                            );
+                          setErrorPassword(passwordValidationResult); //password must match the password stores in the DB
+                        }}
+                      />
+                      <p className="p-errors">
+                        {errorPassword &&
+                          (!errorPassword.valid ? errorPassword.message : "")}
+                      </p>
+                    </MDBCol>
+                  </MDBRow>
+
+                  <div className="text-center mt-4">
+                    <Button
+                      label="LOGIN"
+                      disabled={!formValid}
+                      styles={{
+                        backgroundColor: "#FFC107",
+                        padding: "10px 20px",
+                        fontSize: "16px",
+                      }}
+                      className="rounded amber"
+                      onClick={async (event) => {
+                        await checkFormFieldsValidity();
+
+                        var flag = checkFormValidity();
+
+                        if (flag) {
+                          setLogInState(null);
+                          setLoading(true); //function checks if email and password are correct and sets
+                          var logInResult = await logIn(email, password);
+                          setLoading(false); //
+                          setLogInState(logInResult);
+
+                          if (logInResult.ok !== true) {
+                            setErrorPassword(null); //if password or Username is false set both feilds to null
+                            setPassword("");
+                          } else {
+                            setTimeout(() => {
+                              props.setShowLogInForm(false);
+                              history.push("/");
+                            }, 2000);
+                          }
+                        }
                       }}
                     />
-                    <p className="p-errors">
-                      {errorEmail &&
-                        (!errorEmail.valid ? errorEmail.message : "")}
-                    </p>
-                    <br />
-                  </MDBCol>
-                </MDBRow>
-                <MDBRow>
-                  <MDBCol md="12">
-                    <label htmlFor="defaultFormRegisterPasswordEx">
-                      Password
-                    </label>
 
-                    <input
-                      type="password"
-                      id="defaultFormRegisterPasswordEx"
-                      placeholder="Enter Password"
-                      className="form-control"
-                      value={password}
-                      onChange={async (event) => {
-                        await setPassword(event.target.value); //checks the password
-                        var passwordValidationResult =
-                          await InputValidation.validateLogInPassword(
-                            event.target.value
-                          );
-                        setErrorPassword(passwordValidationResult); //password must match the password stores in the DB
+                    <p style={{ marginTop: "20px" }}>
+                      New Customer?,{" "}
+                      <p
+                        className={Styles.RegisterNow}
+                        style={{ color: "blue", display: "inline-flex" }}
+                        onClick={() => {
+                          if (typeof props.setShowLogInForm !== "undefined") {
+                            props.setShowLogInForm(false);
+                            history.push("/sign-up");
+                          }
+                        }}
+                      >
+                        {" "}
+                        Register Now
+                      </p>
+                    </p>
+
+                    <p
+                      className={Styles.RegisterNow}
+                      style={{ color: "blue", display: "inline-flex" }}
+                      onClick={() => {
+                        setShowForgotPasswordForm(true);
                       }}
-                    />
-                    <p className="p-errors">
-                      {errorPassword &&
-                        (!errorPassword.valid ? errorPassword.message : "")}
+                    >
+                      {" "}
+                      Forgot Password ?
                     </p>
-                    {/* <p className="font-small blue-text d-flex justify-content-end pb-3">
-                      <a href="/src/components/pages/ProductPage.js">
-                        Forgot Password?
-                      </a>
-                    </p> */}
-                  </MDBCol>
-                </MDBRow>
-
-                <div className="text-center mt-4">
-                  <Button
-                    label="LOGIN"
-                    disabled={!formValid}
-                    styles={{
-                      backgroundColor: "#FFC107",
-                      padding: "15px 25px",
-                      fontSize: "16px",
-                    }}
-                    className="rounded amber"
-                    onClick={async (event) => {
-                      // event.preventDefault();
-                      setLogInState(null);
-                      setLoading(true); //function checks if email and password are correct and sets
-                      var logInResult = await logIn(email, password);
-                      setLoading(false); //
-                      setLogInState(logInResult);
-
-                      if (logInResult.ok !== true) {
-                        setErrorPassword(null); //if password or Username is false set both feilds to null
-                        setPassword("");
-                      } else {
-                        setTimeout(() => {
-                          history.push("/");
-                        }, 2000);
-                      }
-                    }}
-                  />
-
-                  <p>
-                    New Customer?{" "}
-                    <Link to="/sign-up">
-                      <span> Register Now</span>
-                    </Link>
-                  </p>
-                </div>
-              </form>
+                  </div>
+                </form>
+              ) : (
+                <ResetPasswordForm
+                  setShowForgotPasswordForm={setShowForgotPasswordForm}
+                />
+              )}
             </MDBCardBody>
           </MDBCard>
         </div>

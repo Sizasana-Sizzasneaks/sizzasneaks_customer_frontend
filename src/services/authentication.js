@@ -1,4 +1,5 @@
 import { getFirebase } from "react-redux-firebase";
+import * as API from "../api/index.js";
 import * as USER_API from "../api/users.js";
 import store from "../redux/index.js";
 import { getUserProfile } from "../redux/actions/profile.js";
@@ -32,10 +33,10 @@ export const logIn = async (email, password) => {
         console.log("Credential Log In Done");
         store.dispatch(getUserProfile());
         logInUser();
-        output = { ok: true, message: "Log In Successful" };
+        output = { ok: true, message: "Log in successful" };
       })
       .catch((error) => {
-        output = authErrorHandling(error);
+        output = { ok: false, message: "Log In Unsuccessful" };
       });
 
     while (!state.firebase.auth.isLoaded) {
@@ -135,7 +136,7 @@ export const signUp = async ({
     }
   }
 
-  return { ok: true, message: "Sign Up Succesfull" };
+  return { ok: true, message: "Sign Up Successful" };
 };
 
 async function upgradeAnonymousAccount(email, password) {
@@ -233,18 +234,42 @@ export const createGuestUser = async () => {
   }
 };
 
+export const requestResetPassword = async (email) => {
+  var actionCodeSettings = {
+    url: window.location.hostname,
+    handleCodeInApp: false,
+  };
+  var output = {};
+  const firebase = getFirebase();
+  await firebase
+    .auth()
+    .sendPasswordResetEmail(email, actionCodeSettings)
+    .then(() => {
+      output = { ok: true, message: "Password Reset Email sent to " + email };
+    })
+    .catch((error) => {
+      if (error.code === "auth/user-not-found") {
+        output = { ok: true, message: "Password Reset Email sent to " + email };
+      } else {
+        output = { ok: false, message: "Failed to Send Reset Email" };
+      }
+    });
+
+  return output;
+};
+
 //Helper Functions
 
 function authErrorHandling(error) {
   var output;
   if (error.code === "auth/email-already-in-use") {
-    output = { ok: false, message: "Email Address already in Use" };
+    output = { ok: false, message: "Email address already in use" };
   } else if (error.code === "auth/invalid-email") {
-    output = { ok: false, message: "Invalid Email Address" };
+    output = { ok: false, message: "Invalid email address" };
   } else if (error.code === "auth/weak-password") {
     output = { ok: false, message: "Password too weak" };
   } else {
-    output = { ok: false, message: "Sign Up Unsuccesfull" };
+    output = { ok: false, message: "Sign up unsuccessful" };
   }
   return output;
 }

@@ -1,0 +1,21 @@
+.PopUpClose {
+  /* background-color: red; */
+  width: min-content;
+  display: flex;
+  float: inline-end;
+}
+
+.PopUpClose:hover {
+  cursor: pointer;
+}
+
+.RegisterNow:hover {
+  cursor: pointer;
+}
+
+.LoginBanner{
+
+  text-align: center;
+  font-size: 20px;
+  margin-top: 20px;
+}

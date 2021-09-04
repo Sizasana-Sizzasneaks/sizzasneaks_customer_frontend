@@ -63,7 +63,7 @@ function ProductsPage(props) {
           {category}
         </p>
       </div>
-      <Grid container spacing={5} style={{ height: "500px" }}>
+      <Grid container spacing={5} style={{ height: "min-content", marginBottom:"20px" }}>
         {products &&
           products.map((product) => {
             return (
