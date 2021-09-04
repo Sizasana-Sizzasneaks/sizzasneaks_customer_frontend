@@ -236,7 +236,7 @@ export const createGuestUser = async () => {
 
 export const requestResetPassword = async (email) => {
   var actionCodeSettings = {
-    url: window.location.hostname,
+    url: window.location.href,
     handleCodeInApp: false,
   };
   var output = {};

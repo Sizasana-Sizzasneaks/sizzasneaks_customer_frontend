@@ -32,6 +32,7 @@ function Notification(props) {
           display: "inline-flex",
           justifyContent: "center",
           alignItems: "center",
+          height: "max-content"
         }}
         onClick={() => {
           if (typeof props.onClick !== "undefined") {

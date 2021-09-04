@@ -143,7 +143,12 @@ function LogInComponent(props) {
                   </MDBRow>
                   <MDBRow>
                     <MDBCol md="12">
-                      <label htmlFor="defaultFormRegisterNameEx">Email</label>
+                      <label
+                        className={Styles.InputLabel}
+                        htmlFor="defaultFormRegisterNameEx"
+                      >
+                        Email
+                      </label>
                       <input
                         type="text"
                         id="defaultFormRegisterNameEx"
@@ -168,7 +173,10 @@ function LogInComponent(props) {
                   </MDBRow>
                   <MDBRow>
                     <MDBCol md="12">
-                      <label htmlFor="defaultFormRegisterPasswordEx">
+                      <label
+                        htmlFor="defaultFormRegisterPasswordEx"
+                        className={Styles.InputLabel}
+                      >
                         Password
                       </label>
 
@@ -229,7 +237,7 @@ function LogInComponent(props) {
                       }}
                     />
 
-                    <p style={{ marginTop: "20px" }}>
+                    <p style={{ marginTop: "20px", marginBottom:"5px" }}>
                       New Customer?,{" "}
                       <p
                         className={Styles.RegisterNow}

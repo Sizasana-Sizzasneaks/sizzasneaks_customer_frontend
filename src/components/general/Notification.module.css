@@ -1,5 +1,5 @@
 .ContactButton {
-  text-align: center;
+  text-align: left;
   background-color: #e4b849;
   height: min-content;
   width: auto;
@@ -20,7 +20,8 @@
   font-family: "Raleway", sans-serif;
   margin: 0px;
   margin-right: 8px;
-  font-size: 18px;
+  margin-left: 5px;
+  
 }
 
 .ContactButton span {

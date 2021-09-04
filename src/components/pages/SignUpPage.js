@@ -12,6 +12,8 @@ import { signUp } from "../../services/authentication.js";
 import Button from "../general/Button.js";
 import Notification from "../general/Notification.js";
 
+import Styles from "./SignUpPage.module.css";
+
 // This is the Sign up page
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -140,7 +142,14 @@ function SignUpPage() {
         }}
       >
         <MDBRow>
-          <MDBCol md={8} style={{ margin: "0 auto", marginBottom:"10px", padding: "12px 24px" }}>
+          <MDBCol
+            md={8}
+            style={{
+              margin: "0 auto",
+              marginBottom: "10px",
+              padding: "12px 24px",
+            }}
+          >
             {signUpState && (
               <>
                 {signUpState.ok === true ? (
@@ -156,24 +165,22 @@ function SignUpPage() {
                     styles={{ width: "100%" }}
                   />
                 )}
-                
               </>
             )}
             {loading && (
-                <div style={{ paddingTop: "10px", paddingBottom: "20px" }}>
-                  <LinearProgress />
-                </div>
-              )}
+              <div style={{ paddingTop: "10px", paddingBottom: "20px" }}>
+                <LinearProgress />
+              </div>
+            )}
           </MDBCol>{" "}
         </MDBRow>
         <MDBRow>
           <MDBCol md="8" className={classes.card} style={{ margin: "0 auto" }}>
             <form>
-             
               <MDBRow>
                 <p className="h4 text-left mb-4">Personal Details</p>
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterNameEx">First name</label>
+                  <label className={Styles.InputLabel}  htmlFor="defaultFormRegisterNameEx">First name</label>
                   <input
                     type="text"
                     id="defaultFormRegisterNameEx"
@@ -193,7 +200,7 @@ function SignUpPage() {
                 </MDBCol>
 
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterNameEx">Last Name</label>
+                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterNameEx">Last Name</label>
                   <input
                     type="text"
                     id="defaultFormRegisterNameEx"
@@ -214,7 +221,7 @@ function SignUpPage() {
               </MDBRow>
               <MDBRow>
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterEmailEx">
+                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterEmailEx">
                     Email Address
                   </label>
                   <input
@@ -236,7 +243,7 @@ function SignUpPage() {
                 </MDBCol>
 
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterMobileEx">
+                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterMobileEx">
                     Mobile Number
                   </label>
                   <input
@@ -261,7 +268,7 @@ function SignUpPage() {
               </MDBRow>
               <MDBRow>
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterPasswordEx">
+                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterPasswordEx">
                     Password
                   </label>
                   <input
@@ -285,7 +292,7 @@ function SignUpPage() {
                 </MDBCol>
 
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterPasswordEx">
+                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterPasswordEx">
                     Retype Password
                   </label>
                   <input

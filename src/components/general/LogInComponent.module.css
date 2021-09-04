@@ -16,6 +16,11 @@
 .LoginBanner{
 
   text-align: center;
-  font-size: 20px;
+  font-size: 18px;
   margin-top: 20px;
+  font-weight: 400;
+}
+
+.InputLabel{
+  margin-bottom: 5px;
 }
