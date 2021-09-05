@@ -14,7 +14,6 @@ function ProductDisplayCard(props) {
   var [sizeSelectedError, setSizeSelectedError] = React.useState(null);
   var [colorSelectedError, setColorSelectedError] = React.useState(null);
 
-
   function getSelectedOption() {
     return {
       color: props.product.options[selectedColor].color,
@@ -55,22 +54,24 @@ function ProductDisplayCard(props) {
       setColorSelectedError("Color Required");
     }
 
-  //below return fucntion shows how images will be shows of the product
+    //below return fucntion shows how images will be shows of the product
     return (
       <Row className={Styles.currentProductCard}>
         <Col className={Styles.imageOptionsSegment} xs={2}>
-          <Row>
-            <Col>
-              <img src={props.product.imgURls[1].imgURL} />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <img src={props.product.imgURls[2].imgURL} />
-            </Col>
-          </Row>
+          {props.product.imgUrls &&
+            props.product.imgUrls.map((imageURL, index) => {
+              return (
+                index > 0 && (
+                  <Row>
+                    <Col>
+                      <img src={imageURL.imgURL} />
+                    </Col>
+                  </Row>
+                )
+              );
+            })}
         </Col>
-  
+
         <Col xs={1} className={Styles.mainImageSegment}>
           <Row>
             <Col>
@@ -78,7 +79,7 @@ function ProductDisplayCard(props) {
             </Col>
           </Row>
         </Col>
-  
+
         <Col className={Styles.currentProductDetailsSegment}>
           <Row>
             <Col className={Styles.brand}>
@@ -108,7 +109,7 @@ function ProductDisplayCard(props) {
                   setSelectedColor(color);
                 }}
                 selectSize={(size) => {
-                  setSizeSelectedError(null);//checks size selected
+                  setSizeSelectedError(null); //checks size selected
                   setColorSelectedError(null);
                   setSelectedSize(size);
                 }}
@@ -116,24 +117,24 @@ function ProductDisplayCard(props) {
                 colorSelectedError={colorSelectedError}
               />
             </Col>
-          </Row> 
-  
+          </Row>
+
           <Row className={Styles.priceAndButtons}>
             <Col className={Styles.productPrice} xs={5}>
               <p>R {props.product.sellingPrice}</p>
             </Col>
-            <Col  xs={7}>
+            <Col xs={7}>
               <Button
                 label="ADD TO CART"
-                styles={{ backgroundColor: "#F3D63C" }}// Add to cart button formation and style 
+                styles={{ backgroundColor: "#F3D63C" }} // Add to cart button formation and style
                 onClick={() => {
                   addProductToCart();
                 }}
               />
-              <Button
+              {/* <Button
                 label="ADD TO WISHLIST"
-                styles={{ backgroundColor: "#E3E3E3", float: "right" }} // Add to Wishlist button formation and style 
-              />
+                styles={{ backgroundColor: "#E3E3E3", float: "right" }} // Add to Wishlist button formation and style
+              /> */}
             </Col>
           </Row>
         </Col>
@@ -144,16 +145,18 @@ function ProductDisplayCard(props) {
   return (
     <Row className={Styles.currentProductCard}>
       <Col className={Styles.imageOptionsSegment} xs={2}>
-        <Row>
-          <Col>
-            <img src={props.product.imgURls[1].imgURL} />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <img src={props.product.imgURls[2].imgURL} />
-          </Col>
-        </Row>
+        {props.product.imgURls &&
+          props.product.imgURls.map((imageURL, index) => {
+            return (
+              index > 0 && (
+                <Row>
+                  <Col>
+                    <img src={imageURL.imgURL} />
+                  </Col>
+                </Row>
+              )
+            );
+          })}
       </Col>
 
       <Col xs={1} className={Styles.mainImageSegment}>
@@ -207,7 +210,8 @@ function ProductDisplayCard(props) {
           <Col className={Styles.productPrice} xs={5}>
             <p>R {props.product.sellingPrice}</p>
           </Col>
-          <Col xs={7}>
+          <Col xs={3}></Col>
+          <Col xs={4}>
             <Button
               label="ADD TO CART"
               styles={{ backgroundColor: "#F3D63C" }}
@@ -215,10 +219,10 @@ function ProductDisplayCard(props) {
                 addProductToCart();
               }}
             />
-            <Button
+            {/* <Button
               label="ADD TO WISHLIST"
               styles={{ backgroundColor: "#E3E3E3", float: "right" }}
-            />
+            /> */}
           </Col>
         </Row>
       </Col>

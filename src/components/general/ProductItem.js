@@ -39,7 +39,9 @@ function ProductItem(props) {
           </Col>
           <Col xl={5} style={{ padding: "0px" }}>
             {" "}
-            <p style={{ float: "right", marginBottom: "0px" }}>4.2</p>
+            <p style={{ float: "right", marginBottom: "0px" }}>
+              {props.product.averageRating}
+            </p>
             <span
               style={{
                 color: "#F3D63C",

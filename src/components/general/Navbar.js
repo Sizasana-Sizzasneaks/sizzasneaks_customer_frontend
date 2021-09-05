@@ -216,7 +216,7 @@ function Navbar() {
                   history.push("/products/BRAND/" + value);
                 }}
                 wrapperStyle={{ borderStyle: "none", width: "max-content" }}
-                inputStyle={{ backgroundColor: "#38CCCC" }}
+                // inputStyle={{ backgroundColor: "#38CCCC" }}
               />
             </div>
             <div style={{ height: "100%", display: "inline-block" }}>
