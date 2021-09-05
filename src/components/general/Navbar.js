@@ -7,21 +7,39 @@ import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import SearchInputField from "./SearchInputField.js";
+import DropDownInput from "./DropDownInput.js";
 
 import { signOutCurrentUser } from "../../services/authentication.js";
 import { clearUserProfile } from "../../redux/actions/profile.js";
+import { getProductBrands } from "../../api/products.js";
 
 import LogIn from "./LogInComponent";
 
 function Navbar() {
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  //State
+  var [brandsList, setBrandsList] = React.useState([]);
   var [search, setSearch] = React.useState(null);
+
+  React.useEffect(() => {
+    getProductBrandsList();
+  }, []);
 
   const handleClick = () => {
     handleLoginClick();
   };
 
-  const dispatch = useDispatch();
+  async function getProductBrandsList() {
+    var getProductBrandsResult = await getProductBrands();
+
+    if (getProductBrandsResult.ok) {
+      setBrandsList(getProductBrandsResult.data);
+    } else {
+      setBrandsList([]);
+    }
+  }
 
   // declare a variable to use State Hook: isShowLogin
   const [isShowLogin, setIsShowLogin] = useState(false);
@@ -192,7 +210,16 @@ function Navbar() {
         >
           <div style={{ display: "flex", height: "100%" }}>
             <div style={{ height: "100%", display: "inline-block" }}>
-              <NavbarNavigationLink label="BRANDS" expandable={true} />
+              <DropDownInput
+                list={brandsList}
+                onChange={(value) => {
+                  history.push("/products/BRAND/" + value);
+                }}
+                wrapperStyle={{ borderStyle: "none", width: "max-content" }}
+                inputStyle={{ backgroundColor: "#38CCCC" }}
+              />
+            </div>
+            <div style={{ height: "100%", display: "inline-block" }}>
               <NavbarNavigationLink
                 label="WOMEN"
                 onClick={() => {

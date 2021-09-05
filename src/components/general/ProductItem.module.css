@@ -1,0 +1,37 @@
+.ProductItem {
+  background-color: #ffffff;
+  width: 220px;
+  height: 100%;
+  padding: 10px;
+  color: black;
+}
+
+.ProductItemImage {
+  height: 180px;
+  width: 100%;
+  object-fit: cover;
+  /* border-style: solid; */
+}
+
+.NameRatingRow {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+.ProductName {
+  font-weight: 400;
+  margin-top: 5px;
+  margin-bottom: 7px;
+}
+
+.BrandName {
+  font-size: 14px;
+  margin-bottom: 7px;
+}
+
+.SellingPrice {
+  font-weight: 400;
+  margin-bottom: 0px;
+}

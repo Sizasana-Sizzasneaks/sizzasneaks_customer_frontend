@@ -1,0 +1,110 @@
+.EntireInputFieldComponent {
+  width: max-content;
+  display: inline-flex;
+  height: 100%;
+  font-size: 14px;
+}
+
+.EntireInputFieldComponent:hover {
+  cursor: pointer;
+}
+.InputLabel {
+  margin-bottom: 5px;
+  color: rgba(00, 00, 00, 0.6);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: Barlow, sans-serif;
+}
+
+.InputLabelFocused {
+  color: #065faa;
+}
+.InputLabelError {
+  color: #b00020;
+}
+
+.InputWrapper {
+  border-style: solid;
+  border-width: 1.5px;
+  border-radius: 5px;
+  height: 100%;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-color: rgba(00, 00, 00, 0.12);
+  font-size: 14px;
+}
+
+.InputWrapper:hover {
+  cursor: pointer;
+}
+
+.InputWrapperFocused {
+  border-color: #065faa;
+}
+
+.InputWrapperError {
+  border-color: #b00020;
+}
+
+.InputField {
+  border: none;
+  outline: none;
+  background-color: white;
+  height: 100%;
+  width: 98%;
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.InputField option {
+  font-size: 14px;
+  font-weight: 300;
+}
+.InputField:hover {
+  cursor: pointer;
+}
+
+.EntireInputFieldComponent input {
+  font-size: 15px;
+  font-family: Barlow, sans-serif;
+}
+
+.EntireInputFieldComponent textarea {
+  font-size: 15px;
+  font-family: Barlow, sans-serif;
+}
+
+.InputField:focus {
+  outline: none;
+}
+
+.InputError {
+  margin-top: 1px;
+  margin-bottom: 0px;
+  margin-left: 1px;
+  color: #b00020;
+}
+
+.InputTextArea {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  border: none;
+  outline: none;
+  width: 97%;
+  height: 92%;
+  resize: none;
+}
+
+.InputTextArea::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+
+.InputTextArea:focus {
+  outline: none;
+}
+
+.Option:hover{
+  cursor: pointer;
+}
