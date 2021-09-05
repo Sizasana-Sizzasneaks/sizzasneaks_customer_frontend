@@ -136,7 +136,17 @@ export const signUp = async ({
     }
   }
 
-  return { ok: true, message: "Sign Up Successful" };
+  var sendEmailVerificationEmailResult = await sendEmailVerificationEmail();
+
+  if (sendEmailVerificationEmailResult.ok === true) {
+    return {
+      ok: true,
+      message:
+        "Sign Up Successful, " + sendEmailVerificationEmailResult.message,
+    };
+  } else {
+    return { ok: true, message: "Sign Up Successful" };
+  }
 };
 
 async function upgradeAnonymousAccount(email, password) {
@@ -174,6 +184,31 @@ async function vanillaSignUp(email, password) {
 
   return output;
 }
+
+export const sendEmailVerificationEmail = async () => {
+  var firebase = getFirebase();
+  var output = {};
+  await firebase
+    .auth()
+    .currentUser.sendEmailVerification()
+    .then(() => {
+      output = {
+        ok: true,
+        message:
+          "A verification email has been sent to " +
+          firebase.auth().currentUser.email +
+          ".",
+      };
+    })
+    .catch(() => {
+      output = {
+        ok: false,
+        message: "Failed to send Verification Email",
+      };
+    });
+
+  return output;
+};
 
 //Firebase Fuction for Logging Out the Current User
 export const signOutCurrentUser = () => {

@@ -63,3 +63,10 @@
 .WriteReviewPublishSection {
   margin-top: 10px;
 }
+
+.RequestVerificationText {
+}
+
+.RequestVerificationText:hover {
+  cursor: pointer;
+}

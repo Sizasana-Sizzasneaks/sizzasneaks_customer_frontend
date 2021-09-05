@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 
 import Styles from "./Navbar.module.css";
 
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import SearchInputField from "./SearchInputField.js";
@@ -75,8 +75,8 @@ function Navbar() {
               <SearchInputField
                 value={search}
                 placeHolderText="Search"
-                onChange={(value) => {
-                  setSearch(value);
+                onChange={async (value) => {
+                  await setSearch(value);
                   if (value === "") {
                     history.push("/");
                   } else {

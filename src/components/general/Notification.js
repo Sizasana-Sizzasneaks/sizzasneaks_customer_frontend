@@ -8,7 +8,7 @@ function Notification(props) {
     <div
       className={Styles.ContactButton}
       style={
-        props.state === "success"
+        props.state === "success" ||  props.state ==="loading"
           ? {
               borderStyle: "solid",
               borderWidth: "2px",
@@ -51,7 +51,7 @@ function Notification(props) {
       >
         {props.state === "loading" ? (
           <CircularProgress
-            size="17px"
+            size="19px"
             style={{ marginLeft: "5px", color: "#005651" }}
           />
         ) : (
