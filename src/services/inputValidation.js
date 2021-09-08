@@ -2,7 +2,7 @@ import * as Yup from "yup";
 
 //First Name & Last Name validation Schema and Function Logic
 const nameSchema = Yup.object().shape({
-  name: Yup.string("Please enter a string")
+  name: Yup.string("Please enter a String")
     .required("Required")
     .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
     .max(50),
@@ -21,9 +21,9 @@ export const validateName = (name) => {
 
 //Email Validation Schema and Fuction Logic
 const emailSchema = Yup.object().shape({
-  email: Yup.string("Please Enter a String")
+  email: Yup.string("Please enter a String")
     .email("Invalid email address")
-    .required("Required"),
+    .required("Required").nullable()
 });
 
 export const validateEmail = (email) => {
@@ -43,8 +43,9 @@ const phoneRegExp =
 
 const mobileNumberSchema = Yup.object().shape({
   mobileNumber: Yup.string("Please enter a string")
-    .matches(phoneRegExp, "Phone number is not valid")
-    .min(10)
+    .matches(phoneRegExp, "Phone number is invalid")
+    .min(10, "Must have 10 digits.")
+    .max(10, "Must have 10 digits.")
     .required("Required"),
 });
 
@@ -82,7 +83,7 @@ export const validateSignUpPassword = (password) => {
 
 //Log In Password Validation Schema and Fuction Logic
 const loginPasswordSchema = Yup.object().shape({
-  password: Yup.string("Please enter a string").required("Required"),
+  password: Yup.string("Please enter a string").required("Required").nullable()
 });
 
 export const validateLogInPassword = (password) => {
@@ -100,10 +101,10 @@ export const validateLogInPassword = (password) => {
 export const validateRetypePassword = (password, retypePassword) => {
   const retypePasswordSchema = Yup.object().shape({
     retypePassword: Yup.string()
-      .test("mactch", "Password does not match", (retypePasswordCheck) => {
+      .test("match", "Password does not match", (retypePasswordCheck) => {
         return retypePasswordCheck === password;
       })
-      .required("Confirm Password is required"),
+      .required("Password confirmation required"),
   });
 
   return retypePasswordSchema
@@ -120,20 +121,16 @@ export const validateRetypePassword = (password, retypePassword) => {
 
 //Rating Score
 
-
-
 export const validateRatingScore = (rating) => {
-
   const ratingScoreSchema = Yup.object().shape({
     rating: Yup.number("Rating must be an Intager number.")
-      .test("mactch", "Rating Required", () => {
+      .test("match", "Rating Required", () => {
         return rating !== 0;
       })
       .min(1, "Score must be between 1 & 5")
-      .max(5,"Score must be between 1 & 5")
+      .max(5, "Score must be between 1 & 5")
       .required("Required"),
   });
-
 
   return ratingScoreSchema
     .validate({ rating: rating })

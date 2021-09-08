@@ -2,6 +2,7 @@ import React from "react";
 import Styles from "./WriteReview.module.css";
 import { Row, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { sendEmailVerificationEmail } from "../../services/authentication.js";
 
 import Button from "../general/Button.js";
 import Rating from "./Rating.js";
@@ -10,14 +11,14 @@ import {
   validateRatingScore,
   validateRatingBody,
 } from "../../services/inputValidation.js";
-import {getCurrentDateAsString} from "../../services/dateManipulationFunctions.js"
+import { getCurrentDateAsString } from "../../services/dateManipulationFunctions.js";
 import { CircularProgress } from "@material-ui/core";
-//Function used for Writing a review 
+//Function used for Writing a review
 function WriteReview(props) {
   const authState = useSelector((state) => state.firebase.auth);
   const profileState = useSelector((state) => state.profile);
 
-  var [rating, setRating] = React.useState(0);// initail state of Rating set to 0
+  var [rating, setRating] = React.useState(0); // initail state of Rating set to 0
   var [body, setBody] = React.useState(""); // initail state of body set to nothing
 
   var [ratingValid, setRatingValid] = React.useState(null); //Used to check if the rating is valid
@@ -28,12 +29,15 @@ function WriteReview(props) {
   var [loading, setloading] = React.useState(false);
   var [writeReviewState, setWriteReviewState] = React.useState(null);
 
+  var [loadingRequest, setLoadingRequest] = React.useState(false);
+  var [requestVerEmailState, setRequestVerEmailState] = React.useState(null);
+
   React.useEffect(() => {
     checkFormValidity();
   }, [ratingValid, bodyValid]); //Refreshes the screen
 
   var currentDate = getCurrentDateAsString();
-//Function to check Input Validation for rating and Body
+  //Function to check Input Validation for rating and Body
   async function checkInputValidity() {
     var validateRatingScoreResult = await validateRatingScore(rating);
     await setRatingValid(validateRatingScoreResult);
@@ -41,7 +45,7 @@ function WriteReview(props) {
     await setBodyValid(validateRatingBodyResult);
     await checkFormValidity();
   }
-//function to check validation for Form e.g. Both Rating and body is required to publish a review
+  //function to check validation for Form e.g. Both Rating and body is required to publish a review
   async function checkFormValidity() {
     if (ratingValid && bodyValid) {
       if (ratingValid.valid === true && bodyValid.valid === true) {
@@ -51,7 +55,7 @@ function WriteReview(props) {
       }
     }
   }
-//Clears the feilds once the review is publised or deleted
+  //Clears the feilds once the review is publised or deleted
   function clearFields() {
     setRating(0);
     setBody("");
@@ -60,8 +64,8 @@ function WriteReview(props) {
     setWriteReviewState(null);
     setFormValid(false);
   }
-//visual aspect of how the Write Review fucntion will show
-// Visual functionalities of a review will be published
+  //visual aspect of how the Write Review fucntion will show
+  // Visual functionalities of a review will be published
   return (
     <Row className={Styles.WriteReview}>
       <Col>
@@ -72,7 +76,7 @@ function WriteReview(props) {
             <span style={{ fontWeight: "500" }}>review </span>
             for this <span style={{ fontWeight: "500" }}>product</span>.
           </p>
-        ) : (
+        ) : authState.emailVerified ? (
           <>
             <Row>
               <Col className={Styles.WriteReviewHeader}>
@@ -157,7 +161,7 @@ function WriteReview(props) {
             <Row>
               <Col className={Styles.WriteReviewPublishSection}>
                 <Button
-                  disabled={!formValid} 
+                  disabled={!formValid}
                   onClick={async () => {
                     await checkInputValidity(); //Awaits checkInputValidity before publishing a review
 
@@ -173,7 +177,7 @@ function WriteReview(props) {
                         if (writeAReviewResult.ok === true) {
                           setWriteReviewState(writeAReviewResult);
                           setTimeout(() => {
-                            clearFields();//clear filds after a review is published 
+                            clearFields(); //clear filds after a review is published
                           }, 1000);
                         } else {
                           setRatingValid(writeAReviewResult);
@@ -186,6 +190,90 @@ function WriteReview(props) {
                 />
               </Col>
             </Row>
+          </>
+        ) : (
+          <>
+            <p
+              style={{
+                margin: "auto",
+                textAlign: "center",
+                fontSize: "18px",
+                marginBottom: "10px",
+              }}
+            >
+              Please
+              <span style={{ fontWeight: "500" }}>
+                {" "}
+                verify your email address{" "}
+              </span>
+              in order to leave a
+              <span style={{ fontWeight: "500" }}> review </span>
+              for this
+              <span style={{ fontWeight: "500" }}> product</span>.
+            </p>
+            <p
+              className={Styles.RequestVerificationText}
+              onClick={async () => {
+                setRequestVerEmailState(null);
+                setLoadingRequest(true);
+                var sendEmailVerificationEmailResult =
+                  await sendEmailVerificationEmail();
+
+                if (sendEmailVerificationEmailResult.ok) {
+                  setLoadingRequest(false);
+                  setRequestVerEmailState({ ok: true });
+                } else {
+                  setLoadingRequest(false);
+                  setRequestVerEmailState({ ok: false });
+                }
+              }}
+              style={{
+                fontWeight: "500",
+                color: "blue",
+                margin: "auto",
+                textAlign: "center",
+                fontSize: "18px",
+                marginBottom: "10px",
+              }}
+            >
+              {" "}
+              Request Verification Email
+            </p>
+            {loadingRequest && (
+              <div style={{ alignContent: "center", display: "flex" }}>
+                <CircularProgress size={20} style={{ margin: "0px auto" }} />
+              </div>
+            )}
+            {requestVerEmailState &&
+              (requestVerEmailState.ok ? (
+                <p
+                  style={{
+                    fontWeight: "400",
+                    color: "green",
+                    margin: "auto",
+                    textAlign: "center",
+                    fontSize: "18px",
+                    marginBottom: "0px",
+                  }}
+                >
+                  {" "}
+                  Sent
+                </p>
+              ) : (
+                <p
+                  style={{
+                    fontWeight: "400",
+                    color: "red",
+                    margin: "auto",
+                    textAlign: "center",
+                    fontSize: "18px",
+                    marginBottom: "0px",
+                  }}
+                >
+                  {" "}
+                  Failed
+                </p>
+              ))}
           </>
         )}
       </Col>

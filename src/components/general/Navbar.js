@@ -3,24 +3,43 @@ import { Container, Row, Col } from "react-bootstrap";
 
 import Styles from "./Navbar.module.css";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import SearchInputField from "./SearchInputField.js";
+import DropDownInput from "./DropDownInput.js";
 
-import {
-  signOutCurrentUser,
-  createGuestUser,
-} from "../../services/authentication.js";
+import { signOutCurrentUser } from "../../services/authentication.js";
 import { clearUserProfile } from "../../redux/actions/profile.js";
+import { getProductBrands } from "../../api/products.js";
 
 import LogIn from "./LogInComponent";
 
 function Navbar() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  //State
+  var [brandsList, setBrandsList] = React.useState([]);
+  var [search, setSearch] = React.useState(null);
+
+  React.useEffect(() => {
+    getProductBrandsList();
+  }, []);
+
   const handleClick = () => {
     handleLoginClick();
   };
 
-  const dispatch = useDispatch();
+  async function getProductBrandsList() {
+    var getProductBrandsResult = await getProductBrands();
+
+    if (getProductBrandsResult.ok) {
+      setBrandsList(getProductBrandsResult.data);
+    } else {
+      setBrandsList([]);
+    }
+  }
 
   // declare a variable to use State Hook: isShowLogin
   const [isShowLogin, setIsShowLogin] = useState(false);
@@ -42,107 +61,142 @@ function Navbar() {
             paddingLeft: "0",
             paddingRight: "0",
             paddingTop: "10px",
-            // backgroundColor: "red"
           }}
         >
           <Row>
-            <Col xs={4} style={{ padding: "0" }}>
+            <Col xl={4} style={{ padding: "0" }}>
               <Link to="/">
                 {" "}
                 <p className={Styles.LogoBanner}>SIZZASNEAKS</p>{" "}
               </Link>
             </Col>
 
-            <Col xs={4} style={{ padding: "0" }}>
-              <div className={Styles.SearchBarBox}>
-                <input
-                  className={Styles.SearchInput}
-                  type="text"
-                  placeholder="Search Products"
-                />
-              </div>
+            <Col xl={4} style={{ padding: "0" }}>
+              <SearchInputField
+                value={search}
+                placeHolderText="Search"
+                onChange={async (value) => {
+                  await setSearch(value);
+                  if (value === "") {
+                    history.push("/");
+                  } else {
+                    history.push("/products/SEARCH/" + value);
+                  }
+                }}
+              />
             </Col>
-
-            {profileState.loading && (
+            {profileState.loading ? (
               <Col
-                xs={4}
-                style={{ padding: "0", display: "flex", alignItems: "center" }}
+                xl={4}
+                style={{
+                  padding: "0",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  display: "inline-flex",
+                }}
               >
                 <div style={{ margin: "auto", marginTop: "18px" }}>
                   <CircularProgress size={30} />
                 </div>
               </Col>
-            )}
-            {!profileState.loading && (
-              <Col xs={4} style={{ padding: "0" }}>
+            ) : (
+              <Col
+                xl={4}
+                style={{
+                  padding: "0",
+                }}
+              >
                 <Row className={Styles.TopRightNavBannerLinks}>
                   {authState.isEmpty || authState.isAnonymous ? (
                     <>
                       <Col
-                        xs={2}
-                        className={Styles.TopRightNavBannerLinky}
-                        style={{ marginLeft: "auto" }}
+                        className={Styles.TopRightNavBannerLink}
+                        onClick={() => {
+                          handleClick();
+                        }}
                       >
-                        <p onClick={handleClick}> Log In</p>
-                        <div className={Styles.TopRightNavBannerLinkyy}>
-                          <LogIn isShowLogin={isShowLogin} />
-                        </div>
+                        {" "}
+                        <p>Log In</p>
                       </Col>
-                      <Col xs={1}>
-                        <div className={Styles.VerticalDivider}></div>
+                      <Col xl={1}>
+                        <VerticalDivider />
                       </Col>
-                      <Col xs={3} className={Styles.TopRightNavBannerLink}>
-                        <Link to="/sign-up">
+                      <Col
+                        className={Styles.TopRightNavBannerLink}
+                        onClick={() => {
+                          history.push("/sign-up");
+                        }}
+                      >
+                        <p>Sign Up</p>
+                      </Col>
+                      <Col xl={1}>
+                        <VerticalDivider />
+                      </Col>
+                      <Col
+                        className={Styles.TopRightNavBannerLink}
+                        onClick={() => {
+                          history.push("/cart");
+                        }}
+                      >
+                        <p>
                           {" "}
-                          <p>Sign Up</p>{" "}
-                        </Link>
-                      </Col>{" "}
-                      <Col xs={1}>
-                        <div className={Styles.VerticalDivider}></div>
+                          <span
+                            style={{ float: "left" }}
+                            className="material-icons"
+                          >
+                            shopping_cart
+                          </span>
+                          Cart
+                        </p>
                       </Col>
+                      {isShowLogin && (
+                        <LogIn setShowLogInForm={setIsShowLogin} />
+                      )}
                     </>
                   ) : (
                     <>
-                      {" "}
-                      <Col xs={3} className={Styles.TopRightNavBannerLink}>
+                      <Col className={Styles.TopRightNavBannerLink}>
                         {" "}
                         <p>
                           {profileState ? profileState.displayName : "User"}
-                        </p>{" "}
-                      </Col>{" "}
-                      <Col xs={1}>
-                        <div className={Styles.VerticalDivider}></div>
+                        </p>
                       </Col>
-                      <Col xs={3} className={Styles.TopRightNavBannerLink}>
-                        {" "}
-                        <p
-                          onClick={async () => {
-                            await signOutCurrentUser(); //When the user clicks sign outb button its signs user out and clears the profile
-                            await dispatch(clearUserProfile());
-                          }}
-                        >
-                          Log Out
-                        </p>{" "}
+                      <Col xl={1}>
+                        <VerticalDivider />
                       </Col>
-                      <Col xs={1}>
-                        <div className={Styles.VerticalDivider}></div>
+                      <Col
+                        className={Styles.TopRightNavBannerLink}
+                        onClick={async () => {
+                          await signOutCurrentUser();
+                          await dispatch(clearUserProfile());
+                          //Go to Home
+                          history.push("/");
+                        }}
+                      >
+                        <p>Log Out</p>
+                      </Col>
+                      <Col xl={1}>
+                        <VerticalDivider />
+                      </Col>
+                      <Col
+                        className={Styles.TopRightNavBannerLink}
+                        onClick={async () => {
+                          history.push("/cart");
+                        }}
+                      >
+                        <p>
+                          {" "}
+                          <span
+                            style={{ float: "left" }}
+                            className="material-icons"
+                          >
+                            shopping_cart
+                          </span>
+                          Cart
+                        </p>
                       </Col>
                     </>
                   )}
-
-                  <Col xs={3} className={Styles.TopRightNavBannerLink}>
-                    <Link to="/cart">
-                      <div className={Styles.ShoppingCartBanner}>
-                        <span
-                          style={{ float: "left" }}
-                          className="material-icons"
-                        >
-                          shopping_cart
-                        </span>
-                        <p>Cart</p>
-                      </div>
-                    </Link>
-                  </Col>
                 </Row>
               </Col>
             )}
@@ -156,10 +210,34 @@ function Navbar() {
         >
           <div style={{ display: "flex", height: "100%" }}>
             <div style={{ height: "100%", display: "inline-block" }}>
-              <NavabarNavigationLink label="BRANDS" expandable={true} />
-              <NavabarNavigationLink label="WOMEN" />
-              <NavabarNavigationLink label="MEN" />
-              <NavabarNavigationLink label="KIDS" />
+              <DropDownInput
+                list={brandsList}
+                onChange={(value) => {
+                  history.push("/products/BRAND/" + value);
+                }}
+                wrapperStyle={{ borderStyle: "none", width: "max-content" }}
+                // inputStyle={{ backgroundColor: "#38CCCC" }}
+              />
+            </div>
+            <div style={{ height: "100%", display: "inline-block" }}>
+              <NavbarNavigationLink
+                label="WOMEN"
+                onClick={() => {
+                  history.push("/products/CATEGORY/WOMEN");
+                }}
+              />
+              <NavbarNavigationLink
+                label="MEN"
+                onClick={() => {
+                  history.push("/products/CATEGORY/MEN");
+                }}
+              />
+              <NavbarNavigationLink
+                label="KIDS"
+                onClick={() => {
+                  history.push("/products/CATEGORY/KIDS");
+                }}
+              />
             </div>
             <div
               style={{
@@ -168,8 +246,12 @@ function Navbar() {
                 display: "inline-block",
               }}
             >
-              <NavabarNavigationLink label="NEW ARRIVALS" />
-              <NavabarNavigationLink label="WISHLIST" />
+              <NavbarNavigationLink
+                label="NEW"
+                onClick={() => {
+                  history.push("/products/NEW/NEW");
+                }}
+              />
             </div>
           </div>
         </Container>
@@ -178,24 +260,27 @@ function Navbar() {
   );
 }
 //Above are the links on the Navbar to catogoroze products
-function NavabarNavigationLink(props) {
+function NavbarNavigationLink(props) {
   return (
-    <Link to={"/products/" + "CATEGORY/" + props.label}>
-      <div
-        className={Styles.NavbarNavigationLink}
-        // onClick={function () {
-        //   alert("Coming Soon");
-        // }}
-      >
-        <p style={{}}>{props.label}</p>
-        {props.expandable && (
-          <span class="material-icons" style={{ marginLeft: "10px" }}>
-            expand_more
-          </span>
-        )}
-      </div>
-    </Link>
+    <div
+      className={Styles.NavbarNavigationLink}
+      onClick={() => {
+        if (typeof props.onClick !== "undefined") {
+          props.onClick();
+        }
+      }}
+    >
+      <p style={{ fontWeight: "300" }}>{props.label}</p>
+      {props.expandable && (
+        <span class="material-icons" style={{ marginLeft: "10px" }}>
+          expand_more
+        </span>
+      )}
+    </div>
   );
 }
 
+function VerticalDivider(props) {
+  return <div className={Styles.VerticalDivider}></div>;
+}
 export default Navbar;
