@@ -51,6 +51,7 @@ function Navbar() {
 
   const authState = useSelector((state) => state.firebase.auth);
   const profileState = useSelector((state) => state.profile);
+  const cartState = useSelector((state) => state.cart);
   return (
     <nav>
       <div className={Styles.NavbarBanner}>
@@ -146,7 +147,12 @@ function Navbar() {
                           >
                             shopping_cart
                           </span>
-                          Cart
+                          {cartState.cart ? (
+                            <p>{cartState.cart.cartCount}</p>
+                          ) : (
+                            <p>Cart</p>
+                          )}
+                          {cartState.loading && <CircularProgress size={30} />}
                         </p>
                       </Col>
                       {isShowLogin && (
@@ -192,7 +198,12 @@ function Navbar() {
                           >
                             shopping_cart
                           </span>
-                          Cart
+                          {cartState.cart ? (
+                            <p>{cartState.cart.cartCount}</p>
+                          ) : (
+                            <p>Cart</p>
+                          )}
+                          {cartState.loading && <CircularProgress size={30} />}
                         </p>
                       </Col>
                     </>

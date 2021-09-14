@@ -1,62 +1,55 @@
 // function creates a card cart item and receives data from the page
 import { Style } from "@material-ui/icons";
 import React from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
+import Button from "../general/Button.js";
 // import Styles from "../general/Navbar.module.css";
 import QuantityCart from "./QuantityCart";
-import Styles from "./ShoppingCartPage.module.css";
+import Styles from "./CartItemLine.module.css";
 
 function CartItemLine(props) {
+  function goToProductPage() {
+    //Checks if this property is defined
+    if (typeof props.pushToProductPage !== "undefined") {
+      //Calls the function supplied to this property.
+      props.pushToProductPage();
+    }
+  }
   return (
-    <Row
-      onClick={() => {
-        //Checks if this property is defined
-        if (typeof props.pushToShoppingCartPage !== "undefined") {
-          //Calls the function supplied to this property.
-          props.pushToShoppingCartPage();
-        }
-      }}
-    >
-      {/* cart items image display */}
-      <Col xl={2}>
-        <img width="100px" src={props.cartItemImage} alt="ProductImage"></img>
+    <Row className={Styles.CartItemLine}>
+      <Col xl={3}>
+        <img
+          onClick={goToProductPage}
+          className={Styles.ProductImg}
+          src={props.cartItemImage}
+          alt="ProductImage"
+        ></img>
       </Col>
-      <Col>
-        {/* Product details & variants*/}
-        <Row>
-          {/* Product name */}
-          <Col xl={6}>
+      <Col xl={6}>
+        <Row className={Styles.DetailLine}>
+          <Col>
             {" "}
-            <p className={Styles.Name}>{props.cartItemName}</p>{" "}
+            <p className={Styles.Name} onClick={goToProductPage}>
+              {props.cartItemName}
+            </p>{" "}
           </Col>
-          {/* delete cart item button */}
-          <Col className={Styles.RightText}>
-            <Button
-              variant="outline-dark"
-              size="sm"
-              onClick={() => {
-                if (typeof props.delete !== "undefined") {
-                  props.delete();
-                }
-              }}
-            >
-              {" "}
-              Remove
-            </Button>
+        </Row>
+        <Row className={Styles.DetailLineOption}>
+          {" "}
+          <Col>
+            {" "}
+            <p className={Styles.SubName}>
+              Color:{" "}
+              <span className={Styles.OptionValue}>{props.cartItemColor}</span>
+            </p>
+            <p className={Styles.SubName}>
+              Size:{" "}
+              <span className={Styles.OptionValue}>{props.cartItemSize}</span>
+            </p>
           </Col>
-          <Row>
-            {/* product variants */}
-            <Col xl={2}>
-              {" "}
-              <p className={Styles.SubName}>Color: {props.cartItemColor}</p>
-            </Col>
-            <Col xl={2} className={Styles.LeftText}>
-              {" "}
-              <p className={Styles.SubName}>Size: {props.cartItemSize}</p>
-            </Col>
-          </Row>
-          {/* product quantity & price */}
-          <Col xl={6}>
+        </Row>
+        <Row className={Styles.DetailLineQuantity}>
+          <Col>
             {" "}
             <QuantityCart
               value={props.cartItemQuantity}
@@ -67,9 +60,52 @@ function CartItemLine(props) {
               }}
             />{" "}
           </Col>
-          <Col className={Styles.RightTextPrice}>
-            <p className={Styles.SubName}>R {props.cartItemSellingPrice}</p>
-          </Col>
+        </Row>
+      </Col>
+      <Col xl={3}>
+        <Row className={Styles.RemoveLine}>
+          {" "}
+          <Button
+            label="Delete"
+            onClick={() => {
+              if (typeof props.delete !== "undefined") {
+                props.delete();
+              }
+            }}
+            styles={{
+              backgroundColor: "White",
+              height: "max-content",
+              width: "max-content",
+              borderStyle: "solid",
+              borderWidth: "1.5px",
+              padding: "5px 12px",
+              borderRadius: "2px",
+              marginLeft: "auto",
+            }}
+          >
+            {" "}
+            Remove
+          </Button>
+        </Row>
+        <Row className={Styles.PriceLine}>
+          {props.available ? (
+            <Col>
+              <p className={Styles.PriceValue}>
+                R {props.cartItemSellingPrice}
+              </p>
+            </Col>
+          ) : (
+            <Col>
+              <div className={Styles.UnavailableBanner}>
+                <p
+                  title="This quantity of this product is unavailable."
+                  className={Styles.UnavailableText}
+                >
+                  NOT AVAILABLE
+                </p>
+              </div>
+            </Col>
+          )}
         </Row>
       </Col>
     </Row>

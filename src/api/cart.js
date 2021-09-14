@@ -42,6 +42,7 @@ export const addToCart = async (productId, variant) => {
           config
         ) //sends the data of the selected product to the current user's cart
         .then((res) => {
+
           return res.data; // returns the corresponding data for the product that has been added to the cart
         })
         .catch((error) => {
