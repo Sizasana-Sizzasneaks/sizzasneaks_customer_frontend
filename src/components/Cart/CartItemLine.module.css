@@ -3,17 +3,19 @@
   margin: 10px 0px;
 }
 .DetailLine {
-  height: 40px;
+  height: max-content;
+  align-self: flex-start;
 }
 
 .DetailLineOption {
-  height: 60px;
+  height: max-content;
+  align-self: center;
 }
 
 .DetailLineQuantity {
-  height: 50px;
+  height: max-content;
   display: flex;
-  align-content: flex-end;
+  align-self: flex-end;
 }
 
 .ProductImg {
@@ -27,7 +29,7 @@
 }
 
 .Name {
-  font-weight: 500;
+  font-weight: 400;
   font-size: 20px;
   margin-bottom: 0px;
 }
@@ -36,15 +38,15 @@
 }
 
 .SubName {
-  font-weight: 500;
+  font-weight: 400;
   /* margin-top: revert; */
-  margin-bottom: 8px;
+  margin-bottom: 2px;
   margin-right: 12px;
 }
 
 .OptionValue {
   margin-left: 5px;
-  font-weight: 400;
+  font-weight: 300;
 }
 
 .RemoveLine {
@@ -59,7 +61,7 @@
 .PriceValue {
   text-align: end;
   margin-bottom: 0px;
-  font-size: 23px;
+  font-size: 20px;
 }
 
 .UnavailableBanner {

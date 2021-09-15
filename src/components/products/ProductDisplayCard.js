@@ -10,6 +10,11 @@ import OptionSelector from "./OptionSelector";
 import Button from "../general/Button.js";
 
 function ProductDisplayCard(props) {
+  var formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ZAR",
+  });
+
   const dispatch = useDispatch();
   var [selectedColor, setSelectedColor] = React.useState(0);
   var [selectedSize, setSelectedSize] = React.useState(null);
@@ -185,11 +190,11 @@ function ProductDisplayCard(props) {
         </Row>
 
         <Row className={Styles.priceAndButtons}>
-          <Col className={Styles.productPrice} xs={5}>
-            <p>R {props.product.sellingPrice}</p>
+          <Col className={Styles.productPrice} xl={7}>
+            <p>{formatter.format(props.product.sellingPrice)}</p>
           </Col>
-          <Col xs={3}></Col>
-          <Col xs={4}>
+          <Col xl={1}></Col>
+          <Col xl={4}>
             <Button
               label="ADD TO CART"
               styles={{ backgroundColor: "#F3D63C" }}

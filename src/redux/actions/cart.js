@@ -38,3 +38,9 @@ export const getUserCart = () => async (dispatch) => {
     });
   }
 };
+
+export const clearUserCart = () => {
+  return {
+    type: "ClEAR_USER_CART",
+  };
+};

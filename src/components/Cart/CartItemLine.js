@@ -8,6 +8,12 @@ import QuantityCart from "./QuantityCart";
 import Styles from "./CartItemLine.module.css";
 
 function CartItemLine(props) {
+  var formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ZAR",
+
+ 
+  });
   function goToProductPage() {
     //Checks if this property is defined
     if (typeof props.pushToProductPage !== "undefined") {
@@ -25,7 +31,7 @@ function CartItemLine(props) {
           alt="ProductImage"
         ></img>
       </Col>
-      <Col xl={6}>
+      <Col xl={5} style={{ display: "grid" }}>
         <Row className={Styles.DetailLine}>
           <Col>
             {" "}
@@ -62,7 +68,7 @@ function CartItemLine(props) {
           </Col>
         </Row>
       </Col>
-      <Col xl={3}>
+      <Col xl={4}>
         <Row className={Styles.RemoveLine}>
           {" "}
           <Button
@@ -91,7 +97,7 @@ function CartItemLine(props) {
           {props.available ? (
             <Col>
               <p className={Styles.PriceValue}>
-                R {props.cartItemSellingPrice}
+                {formatter.format(props.cartItemSellingPrice)}
               </p>
             </Col>
           ) : (

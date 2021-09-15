@@ -150,9 +150,8 @@ function Navbar() {
                           {cartState.cart ? (
                             <p>{cartState.cart.cartCount}</p>
                           ) : (
-                            <p>Cart</p>
+                            <div>{cartState.loading ? (<CircularProgress size={20} />):(<p>Cart</p>)}</div>
                           )}
-                          {cartState.loading && <CircularProgress size={30} />}
                         </p>
                       </Col>
                       {isShowLogin && (
@@ -201,9 +200,9 @@ function Navbar() {
                           {cartState.cart ? (
                             <p>{cartState.cart.cartCount}</p>
                           ) : (
-                            <p>Cart</p>
+                            <div>{cartState.loading ? (<CircularProgress size={30} />):(<p>Cart</p>)}</div>
                           )}
-                          {cartState.loading && <CircularProgress size={30} />}
+                          
                         </p>
                       </Col>
                     </>

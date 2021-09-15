@@ -3,6 +3,7 @@ import * as API from "../api/index.js";
 import * as USER_API from "../api/users.js";
 import store from "../redux/index.js";
 import { getUserProfile } from "../redux/actions/profile.js";
+import { getUserCart, clearUserCart } from "../redux/actions/cart.js";
 import { getCart, addToCart } from "../api/cart.js";
 import { logInUser } from "../api/users.js";
 
@@ -234,6 +235,7 @@ export const getCurrentUserIdToken = async () => {
     .currentUser.getIdToken(true)
     .then((idToken) => {
       output = { ok: true, data: idToken };
+      store.dispatch(clearUserCart());
     })
     .catch((error) => {
       output = { ok: false, message: "Failed to get Id Token" };
