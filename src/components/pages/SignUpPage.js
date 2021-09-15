@@ -6,7 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { getUserProfile } from "../../redux/actions/profile";
+import { getUserProfile } from "../../redux/actions/profile.js";
+import { getUserCart } from "../../redux/actions/cart.js";
 import * as InputValidation from "../../services/inputValidation.js";
 import { signUp } from "../../services/authentication.js";
 import Button from "../general/Button.js";
@@ -180,7 +181,12 @@ function SignUpPage() {
               <MDBRow>
                 <p className="h4 text-left mb-4">Personal Details</p>
                 <MDBCol md="6">
-                  <label className={Styles.InputLabel}  htmlFor="defaultFormRegisterNameEx">First name</label>
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterNameEx"
+                  >
+                    First name
+                  </label>
                   <input
                     type="text"
                     id="defaultFormRegisterNameEx"
@@ -200,7 +206,12 @@ function SignUpPage() {
                 </MDBCol>
 
                 <MDBCol md="6">
-                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterNameEx">Last Name</label>
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterNameEx"
+                  >
+                    Last Name
+                  </label>
                   <input
                     type="text"
                     id="defaultFormRegisterNameEx"
@@ -221,7 +232,10 @@ function SignUpPage() {
               </MDBRow>
               <MDBRow>
                 <MDBCol md="6">
-                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterEmailEx">
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterEmailEx"
+                  >
                     Email Address
                   </label>
                   <input
@@ -243,7 +257,10 @@ function SignUpPage() {
                 </MDBCol>
 
                 <MDBCol md="6">
-                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterMobileEx">
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterMobileEx"
+                  >
                     Mobile Number
                   </label>
                   <input
@@ -268,7 +285,10 @@ function SignUpPage() {
               </MDBRow>
               <MDBRow>
                 <MDBCol md="6">
-                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterPasswordEx">
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterPasswordEx"
+                  >
                     Password
                   </label>
                   <input
@@ -292,7 +312,10 @@ function SignUpPage() {
                 </MDBCol>
 
                 <MDBCol md="6">
-                  <label  className={Styles.InputLabel}  htmlFor="defaultFormRegisterPasswordEx">
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterPasswordEx"
+                  >
                     Retype Password
                   </label>
                   <input
@@ -363,10 +386,7 @@ function SignUpPage() {
                         setErrorRetypePsw(null);
 
                         dispatch(getUserProfile());
-
-                        // setTimeout(() => {
-                        //   history.push("/");
-                        // }, 2000);
+                        dispatch(getUserCart());
                       } else {
                         setEmail("");
                         setPassword("");

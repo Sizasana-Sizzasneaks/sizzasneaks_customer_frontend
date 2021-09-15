@@ -61,3 +61,11 @@
   text-align: center;
   margin: 20px;
 }
+
+.RequestVerificationText {
+  color: blue;
+}
+
+.RequestVerificationText:hover {
+  cursor: pointer;
+}

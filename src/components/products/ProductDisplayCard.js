@@ -114,6 +114,7 @@ function ProductDisplayCard(props) {
           props.product.imgURls.map((imageURL, index) => {
             return (
               <Row
+              className={Styles.ProductImageOption}
                 onClick={() => {
                   setSelectedImage(imageURL);
                 }}

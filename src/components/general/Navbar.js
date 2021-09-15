@@ -11,6 +11,7 @@ import DropDownInput from "./DropDownInput.js";
 
 import { signOutCurrentUser } from "../../services/authentication.js";
 import { clearUserProfile } from "../../redux/actions/profile.js";
+import { clearUserCart } from "../../redux/actions/cart.js";
 import { getProductBrands } from "../../api/products.js";
 
 import LogIn from "./LogInComponent";
@@ -150,7 +151,13 @@ function Navbar() {
                           {cartState.cart ? (
                             <p>{cartState.cart.cartCount}</p>
                           ) : (
-                            <div>{cartState.loading ? (<CircularProgress size={20} />):(<p>Cart</p>)}</div>
+                            <div>
+                              {cartState.loading ? (
+                                <CircularProgress size={20} />
+                              ) : (
+                                <p>Cart</p>
+                              )}
+                            </div>
                           )}
                         </p>
                       </Col>
@@ -174,6 +181,7 @@ function Navbar() {
                         onClick={async () => {
                           await signOutCurrentUser();
                           await dispatch(clearUserProfile());
+                          dispatch(clearUserCart());
                           //Go to Home
                           history.push("/");
                         }}
@@ -200,9 +208,14 @@ function Navbar() {
                           {cartState.cart ? (
                             <p>{cartState.cart.cartCount}</p>
                           ) : (
-                            <div>{cartState.loading ? (<CircularProgress size={30} />):(<p>Cart</p>)}</div>
+                            <div>
+                              {cartState.loading ? (
+                                <CircularProgress size={30} />
+                              ) : (
+                                <p>Cart</p>
+                              )}
+                            </div>
                           )}
-                          
                         </p>
                       </Col>
                     </>

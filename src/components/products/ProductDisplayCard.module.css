@@ -82,3 +82,6 @@
     overflow-y: auto;
   }
   
+  .ProductImageOption:hover{
+    cursor: pointer;
+  }

@@ -32,7 +32,6 @@ export const logIn = async (email, password) => {
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
         console.log("Credential Log In Done");
-        store.dispatch(getUserProfile());
         logInUser();
         output = { ok: true, message: "Log in successful" };
       })
@@ -160,7 +159,7 @@ async function upgradeAnonymousAccount(email, password) {
   await user
     .linkWithCredential(credential)
     .then(() => {
-      output = { ok: true, message: "Account Upgrade Succesfull" };
+      output = { ok: true, message: "Account Upgrade Successful" };
     })
     .catch((error) => {
       output = authErrorHandling(error);
@@ -177,7 +176,7 @@ async function vanillaSignUp(email, password) {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then((UserCredential) => {
-      output = { ok: true, message: "Sign Up Succesfull" };
+      output = { ok: true, message: "Sign Up Successful" };
     })
     .catch((error) => {
       output = authErrorHandling(error);
@@ -211,7 +210,7 @@ export const sendEmailVerificationEmail = async () => {
   return output;
 };
 
-//Firebase Fuction for Logging Out the Current User
+//Firebase Function for Logging Out the Current User
 export const signOutCurrentUser = () => {
   var firebase = getFirebase();
 
@@ -219,14 +218,14 @@ export const signOutCurrentUser = () => {
     .auth()
     .signOut()
     .then(() => {
-      return { ok: true, message: "Sign Out Succesfull" };
+      return { ok: true, message: "Sign Out Successful" };
     })
     .catch((error) => {
       return { ok: false, message: "Sign Out Failed" };
     });
 };
 
-//Firebase Fuction for getting the ID Token of the Current User
+//Firebase Function for getting the ID Token of the Current User
 export const getCurrentUserIdToken = async () => {
   var firebase = getFirebase();
   var output;
@@ -235,7 +234,6 @@ export const getCurrentUserIdToken = async () => {
     .currentUser.getIdToken(true)
     .then((idToken) => {
       output = { ok: true, data: idToken };
-      store.dispatch(clearUserCart());
     })
     .catch((error) => {
       output = { ok: false, message: "Failed to get Id Token" };

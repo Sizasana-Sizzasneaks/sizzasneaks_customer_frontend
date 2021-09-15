@@ -1,5 +1,3 @@
-// function creates a card cart item and receives data from the page
-import { Style } from "@material-ui/icons";
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import Button from "../general/Button.js";
@@ -7,18 +5,105 @@ import Button from "../general/Button.js";
 import QuantityCart from "./QuantityCart";
 import Styles from "./CartItemLine.module.css";
 
+import {
+  deleteSingleCartItem,
+  updateCartItemQuantity,
+} from "../../api/cart.js";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { getUserCart } from "../../redux/actions/cart.js";
+import { CircularProgress } from "@material-ui/core";
+
 function CartItemLine(props) {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  //State to Handle Delete Process
+  var [deleteState, setDeleteState] = React.useState(null);
+  var [deleteLoading, setDeleteLoading] = React.useState(false);
+
+  //State to Handle Quantity Update Process
+  var [quantityLoading, setQuantityLoading] = React.useState(false);
+  var [quantityUpdateState, setQuantityUpdateState] = React.useState(null);
+
   var formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "ZAR",
-
- 
   });
+
+  //deleteCartItem is used when the customer deletes a certain product from his cart
+  async function deleteCartItem() {
+    setDeleteLoading(true);
+    setDeleteState(null);
+    if (
+      typeof props.cartItemProductId !== "undefined" &&
+      typeof props.cartItemOption !== "undefined"
+    ) {
+      var deleteSingleCartItemResult = await deleteSingleCartItem(
+        props.cartItemProductId,
+        props.cartItemOption
+      );
+
+      if (deleteSingleCartItemResult.ok === true) {
+        setDeleteState(deleteSingleCartItemResult);
+        setDeleteLoading(false);
+        setTimeout(() => {
+          dispatch(getUserCart());
+        }, [1000]);
+      } else {
+        setDeleteState({ ok: false, message: "Failed to Delete" });
+        setDeleteLoading(false);
+        setTimeout(() => {
+          setDeleteState(null);
+        }, [1000]);
+      }
+    } else {
+      setDeleteState({ ok: false, message: "Failed to Delete" });
+      setDeleteLoading(false);
+      setTimeout(() => {
+        setDeleteState(null);
+      }, [1000]);
+    }
+  }
+  // updateItemQuantity is used to update the product quantity when a customer add or deletes the amount of products
+  async function updateItemQuantity(newQuantity) {
+    setQuantityLoading(true);
+    setQuantityUpdateState(null);
+    if (
+      typeof props.cartItemProductId !== "undefined" &&
+      typeof props.cartItemOption !== "undefined"
+    ) {
+      var updateCartItemQuantityResult = await updateCartItemQuantity(
+        props.cartItemProductId,
+        props.cartItemOption,
+        newQuantity
+      );
+
+      if (updateCartItemQuantityResult.ok === true) {
+        setQuantityUpdateState(updateCartItemQuantityResult);
+        setQuantityLoading(false);
+        setTimeout(() => {
+          dispatch(getUserCart());
+        }, [1000]);
+      } else {
+        setQuantityUpdateState({ ok: false, message: "Failed to Update" });
+        setQuantityLoading(false);
+        setTimeout(() => {
+          setQuantityUpdateState(null);
+        }, [1000]);
+      }
+    } else {
+      setQuantityUpdateState({ ok: false, message: "Failed to Update" });
+      setQuantityLoading(false);
+      setTimeout(() => {
+        setQuantityUpdateState(null);
+      }, [1000]);
+    }
+  }
+
   function goToProductPage() {
-    //Checks if this property is defined
-    if (typeof props.pushToProductPage !== "undefined") {
-      //Calls the function supplied to this property.
-      props.pushToProductPage();
+    if (typeof props.cartItemProductId !== "undefined") {
+      history.push("/products/" + props.cartItemProductId);
     }
   }
   return (
@@ -56,42 +141,101 @@ function CartItemLine(props) {
         </Row>
         <Row className={Styles.DetailLineQuantity}>
           <Col>
-            {" "}
-            <QuantityCart
-              value={props.cartItemQuantity}
-              update={(value) => {
-                if (typeof props.update !== "undefined") {
-                  props.update(value);
-                }
-              }}
-            />{" "}
+            {quantityLoading ? (
+              <div
+                style={{
+                  marginRight: "auto",
+                  width: "max-content",
+                  height: "max-content",
+                }}
+              >
+                <CircularProgress size={25} />
+              </div>
+            ) : (
+              <>
+                {quantityUpdateState ? (
+                  <div
+                    style={{
+                      marginRight: "auto",
+                      width: "max-content",
+                      height: "max-content",
+                    }}
+                  >
+                    {quantityUpdateState.ok ? (
+                      <p style={{ color: "green", marginBottom: "0px" }}>
+                        Updated
+                      </p>
+                    ) : (
+                      <p style={{ color: "red", marginBottom: "0px" }}>
+                        Failed
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <QuantityCart
+                    value={props.cartItemQuantity}
+                    update={(value) => {
+                      updateItemQuantity(value);
+                    }}
+                  />
+                )}
+              </>
+            )}{" "}
           </Col>
         </Row>
       </Col>
       <Col xl={4}>
         <Row className={Styles.RemoveLine}>
-          {" "}
-          <Button
-            label="Delete"
-            onClick={() => {
-              if (typeof props.delete !== "undefined") {
-                props.delete();
-              }
-            }}
-            styles={{
-              backgroundColor: "White",
-              height: "max-content",
-              width: "max-content",
-              borderStyle: "solid",
-              borderWidth: "1.5px",
-              padding: "5px 12px",
-              borderRadius: "2px",
-              marginLeft: "auto",
-            }}
-          >
-            {" "}
-            Remove
-          </Button>
+          {deleteLoading ? (
+            <div
+              style={{
+                marginLeft: "auto",
+                width: "max-content",
+                height: "max-content",
+              }}
+            >
+              <CircularProgress size={25} />
+            </div>
+          ) : (
+            <>
+              {deleteState ? (
+                <div
+                  style={{
+                    marginLeft: "auto",
+                    width: "max-content",
+                    height: "max-content",
+                  }}
+                >
+                  {deleteState.ok ? (
+                    <p style={{ color: "green", marginBottom: "0px" }}>
+                      Deleted
+                    </p>
+                  ) : (
+                    <p style={{ color: "red", marginBottom: "0px" }}>
+                      Failed to Delete
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <Button
+                  label="Delete"
+                  onClick={() => {
+                    deleteCartItem();
+                  }}
+                  styles={{
+                    backgroundColor: "White",
+                    height: "max-content",
+                    width: "max-content",
+                    borderStyle: "solid",
+                    borderWidth: "1.5px",
+                    padding: "5px 12px",
+                    borderRadius: "2px",
+                    marginLeft: "auto",
+                  }}
+                />
+              )}
+            </>
+          )}
         </Row>
         <Row className={Styles.PriceLine}>
           {props.available ? (
