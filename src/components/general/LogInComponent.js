@@ -1,16 +1,21 @@
 import React from "react";
 import * as InputValidation from "../../services/inputValidation.js";
-import { logIn, requestResetPassword } from "../../services/authentication.js";
+import { logIn } from "../../services/authentication.js";
 import { useHistory } from "react-router-dom";
-import Notification from "./Notification.js";
-import Styles from "./LogInComponent.module.css";
-//Styles & Themes
-import { MDBRow, MDBCol, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
-import { makeStyles } from "@material-ui/core/styles";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Button from "./Button.js";
+import { useDispatch } from "react-redux";
+import { getUserProfile } from "../../redux/actions/profile.js";
+import { getUserCart } from "../../redux/actions/cart.js";
 
+//Components
 import ResetPasswordForm from "./ResetPasswordForm.js";
+import Button from "./Button.js";
+import { MDBRow, MDBCol, MDBCard, MDBCardBody } from "mdb-react-ui-kit";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import Notification from "./Notification.js";
+
+//Styles & Themes
+import { makeStyles } from "@material-ui/core/styles";
+import Styles from "./LogInComponent.module.css";
 
 // This used to make style of the log in component
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 //Taking in UserName and Password from the user
 function LogInComponent(props) {
   const history = useHistory();
+  const dispatch = useDispatch();
   //Form State
   var [email, setEmail] = React.useState("");
   var [password, setPassword] = React.useState("");
@@ -228,16 +234,19 @@ function LogInComponent(props) {
                             setErrorPassword(null); //if password or Username is false set both feilds to null
                             setPassword("");
                           } else {
+                            dispatch(getUserProfile());
+                            dispatch(getUserCart());
                             setTimeout(() => {
                               props.setShowLogInForm(false);
-                              history.push("/");
+
+                              // history.push("/");
                             }, 2000);
                           }
                         }
                       }}
                     />
 
-                    <p style={{ marginTop: "20px", marginBottom:"5px" }}>
+                    <p style={{ marginTop: "20px", marginBottom: "5px" }}>
                       New Customer?,{" "}
                       <p
                         className={Styles.RegisterNow}

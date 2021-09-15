@@ -11,6 +11,7 @@ import DropDownInput from "./DropDownInput.js";
 
 import { signOutCurrentUser } from "../../services/authentication.js";
 import { clearUserProfile } from "../../redux/actions/profile.js";
+import { clearUserCart } from "../../redux/actions/cart.js";
 import { getProductBrands } from "../../api/products.js";
 
 import LogIn from "./LogInComponent";
@@ -51,6 +52,7 @@ function Navbar() {
 
   const authState = useSelector((state) => state.firebase.auth);
   const profileState = useSelector((state) => state.profile);
+  const cartState = useSelector((state) => state.cart);
   return (
     <nav>
       <div className={Styles.NavbarBanner}>
@@ -146,7 +148,17 @@ function Navbar() {
                           >
                             shopping_cart
                           </span>
-                          Cart
+                          {cartState.cart ? (
+                            <p>{cartState.cart.cartCount}</p>
+                          ) : (
+                            <div>
+                              {cartState.loading ? (
+                                <CircularProgress size={20} />
+                              ) : (
+                                <p>Cart</p>
+                              )}
+                            </div>
+                          )}
                         </p>
                       </Col>
                       {isShowLogin && (
@@ -169,6 +181,7 @@ function Navbar() {
                         onClick={async () => {
                           await signOutCurrentUser();
                           await dispatch(clearUserProfile());
+                          dispatch(clearUserCart());
                           //Go to Home
                           history.push("/");
                         }}
@@ -192,7 +205,17 @@ function Navbar() {
                           >
                             shopping_cart
                           </span>
-                          Cart
+                          {cartState.cart ? (
+                            <p>{cartState.cart.cartCount}</p>
+                          ) : (
+                            <div>
+                              {cartState.loading ? (
+                                <CircularProgress size={30} />
+                              ) : (
+                                <p>Cart</p>
+                              )}
+                            </div>
+                          )}
                         </p>
                       </Col>
                     </>

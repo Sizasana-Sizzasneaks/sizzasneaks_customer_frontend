@@ -2,12 +2,20 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import Styles from "./ProductDisplayCard.module.css";
 import { addToCart } from "../../api/cart";
+import { useDispatch } from "react-redux";
+import { getUserCart } from "../../redux/actions/cart";
 
 import OptionSelector from "./OptionSelector";
 
 import Button from "../general/Button.js";
 
 function ProductDisplayCard(props) {
+  var formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ZAR",
+  });
+
+  const dispatch = useDispatch();
   var [selectedColor, setSelectedColor] = React.useState(0);
   var [selectedSize, setSelectedSize] = React.useState(null);
   var [selectedImage, setSelectedImage] = React.useState(
@@ -15,7 +23,10 @@ function ProductDisplayCard(props) {
   );
 
   var [sizeSelectedError, setSizeSelectedError] = React.useState(null);
-  var [colorSelectedError, setColorSelectedError] = React.useState(null);
+  var [colorSelectedError, setColorSelectedError] = React.useState({
+    ok: true,
+    message: null,
+  });
 
   function getSelectedOption() {
     return {
@@ -25,40 +36,77 @@ function ProductDisplayCard(props) {
   }
 
   async function addProductToCart() {
-    props.addToCartState({ok:true, message: "Loading"});
-    setSizeSelectedError(null);
-    setColorSelectedError(null);
+    props.addToCartState({ ok: true, message: "Loading" });
     var selectedOption = getSelectedOption();
-    if (typeof selectedOption.color !== "undefined") {
-      if (typeof selectedOption.variant !== "undefined") {
-        // Add to Cart Call
-        var variant = {};
-        variant.color = selectedOption.color;
-        variant.size = selectedOption.variant.size;
-        var addToCartResult = await addToCart(props.product._id, variant);
-        if (addToCartResult.ok === true) {
-          console.log("It Worked");
-          props.addToCartState(addToCartResult);
-          setTimeout(() => {
-            props.addToCartState(null);
-          }, 2000);
-          console.log(addToCartResult);
-        } else {
-          props.addToCartState(addToCartResult);
-          setTimeout(() => {
-            props.addToCartState(null);
-          }, 2800);
-          console.log("It Did Not Work");
-          console.log(addToCartResult);
-        }
-      } else {
-        setSizeSelectedError("Size Required");
-      }
+
+    // Add to Cart Call
+    var variant = {};
+    variant.color = selectedOption.color;
+    variant.size = selectedOption.variant.size;
+    var addToCartResult = await addToCart(props.product._id, variant);
+    if (addToCartResult.ok === true) {
+      console.log("It Worked");
+      dispatch(getUserCart());
+      props.addToCartState(addToCartResult);
+      setTimeout(() => {
+        props.addToCartState(null);
+      }, 2000);
+      clearFields();
+      console.log(addToCartResult);
     } else {
-      setColorSelectedError("Color Required");
+      props.addToCartState(addToCartResult);
+      setTimeout(() => {
+        props.addToCartState(null);
+      }, 2800);
+      console.log("It Did Not Work");
+      console.log(addToCartResult);
     }
   }
 
+  function checkInputFields() {
+    return new Promise((resolve, reject) => {
+      //Check Selected Color
+      if (typeof selectedColor === "undefined" || selectedColor === null) {
+        setColorSelectedError({ ok: false, message: "Color Required" });
+      } else {
+        setColorSelectedError({ ok: true, message: "" });
+      }
+
+      //Size Selected
+      if (typeof selectedSize === "undefined" || selectedSize === null) {
+        setSizeSelectedError({ ok: false, message: "Size Required" });
+      } else {
+        setSizeSelectedError({ ok: true, message: "" });
+      }
+
+      var flag = checkFormValidity();
+
+      if (flag) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  }
+
+  function checkFormValidity() {
+    if (sizeSelectedError && colorSelectedError) {
+      if (sizeSelectedError.ok && colorSelectedError.ok) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  function clearFields() {
+    setSelectedColor(0);
+    setColorSelectedError({ ok: true, message: null });
+    setSelectedSize(null);
+    setSizeSelectedError(null);
+  }
   return (
     <Row className={Styles.currentProductCard}>
       <Col className={Styles.imageOptionsSegment} xs={2}>
@@ -66,6 +114,7 @@ function ProductDisplayCard(props) {
           props.product.imgURls.map((imageURL, index) => {
             return (
               <Row
+              className={Styles.ProductImageOption}
                 onClick={() => {
                   setSelectedImage(imageURL);
                 }}
@@ -110,14 +159,30 @@ function ProductDisplayCard(props) {
               selectedColor={selectedColor}
               selectedSize={selectedSize}
               selectColor={(color) => {
-                setSizeSelectedError(null);
-                setColorSelectedError(null);
                 setSelectedColor(color);
+
+                if (typeof color === "undefined" || color === null) {
+                  setColorSelectedError({
+                    ok: false,
+                    message: "Color Required",
+                  });
+                } else {
+                  setColorSelectedError({ ok: true, message: "" });
+                }
+                setSelectedSize(null);
+                setSizeSelectedError(null);
               }}
               selectSize={(size) => {
-                setSizeSelectedError(null);
-                setColorSelectedError(null);
                 setSelectedSize(size);
+
+                if (typeof size === "undefined" || size === null) {
+                  setSizeSelectedError({
+                    ok: false,
+                    message: "Size Required",
+                  });
+                } else {
+                  setSizeSelectedError({ ok: true, message: "" });
+                }
               }}
               sizeSelectedError={sizeSelectedError}
               colorSelectedError={colorSelectedError}
@@ -126,16 +191,18 @@ function ProductDisplayCard(props) {
         </Row>
 
         <Row className={Styles.priceAndButtons}>
-          <Col className={Styles.productPrice} xs={5}>
-            <p>R {props.product.sellingPrice}</p>
+          <Col className={Styles.productPrice} xl={7}>
+            <p>{formatter.format(props.product.sellingPrice)}</p>
           </Col>
-          <Col xs={3}></Col>
-          <Col xs={4}>
+          <Col xl={1}></Col>
+          <Col xl={4}>
             <Button
               label="ADD TO CART"
               styles={{ backgroundColor: "#F3D63C" }}
-              onClick={() => {
-                addProductToCart();
+              onClick={async () => {
+                if (await checkInputFields()) {
+                  addProductToCart();
+                }
               }}
             />
             {/* <Button

@@ -7,6 +7,10 @@ import ProductItemImage from "../../images/product-item-image.png";
 import { addToCart } from "../../api/cart.js";
 //page that shows when a user clicks on a product
 function ProductItem(props) {
+  var formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ZAR",
+  });
   return (
     <Link to={"/products/" + props.product._id}>
       <div className={Styles.ProductItem}>
@@ -34,13 +38,13 @@ function ProductItem(props) {
           <Col>
             {" "}
             <p className={Styles.SellingPrice}>
-              R {props.product.sellingPrice}{" "}
+              {formatter.format(props.product.sellingPrice)}
             </p>
           </Col>
-          <Col xl={5} style={{ padding: "0px" }}>
+          <Col xl={4} style={{ padding: "0px" }}>
             {" "}
             <p style={{ float: "right", marginBottom: "0px" }}>
-              {props.product.averageRating}
+              {props.product.averageRatingScore}
             </p>
             <span
               style={{
