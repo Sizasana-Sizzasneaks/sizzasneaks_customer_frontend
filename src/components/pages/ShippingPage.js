@@ -1,11 +1,15 @@
 import React from "react";
-import { createNewShippingAddress } from "../../api/shipping.js";
+import {
+  createNewShippingAddress,
+  getShippingAddressById,
+} from "../../api/shipping.js";
 
 import Styles from "./ShippingPage.module.css";
 
 function ShippingPage() {
   React.useEffect(() => {
-    // addNewShippingAddress();
+    //addNewShippingAddress();
+    retrieveShippingAddress("61433e978cffb44990a602b5");
   }, []);
 
   async function addNewShippingAddress() {
@@ -35,6 +39,22 @@ function ShippingPage() {
     } else {
       console.log("Failed");
       console.log(createNewAddressResult);
+    }
+  }
+
+  async function retrieveShippingAddress(addressId) {
+    if (typeof addressId !== typeof undefined && addressId !== null) {
+      var getShippingAddressByIdResult = await getShippingAddressById(
+        addressId
+      );
+
+      if (getShippingAddressByIdResult.ok) {
+        console.log("Worked");
+        console.log(getShippingAddressByIdResult);
+      } else {
+        console.log("Failed");
+        console.log(getShippingAddressByIdResult);
+      }
     }
   }
 
