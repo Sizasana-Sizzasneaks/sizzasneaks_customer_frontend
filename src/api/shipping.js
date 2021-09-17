@@ -2,6 +2,7 @@ import axios from "axios";
 import { getCurrentUserIdToken } from "../services/authentication.js";
 import * as API_CONSTANTS from "./index.js";
 
+//Used to add address to a user's account when button is clicked
 export const createNewShippingAddress = async (
   addressName,
   addressLineOne,
@@ -23,6 +24,8 @@ export const createNewShippingAddress = async (
         Authorization: "Bearer " + getTokenResult.data,
       },
     };
+
+    // post creates a new address 
     return axios
       .post(
         API_CONSTANTS.SHIPPING_ROUTE,
