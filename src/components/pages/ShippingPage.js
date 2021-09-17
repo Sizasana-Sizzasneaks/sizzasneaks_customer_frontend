@@ -2,24 +2,52 @@ import React from "react";
 import {
   createNewShippingAddress,
   getShippingAddressById,
+  updateShippingAddressById,
 } from "../../api/shipping.js";
 
 import Styles from "./ShippingPage.module.css";
 
 function ShippingPage() {
   React.useEffect(() => {
-    //addNewShippingAddress();
+   // addNewShippingAddress();
     // retrieveShippingAddress("61433e978cffb44990a602b5");
+    //updateAddress();
   }, []);
 
+  async function updateAddress() {
+    var addressId = "61447ce90187213640efdf05";
+    var addressData = {
+      addressName: "Distant Place Address",
+      addressLineOne: "200 Timmy Rd",
+      addressLineTwo: "Silvery, Slope",
+      city: "Old York",
+      province: "Imagine",
+      country: "SliderLand",
+      zipCode: "2244",
+      contactNumber: "0743018881",
+    };
+
+    var updateShippingAddressByIdResult = await updateShippingAddressById(
+      addressId,
+      addressData
+    );
+    if (updateShippingAddressByIdResult.ok) {
+      console.log("Worked");
+      console.log(updateShippingAddressByIdResult);
+    } else {
+      console.log("Failed");
+      console.log(updateShippingAddressByIdResult);
+    }
+  }
+
   async function addNewShippingAddress() {
-    var addressName = "Res Address";
-    var addressLineOne = "144 Peter Rd";
+    var addressName = "Res Address 3";
+    var addressLineOne = "145 Peter Rd";
     var addressLineTwo = "Ruimsig, Roodepoort";
     var city = "Johannesburg";
     var province = "Gauteng";
     var country = "South Africa";
-    var zipCode = "1724";
+    var zipCode = "5674";
     var contactNumber = "0743018891";
 
     var createNewAddressResult = await createNewShippingAddress(

@@ -66,10 +66,43 @@ export const getShippingAddressById = async (addressId) => {
       },
       params: {
         addressId: addressId,
-      }
+      },
     };
     return axios
       .get(API_CONSTANTS.SHIPPING_ROUTE + "/address", config)
+      .then((res) => {
+        //Request Successful
+        //Handle Different HTTP Status Codes and Responses
+        return res.data; // Returns the corresponding Shipping address.
+      })
+      .catch((error) => {
+        // returns general error when the system fails to retrieve a user's shipping address
+        return { ok: false, error: error };
+      });
+  } else {
+    //returns a general error when the system has failed to get the user's token
+    return getTokenResult;
+  }
+};
+
+export const updateShippingAddressById = async (addressId, addressData) => {
+  var getTokenResult = await getCurrentUserIdToken();
+
+  // checks whether the current user's token was retrieved successfully
+  if (getTokenResult.ok === true) {
+    // sets the necessary header information for authentication based on the user's token
+    const config = {
+      headers: {
+        credentialClaims: "customer",
+        Authorization: "Bearer " + getTokenResult.data,
+      },
+    };
+    return axios
+      .put(
+        API_CONSTANTS.SHIPPING_ROUTE + "/address",
+        { addressId: addressId, addressData: addressData },
+        config
+      )
       .then((res) => {
         //Request Successful
         //Handle Different HTTP Status Codes and Responses
