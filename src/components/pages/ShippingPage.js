@@ -1,11 +1,12 @@
 import React from "react";
-import { createNewShippingAddress } from "../../api/shipping.js";
+import { createNewShippingAddress,deleteShippingAddress } from "../../api/shipping.js";
 
 import Styles from "./ShippingPage.module.css";
 
 function ShippingPage() {
   React.useEffect(() => {
     // addNewShippingAddress();
+    deleteShippingAddress();
   }, []);
 
   async function addNewShippingAddress() {
@@ -37,7 +38,20 @@ function ShippingPage() {
       console.log(createNewAddressResult);
     }
   }
+  async function deleteShippingAddress(){
 
+    var address_id="77guebkjdnkjdnk2iou781";
+    var deleteShippingAddressResult=await deleteShippingAddress(
+      address_id
+    );
+    if(deleteShippingAddressResult.ok){
+      console.log("Delete worked");
+      console.log(deleteShippingAddressResult);
+    }else{
+      console.log("Delete failed");
+      console.log(deleteShippingAddressResult);
+    }
+  }
   return (
     <div>
       <p>Shipping Page</p>
