@@ -9,7 +9,7 @@ import Styles from "./ShippingPage.module.css";
 function ShippingPage() {
   React.useEffect(() => {
     //addNewShippingAddress();
-    retrieveShippingAddress("61433e978cffb44990a602b5");
+    // retrieveShippingAddress("61433e978cffb44990a602b5");
   }, []);
 
   async function addNewShippingAddress() {

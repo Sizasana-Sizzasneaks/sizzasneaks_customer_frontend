@@ -64,9 +64,12 @@ export const getShippingAddressById = async (addressId) => {
         credentialClaims: "customer",
         Authorization: "Bearer " + getTokenResult.data,
       },
+      params: {
+        addressId: addressId,
+      }
     };
     return axios
-      .get(API_CONSTANTS.SHIPPING_ROUTE + "/" + addressId, config)
+      .get(API_CONSTANTS.SHIPPING_ROUTE + "/address", config)
       .then((res) => {
         //Request Successful
         //Handle Different HTTP Status Codes and Responses
