@@ -3,15 +3,17 @@ import {
   createNewShippingAddress,
   getShippingAddressById,
   updateShippingAddressById,
+  getShippingAddresses,
 } from "../../api/shipping.js";
 
 import Styles from "./ShippingPage.module.css";
 
 function ShippingPage() {
   React.useEffect(() => {
-   // addNewShippingAddress();
+    // addNewShippingAddress();
     // retrieveShippingAddress("61433e978cffb44990a602b5");
     //updateAddress();
+    getAddresses();
   }, []);
 
   async function updateAddress() {
@@ -83,6 +85,18 @@ function ShippingPage() {
         console.log("Failed");
         console.log(getShippingAddressByIdResult);
       }
+    }
+  }
+
+  async function getAddresses() {
+    var getShippingAddressesResult = await getShippingAddresses();
+
+    if (getShippingAddressesResult.ok) {
+      console.log("Worked");
+      console.log(getShippingAddressesResult);
+    } else {
+      console.log("Failed");
+      console.log(getShippingAddressesResult);
     }
   }
 
