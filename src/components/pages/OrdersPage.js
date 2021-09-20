@@ -4,11 +4,11 @@ import React from "react";
 import Styles from "./OrdersPage.module.css";
 
 //Functions
-import { getOrders, getOrder } from "../../api/orders.js";
+import { getOrders, getOrder, postOrder } from "../../api/orders.js";
 
 function OrdersPage() {
   React.useEffect(() => {
-    retrieveOrders()
+    //retrieveOrders()
     //retrieveOrder();
   }, []);
 
