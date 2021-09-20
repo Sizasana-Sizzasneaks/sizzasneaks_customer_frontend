@@ -17,6 +17,7 @@ import SignUpPage from "./components/pages/SignUpPage.js";
 import LogInComponent from "./components/general/LogInComponent.js";
 import ShoppingCartPage from "./components/pages/ShoppingCartPage.js";
 import ShippingPage from "./components/pages/ShippingPage.js";
+import OrdersPage from "./components/pages/OrdersPage.js";
 
 import store from "./redux/index.js";
 import { isLoaded, isEmpty } from "react-redux-firebase";
@@ -82,6 +83,7 @@ function App() {
                 path="/shipping"
                 children={<ShippingPage />}
               />
+              <ProtectedRoute exact path="/orders" children={<OrdersPage />} />
               <Route exact path="/sign-up">
                 <SignUpPage />
               </Route>
