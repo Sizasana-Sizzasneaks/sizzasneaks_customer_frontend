@@ -8,8 +8,8 @@ import { getOrders, getOrder } from "../../api/orders.js";
 
 function OrdersPage() {
   React.useEffect(() => {
-    // retrieveOrders()
-    retrieveOrder();
+    retrieveOrders()
+    //retrieveOrder();
   }, []);
 
   async function retrieveOrders() {

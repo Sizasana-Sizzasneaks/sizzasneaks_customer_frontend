@@ -66,11 +66,6 @@ function App() {
           <Navbar />
           <Container fluid="xl" style={{ padding: "0" }}>
             <Switch>
-              <ProtectedRoute
-                exact
-                path="/orders"
-                children={<OrdersPage />}
-              />
               <Route exact path="/products/:id">
                 <ProductPage />
               </Route>
@@ -88,6 +83,7 @@ function App() {
                 path="/shipping"
                 children={<ShippingPage />}
               />
+              <ProtectedRoute exact path="/orders" children={<OrdersPage />} />
               <Route exact path="/sign-up">
                 <SignUpPage />
               </Route>
