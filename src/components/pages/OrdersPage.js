@@ -16,7 +16,7 @@ function OrdersPage() {
     //retrieveOrders()
     //retrieveOrder();
     //createOrder()
-    payOrder();
+ //   payOrder();
   }, []);
 
   async function retrieveOrders() {
