@@ -8,19 +8,34 @@ import {
   deleteShippingAddress,
 } from "../../api/shipping.js";
 
+import { postOrder } from "../../api/orders.js";
+
 import Styles from "./ShippingPage.module.css";
 
 function ShippingPage() {
   React.useEffect(() => {
     // function used when user clicks submit button when
     //creating/adding a new shipping address
-    
+
     // retrieveShippingAddress("61433e978cffb44990a602b5");
     //updateAddress();
     //getAddresses();
     // addNewShippingAddress();
     //deleteAddress();
+    createOrder();
   }, []);
+
+  async function createOrder() {
+    var postOrdersResult = await postOrder("61447b1e0177213640efdef4");
+
+    if (postOrdersResult.ok) {
+      console.log("Worked");
+      console.log(postOrdersResult);
+    } else {
+      console.log("Failed");
+      console.log(postOrdersResult);
+    }
+  }
 
   async function updateAddress() {
     var addressId = "61447ce90187213640efdf05";
