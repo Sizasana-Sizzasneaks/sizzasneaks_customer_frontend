@@ -1,0 +1,26 @@
+.BoxSelector {
+    width: wrap text;
+    padding: 2px 10px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    display: inline-flex;
+    margin-right: 15px;
+  }
+  
+  .BoxSelector p {
+    margin-bottom: 0px;
+  }
+  
+  .BoxSelector:hover{
+      cursor: pointer;
+  }
+  
+  .BoxSelectorSelected {
+    background-color: rgb(211, 211, 211);
+    border-width: 1.5px;
+  }
+  .BoxSelectorSelected p {
+    font-weight: 400;
+  }
+  

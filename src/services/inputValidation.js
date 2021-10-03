@@ -23,7 +23,8 @@ export const validateName = (name) => {
 const emailSchema = Yup.object().shape({
   email: Yup.string("Please enter a String")
     .email("Invalid email address")
-    .required("Required").nullable()
+    .required("Required")
+    .nullable(),
 });
 
 export const validateEmail = (email) => {
@@ -83,7 +84,7 @@ export const validateSignUpPassword = (password) => {
 
 //Log In Password Validation Schema and Fuction Logic
 const loginPasswordSchema = Yup.object().shape({
-  password: Yup.string("Please enter a string").required("Required").nullable()
+  password: Yup.string("Please enter a string").required("Required").nullable(),
 });
 
 export const validateLogInPassword = (password) => {
@@ -156,5 +157,57 @@ export const validateRatingBody = (ratingBody) => {
     })
     .catch((error) => {
       return { valid: false, message: error.errors[0] };
+    });
+};
+
+// Basic String
+const basicStringSchema = Yup.object().shape({
+  text: Yup.string("Please enter a string")
+    .required("Required")
+    .max(50)
+    .nullable(),
+});
+
+export const validateBasicString = (text) => {
+  return basicStringSchema
+    .validate({ text: text })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
+    });
+};
+
+// Basic String
+const deliveryInstructionSchema = Yup.object().shape({
+  text: Yup.string("Please enter a string").max(300).required("Required"),
+});
+
+export const validateDeliveryInstructionString = (text) => {
+  return deliveryInstructionSchema
+    .validate({ text: text })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
+    });
+};
+
+// Zip code
+const zipCodeSchema = Yup.object().shape({
+  text: Yup.number("Please enter a ZipCode").min(1000, "Need Four").max(9999, "Max")
+    .required().typeError("Invalid Zip Code"),
+});
+
+export const validateZipCode = (text) => {
+  return zipCodeSchema
+    .validate({ text: text })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
     });
 };
