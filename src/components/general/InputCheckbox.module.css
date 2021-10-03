@@ -1,0 +1,35 @@
+.CheckBox {
+  border-style: solid;
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+  display: flex;
+  justify-content: center;
+  border-radius: 2px;
+  border-color: #18723A;
+}
+.CheckBox:hover {
+  cursor: pointer;
+}
+
+.CheckBox span {
+  color: white;
+  font-size: 16px;
+
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+
+  display: flex;
+}
+
+.CheckedCheckBox {
+  background-color: #18723A;
+}
+
+.CheckBoxText {
+  
+  margin-left: 10px;
+}

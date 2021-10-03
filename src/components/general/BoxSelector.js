@@ -4,6 +4,7 @@ import Styles from "./BoxSelector.module.css";
 function BoxSelector(props) {
   return (
     <div
+      style={{ ...props.style }}
       onClick={() => {
         if (typeof props.select !== "undefined") {
           props.select();

@@ -5,13 +5,16 @@ import * as API_CONSTANTS from "./index.js";
 //Used to add address to a user's account when button is clicked
 export const createNewShippingAddress = async (
   addressName,
+  firstName,
+  lastName,
   addressLineOne,
   addressLineTwo,
   city,
   province,
   country,
   zipCode,
-  contactNumber
+  contactNumber,
+  deliveryInstruction
 ) => {
   var getTokenResult = await getCurrentUserIdToken();
 
@@ -25,12 +28,14 @@ export const createNewShippingAddress = async (
       },
     };
 
-    // post creates a new address 
+    // post creates a new address
     return axios
       .post(
         API_CONSTANTS.SHIPPING_ROUTE,
         {
           addressName,
+          firstName,
+          lastName,
           addressLineOne,
           addressLineTwo,
           city,
@@ -38,6 +43,7 @@ export const createNewShippingAddress = async (
           country,
           zipCode,
           contactNumber,
+          deliveryInstruction
         },
         config
       )
@@ -55,7 +61,6 @@ export const createNewShippingAddress = async (
     return getTokenResult;
   }
 };
-
 
 export const getShippingAddressById = async (addressId) => {
   var getTokenResult = await getCurrentUserIdToken();
@@ -89,7 +94,6 @@ export const getShippingAddressById = async (addressId) => {
   }
 };
 
-
 export const deleteShippingAddress = async (address_id) => {
   var getTokenResult = await getCurrentUserIdToken();
 
@@ -122,8 +126,6 @@ export const deleteShippingAddress = async (address_id) => {
     return getTokenResult;
   }
 };
-
-
 
 export const getShippingAddresses = async () => {
   var getTokenResult = await getCurrentUserIdToken();

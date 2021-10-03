@@ -19,6 +19,17 @@ export const validateName = (name) => {
     });
 };
 
+export const validateAddressName = (name) => {
+  return nameSchema
+    .validate({ name: name })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
+    });
+};
+
 //Email Validation Schema and Fuction Logic
 const emailSchema = Yup.object().shape({
   email: Yup.string("Please enter a String")
@@ -58,6 +69,18 @@ export const validateMobileNumber = (mobileNumber) => {
     })
     .catch((error) => {
       return { valid: false, message: error.errors[0] };
+    });
+};
+
+// Contact Number on Shipping Page
+export const validateContactNumber = (mobileNumber) => {
+  return mobileNumberSchema
+    .validate({ mobileNumber: mobileNumber })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
     });
 };
 
@@ -197,13 +220,51 @@ export const validateDeliveryInstructionString = (text) => {
 
 // Zip code
 const zipCodeSchema = Yup.object().shape({
-  text: Yup.number("Please enter a ZipCode").min(1000, "Need Four").max(9999, "Max")
-    .required().typeError("Invalid Zip Code"),
+  text: Yup.number("Please enter a ZipCode")
+    .min(1000, "Need Four")
+    .max(9999, "Max")
+    .required()
+    .typeError("Invalid Zip Code"),
 });
 
 export const validateZipCode = (text) => {
   return zipCodeSchema
     .validate({ text: text })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
+    });
+};
+
+const addressSelectedSchema = Yup.object().shape({
+  addressId: Yup.string("Please enter a string")
+    .required("Shipping address required")
+    .nullable(),
+});
+
+export const validateAddressSelected = (addressId) => {
+  return addressSelectedSchema
+    .validate({ addressId: addressId })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
+    });
+};
+
+const locationNameSchema = Yup.object().shape({
+  locationName: Yup.string("Please enter a String")
+    .required("Required")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
+    .max(50),
+});
+
+export const validateLocationName = (locationName) => {
+  return locationNameSchema
+    .validate({ locationName: locationName })
     .then(() => {
       return { ok: true, message: null };
     })

@@ -34,6 +34,7 @@ function InputField(props) {
           type={props.type || "text"}
           className={Styles.InputField}
           style={props.inputStyle}
+          placeholder={props.placeholder}
           onFocus={() => {
             setFocus(true);
           }}
