@@ -28,6 +28,11 @@ function Navbar() {
     getProductBrandsList();
   }, []);
 
+  function pushToProfilePage(){
+
+    history.push("/profile")
+  }
+
   const handleClick = () => {
     handleLoginClick();
   };
@@ -167,7 +172,12 @@ function Navbar() {
                     </>
                   ) : (
                     <>
-                      <Col className={Styles.TopRightNavBannerLink}>
+                      <Col
+                        className={Styles.TopRightNavBannerLink}
+                        onClick={() => {
+                          pushToProfilePage();
+                        }}
+                      >
                         {" "}
                         <p>
                           {profileState ? profileState.displayName : "User"}

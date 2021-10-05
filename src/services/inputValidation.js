@@ -272,3 +272,84 @@ export const validateLocationName = (locationName) => {
       return { ok: false, message: error.errors[0] };
     });
 };
+
+//Card Details Validation
+const cardNumberReg =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+const cardNumberSchema = Yup.object().shape({
+  cardNumber: Yup.string()
+    .required("Required")
+    .matches(cardNumberReg, "Invalid Card Number")
+    .typeError("Invalid Card Number"),
+});
+
+export const validateCardNumber = (cardNumber) => {
+  return cardNumberSchema
+    .validate({ cardNumber: cardNumber })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
+    });
+};
+
+//Expiry Month
+const expiryMonthSchema = Yup.object().shape({
+  month: Yup.number()
+    .required("Required")
+    .min(1, "Invalid Month")
+    .max(12, "Invalid Month")
+    .typeError("Invalid Month"),
+});
+
+export const validateExpiryMonth = (month) => {
+  return expiryMonthSchema
+    .validate({ month: month })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
+    });
+};
+
+//Expiry Year
+const expiryYearSchema = Yup.object().shape({
+  year: Yup.number()
+    .required("Required")
+    .min(2000, "Invalid Year")
+    .max(2030, "Invalid Year")
+    .typeError("Invalid Year"),
+});
+
+export const validateExpiryYear = (year) => {
+  return expiryYearSchema
+    .validate({ year: year })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
+    });
+};
+
+const cvvSchema = Yup.object().shape({
+  cvv: Yup.number()
+    .required("Required")
+    .min(1, "Invalid CVV")
+    .max(9999, "Invalid CVV")
+    .typeError("Invalid CVV"),
+});
+
+export const validateCvv = (cvv) => {
+  return cvvSchema
+    .validate({ cvv: cvv })
+    .then(() => {
+      return { ok: true, message: null };
+    })
+    .catch((error) => {
+      return { ok: false, message: error.errors[0] };
+    });
+};
