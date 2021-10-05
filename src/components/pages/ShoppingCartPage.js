@@ -322,7 +322,7 @@ function ShoppingCartPage() {
                                       }}
                                       onClick={() => {
                                         //Push To Shipping
-                                        // history.push("/");
+                                        history.push("/shipping");
                                       }}
                                     />
                                   ) : (

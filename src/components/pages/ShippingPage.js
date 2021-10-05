@@ -1,81 +1,105 @@
 import React from "react";
+import { sendEmailVerificationEmail } from "../../services/authentication.js";
+import { useHistory, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserCart } from "../../redux/actions/cart.js";
+
+import {
+  Card,
+  ListGroup,
+  Row,
+  Col,
+  Container,
+  Breadcrumb,
+} from "react-bootstrap";
+
+import { CircularProgress, LinearProgress } from "@material-ui/core";
+import CustomButton from "../general/Button.js";
+import Styles from "./ShippingPage.module.css";
+import EditShippingAddress from "./EditShippingAddress.js";
+import ShippingAddressLine from "../shippingAddress/ShippingAddressLine.js";
 
 import {
   createNewShippingAddress,
-  getShippingAddressById,
   updateShippingAddressById,
   getShippingAddresses,
   deleteShippingAddress,
 } from "../../api/shipping.js";
 
-import { postOrder } from "../../api/orders.js";
-
-import Styles from "./ShippingPage.module.css";
-
+import { validateAddressSelected } from "../../services/inputValidation.js";
+import BoxSelector from "../general/BoxSelector.js";
 function ShippingPage() {
-  React.useEffect(() => {
-    // function used when user clicks submit button when
-    //creating/adding a new shipping address
+  var formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "ZAR",
+  });
+  const history = useHistory();
+  const dispatch = useDispatch();
 
-    // retrieveShippingAddress("61433e978cffb44990a602b5");
-    //updateAddress();
-    //getAddresses();
-    // addNewShippingAddress();
-    //deleteAddress();
-    createOrder();
+  const authState = useSelector((state) => state.firebase.auth);
+  const shoppingCart = useSelector((state) => state.cart);
+
+  var [loadingRequest, setLoadingRequest] = React.useState(false);
+  var [requestVerEmailState, setRequestVerEmailState] = React.useState(null);
+
+  //Addresses
+  var [userAddresses, setUserAddresses] = React.useState(null);
+  var [loadingAddresses, setLoadingAddresses] = React.useState(true);
+  var [errorAddresses, setErrorAddresses] = React.useState(null);
+
+  //Selected Address
+  var [selectedAddress, setSelectedAddress] = React.useState(null);
+
+  //State
+  var [stateLoading, setStateLoading] = React.useState(false);
+  var [actionState, setActionState] = React.useState(null);
+
+  //Place Order State
+  var [placeOrderState, setPlaceOrderState] = React.useState(null);
+  var [placeOrderLoading, setPlaceOrderLoading] = React.useState(false);
+
+  //Place Order State
+  var [placeOrderValidation, setPlaceOrderValidation] = React.useState(null);
+
+  // Show Add/Edit Address
+  var [showEditAddress, setShowEditAddress] = React.useState(false);
+  var [newMode, setNewMode] = React.useState(true);
+  var [editAddress, setEditAddress] = React.useState(true);
+
+  React.useEffect(() => {
+    dispatch(getUserCart());
+    getAddresses();
+    // addNewShippingAddress(
+    //   "Home",
+    //   "Matamando",
+    //   "Kalilani",
+    //   "144 Peter Rd",
+    //   "Ruimsig, Roodepoort",
+    //   "Johannesburg",
+    //   "Gauteng",
+    //   "South Africa",
+    //   1724,
+    //   "0743018891"
+    // );
   }, []);
 
-  async function createOrder() {
-    var postOrdersResult = await postOrder("61447b1e0177213640efdef4");
-
-    if (postOrdersResult.ok) {
-      console.log("Worked");
-      console.log(postOrdersResult);
-    } else {
-      console.log("Failed");
-      console.log(postOrdersResult);
-    }
-  }
-
-  async function updateAddress() {
-    var addressId = "61447ce90187213640efdf05";
-    var addressData = {
-      addressName: "Distant Place Address",
-      addressLineOne: "200 Timmy Rd",
-      addressLineTwo: "Silvery, Slope",
-      city: "Old York",
-      province: "Imagine",
-      country: "SliderLand",
-      zipCode: "2244",
-      contactNumber: "0743018881",
-    };
-
-    var updateShippingAddressByIdResult = await updateShippingAddressById(
-      addressId,
-      addressData
-    );
-    if (updateShippingAddressByIdResult.ok) {
-      console.log("Worked");
-      console.log(updateShippingAddressByIdResult);
-    } else {
-      console.log("Failed");
-      console.log(updateShippingAddressByIdResult);
-    }
-  }
-
-  async function addNewShippingAddress() {
-    var addressName = "Res Address 3";
-    var addressLineOne = "145 Peter Rd";
-    var addressLineTwo = "Ruimsig, Roodepoort";
-    var city = "Johannesburg";
-    var province = "Gauteng";
-    var country = "South Africa";
-    var zipCode = "5674";
-    var contactNumber = "0743018891";
-
+  async function addNewShippingAddress(
+    addressName,
+    firstName,
+    lastName,
+    addressLineOne,
+    addressLineTwo,
+    city,
+    province,
+    country,
+    zipCode,
+    contactNumber
+  ) {
     // pass in the parameters needed to create an address object in the backend
     var createNewAddressResult = await createNewShippingAddress(
       addressName,
+      firstName,
+      lastName,
       addressLineOne,
       addressLineTwo,
       city,
@@ -96,53 +120,559 @@ function ShippingPage() {
     }
   }
 
-  //function deletes an one specified address from the user's account based on its address id
-  async function deleteAddress() {
-    // get the select address from the user and send the id to the backend
-    var address_id = "61447d1a0177213640efdf07";
-    var deleteShippingAddressResult = await deleteShippingAddress(address_id);
-    // unit testing by confirm if it was a success
-    if (deleteShippingAddressResult.ok) {
-      console.log("Delete worked");
-      console.log(deleteShippingAddressResult);
-    } else {
-      //unit testing by confirm if it was a success
-      console.log("Delete failed");
-      console.log(deleteShippingAddressResult);
-    }
-  }
-
-  async function retrieveShippingAddress(addressId) {
-    if (typeof addressId !== typeof undefined && addressId !== null) {
-      var getShippingAddressByIdResult = await getShippingAddressById(
-        addressId
-      );
-
-      if (getShippingAddressByIdResult.ok) {
-        console.log("Worked");
-        console.log(getShippingAddressByIdResult);
-      } else {
-        console.log("Failed");
-        console.log(getShippingAddressByIdResult);
-      }
-    }
-  }
-
   async function getAddresses() {
+    setSelectedAddress(null);
+    setLoadingAddresses(true);
+    setUserAddresses(null);
+    setErrorAddresses(null);
+
     var getShippingAddressesResult = await getShippingAddresses();
 
     if (getShippingAddressesResult.ok) {
-      console.log("Worked");
-      console.log(getShippingAddressesResult);
+      setLoadingAddresses(false);
+      setUserAddresses(getShippingAddressesResult.data);
     } else {
-      console.log("Failed");
-      console.log(getShippingAddressesResult);
+      setLoadingAddresses(false);
+      setErrorAddresses(getShippingAddressesResult);
+    }
+  }
+
+  async function validatePaceOrderRequest() {
+    var validateAddressSelectedResult = await validateAddressSelected(
+      selectedAddress
+    );
+
+    if (validateAddressSelectedResult.ok) {
+      setPlaceOrderValidation(null);
+      return true;
+    } else {
+      setPlaceOrderValidation(validateAddressSelectedResult.message);
+      return false;
+    }
+  }
+
+  async function selectAddress(addressId) {
+    setPlaceOrderValidation(null);
+    setSelectedAddress(addressId);
+
+    var validateAddressSelectedResult = await validateAddressSelected(
+      addressId
+    );
+
+    if (!validateAddressSelectedResult.ok) {
+      setActionState(validateAddressSelectedResult.ok);
+    } else {
+      setActionState(null);
+    }
+  }
+
+  //function deletes an one specified address from the user's account based on its address id
+  async function deleteAddress(address_id) {
+    setStateLoading(true);
+    setActionState(null);
+    // get the select address from the user and send the id to the backend
+    var deleteShippingAddressResult = await deleteShippingAddress(address_id);
+    // unit testing by confirm if it was a success
+    if (deleteShippingAddressResult.ok) {
+      setActionState(deleteShippingAddressResult);
+      setStateLoading(false);
+      // Remove the State Message
+      setTimeout(() => {
+        setActionState(null);
+        getAddresses();
+      }, 500);
+    } else {
+      //unit testing by confirm if it was a success
+      setActionState(deleteShippingAddressResult);
+      setStateLoading(false);
+      // Remove the State Message
+      setTimeout(() => {
+        setActionState(null);
+      }, 500);
+    }
+  }
+
+  function switchMode(mode) {
+    switch (mode.mode) {
+      case "new":
+        setNewMode(true);
+        setShowEditAddress(true);
+        break;
+      case "edit":
+        setNewMode(false);
+        setEditAddress(mode.id);
+        setShowEditAddress(true);
+
+        break;
+      case "hide":
+        setNewMode(true);
+        setEditAddress(null);
+        setShowEditAddress(false);
+        getAddresses();
+        break;
+
+      default:
+        setNewMode(true);
+        setEditAddress(null);
+        setShowEditAddress(false);
+        getAddresses();
     }
   }
 
   return (
     <div>
-      <p>Shipping Page</p>
+      <Breadcrumb style={{ margin: "20px" }}>
+        <Breadcrumb.Item>
+          <Link to="/">Home</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link to="/cart">Shopping Cart</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>Shipping Address</Breadcrumb.Item>
+      </Breadcrumb>
+
+      <Container className={Styles.container}>
+        <Row>
+          <Col xs={12} md={8}>
+            {showEditAddress ? (
+              <EditShippingAddress
+                newMode={newMode}
+                editAddress={editAddress}
+                switchMode={switchMode}
+              />
+            ) : (
+              <Card>
+                <Card.Header className={Styles.Name}>
+                  Select a shipping address
+                  <span class="material-icons">arrow_drop_down</span>
+                  {stateLoading ? (
+                    <div
+                      style={{
+                        marginLeft: "auto",
+                        display: "flex",
+                        justifyContent: "left",
+                        alignItems: "center",
+                      }}
+                    >
+                      <CircularProgress size={25} />
+                    </div>
+                  ) : (
+                    <>
+                      {actionState ? (
+                        <>
+                          {actionState.ok ? (
+                            <p className={Styles.StateMessageSuccess}>
+                              {actionState.message}
+                            </p>
+                          ) : (
+                            <p className={Styles.StateMessageError}>
+                              {actionState.message}
+                            </p>
+                          )}
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  )}
+                </Card.Header>
+
+                {loadingAddresses && <LinearProgress />}
+
+                {userAddresses &&
+                  userAddresses.map((address) => {
+                    return (
+                      <ShippingAddressLine
+                        key={address._id}
+                        selected={address._id === selectedAddress}
+                        id={address._id}
+                        addressName={address.addressName}
+                        name={address.firstName + " " + address.lastName}
+                        addressLineOne={address.addressLineOne}
+                        addressLineTwo={address.addressLineTwo}
+                        city={address.city}
+                        province={address.province}
+                        country={address.country}
+                        zipCode={address.zipCode}
+                        contactNumber={address.contactNumber}
+                        deleteAddress={deleteAddress}
+                        selectAddress={selectAddress}
+                        showEditAddress={switchMode}
+                      />
+                    );
+                  })}
+                {errorAddresses && <p>{errorAddresses.message}</p>}
+                <CustomButton
+                  label="Add New Address"
+                  styles={{
+                    backgroundColor: "#38CCCC",
+                    margin: "20px auto",
+
+                    textAlign: "center",
+                  }}
+                  onClick={() => {
+                    switchMode({mode:"new"});
+                  }}
+                />
+              </Card>
+            )}
+          </Col>
+
+          {/* Summary detail card component */}
+          <Col xs={6} md={4}>
+            <Card className="cardStyle">
+              <Card.Header className={Styles.Name}> Cart Summary</Card.Header>
+
+              {authState.isEmpty ? (
+                <div className={Styles.EmptyCartBanner}>
+                  <p>Your shopping cart is empty.</p>
+                  <CustomButton
+                    label="Continue Shopping"
+                    styles={{
+                      backgroundColor: "#38CCCC",
+                      margin: "20px auto",
+
+                      textAlign: "center",
+                    }}
+                    onClick={() => {
+                      history.push("/");
+                    }}
+                  />
+                </div>
+              ) : (
+                <>
+                  {shoppingCart.loading ? (
+                    <div className={Styles.CartSummaryLoading}>
+                      <CircularProgress size={90} />
+                    </div>
+                  ) : (
+                    <div>
+                      {!shoppingCart.error ? (
+                        <div>
+                          {shoppingCart.cart &&
+                            (shoppingCart.cart.cart.length != 0 ? (
+                              <div>
+                                <ListGroup variant="flush">
+                                  <ListGroup.Item
+                                    className={Styles.SingleLineItem}
+                                  >
+                                    <Row>
+                                      <Col
+                                        xl={6}
+                                        className={Styles.SummaryItemLabel}
+                                      >
+                                        {" "}
+                                        <p>
+                                          Price ({shoppingCart.cart.cartCount}{" "}
+                                          Items):{" "}
+                                        </p>
+                                      </Col>
+                                      {/* <Col xl={1} /> */}
+                                      <Col
+                                        xl={6}
+                                        className={Styles.SummaryCostValue}
+                                      >
+                                        {formatter.format(
+                                          shoppingCart.cart.cartTotal
+                                        )}
+                                      </Col>
+                                    </Row>
+                                  </ListGroup.Item>
+                                  <ListGroup.Item
+                                    className={Styles.SingleLineItem}
+                                  >
+                                    <Row>
+                                      <Col
+                                        xl={6}
+                                        className={Styles.SummaryItemLabel}
+                                      >
+                                        {" "}
+                                        <p>Delivery Charge: </p>{" "}
+                                      </Col>
+
+                                      <Col
+                                        xl={6}
+                                        className={Styles.SummaryCostValue}
+                                      >
+                                        {formatter.format(
+                                          shoppingCart.cart.cartDeliveryCharge
+                                        )}
+                                      </Col>
+                                    </Row>
+                                  </ListGroup.Item>
+                                  <ListGroup.Item
+                                    className={Styles.SingleLineItem}
+                                  >
+                                    <Row>
+                                      <Col
+                                        xl={4}
+                                        className={Styles.SummaryItemLabel}
+                                      >
+                                        <p>Total Price: </p>
+                                      </Col>
+
+                                      <Col
+                                        xl={8}
+                                        className={Styles.SummaryCostValue}
+                                        style={{
+                                          fontSize: "23px",
+                                          fontWeight: "500",
+                                        }}
+                                      >
+                                        {formatter.format(
+                                          shoppingCart.cart.cartTotal +
+                                            shoppingCart.cart.cartDeliveryCharge
+                                        )}
+                                      </Col>
+                                    </Row>
+                                  </ListGroup.Item>
+                                </ListGroup>
+                                <div
+                                  style={{
+                                    display: "grid",
+                                    alignItems: "center",
+                                    marginTop: "15px",
+                                    marginBottom: "15px",
+                                  }}
+                                >
+                                  {authState.isEmpty ||
+                                  authState.isAnonymous ? (
+                                    <div className={Styles.VerifiyEmailBox}>
+                                      <p
+                                        style={{
+                                          margin: "auto",
+                                          textAlign: "center",
+                                          fontSize: "16px",
+                                          padding: "10px",
+                                        }}
+                                      >
+                                        <span
+                                          className={
+                                            Styles.RequestVerificationText
+                                          }
+                                          onClick={() => {
+                                            history.push("/sign-up");
+                                          }}
+                                          style={{ fontWeight: "500" }}
+                                        >
+                                          Sign up
+                                        </span>{" "}
+                                        /{" "}
+                                        <span
+                                          className={
+                                            Styles.RequestVerificationText
+                                          }
+                                          onClick={() => {
+                                            history.push("/log-in");
+                                          }}
+                                          style={{ fontWeight: "500" }}
+                                        >
+                                          log in
+                                        </span>{" "}
+                                        to{" "}
+                                        <span style={{ fontWeight: "500" }}>
+                                          place{" "}
+                                        </span>
+                                        an{" "}
+                                        <span style={{ fontWeight: "500" }}>
+                                          order
+                                        </span>
+                                        .
+                                      </p>
+                                    </div>
+                                  ) : authState.emailVerified ? (
+                                    <>
+                                      {placeOrderValidation && (
+                                        <div
+                                          className={
+                                            Styles.PlaceOrderValidationError
+                                          }
+                                        >
+                                          {" "}
+                                          <p>{placeOrderValidation}</p>
+                                        </div>
+                                      )}
+                                      <CustomButton
+                                        label="Place Order"
+                                        styles={{
+                                          backgroundColor: "#18723A",
+                                          color: "white",
+                                          margin: "10px auto",
+                                          width: "80%",
+                                          textAlign: "center",
+                                        }}
+                                        onClick={async () => {
+                                          //place Order
+                                          var result =
+                                            await validatePaceOrderRequest();
+
+                                          if (result) {
+                                            console.log("Pacing Order");
+                                          }
+                                        }}
+                                      />
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div className={Styles.VerifiyEmailBox}>
+                                        <p
+                                          style={{
+                                            margin: "auto",
+                                            textAlign: "center",
+                                            fontSize: "16px",
+                                            marginBottom: "10px",
+                                          }}
+                                        >
+                                          Please
+                                          <span style={{ fontWeight: "500" }}>
+                                            {" "}
+                                            verify your email address{" "}
+                                          </span>
+                                          to
+                                          <span style={{ fontWeight: "500" }}>
+                                            {" "}
+                                            place{" "}
+                                          </span>
+                                          an
+                                          <span style={{ fontWeight: "500" }}>
+                                            {" "}
+                                            order
+                                          </span>
+                                          .
+                                        </p>
+                                        <p
+                                          className={
+                                            Styles.RequestVerificationText
+                                          }
+                                          onClick={async () => {
+                                            setRequestVerEmailState(null);
+                                            setLoadingRequest(true);
+                                            var sendEmailVerificationEmailResult =
+                                              await sendEmailVerificationEmail();
+
+                                            if (
+                                              sendEmailVerificationEmailResult.ok
+                                            ) {
+                                              setLoadingRequest(false);
+                                              setRequestVerEmailState({
+                                                ok: true,
+                                              });
+                                            } else {
+                                              setLoadingRequest(false);
+                                              setRequestVerEmailState({
+                                                ok: false,
+                                              });
+                                            }
+                                          }}
+                                          style={{
+                                            fontWeight: "500",
+                                            color: "blue",
+                                            margin: "auto",
+                                            textAlign: "center",
+                                            fontSize: "16px",
+                                            marginBottom: "10px",
+                                          }}
+                                        >
+                                          {" "}
+                                          Request Verification Email
+                                        </p>
+                                        {loadingRequest && (
+                                          <div
+                                            style={{
+                                              alignContent: "center",
+                                              display: "flex",
+                                            }}
+                                          >
+                                            <CircularProgress
+                                              size={20}
+                                              style={{ margin: "0px auto" }}
+                                            />
+                                          </div>
+                                        )}
+                                        {requestVerEmailState &&
+                                          (requestVerEmailState.ok ? (
+                                            <p
+                                              style={{
+                                                fontWeight: "400",
+                                                color: "green",
+                                                margin: "auto",
+                                                textAlign: "center",
+                                                fontSize: "18px",
+                                                marginBottom: "0px",
+                                              }}
+                                            >
+                                              {" "}
+                                              Sent
+                                            </p>
+                                          ) : (
+                                            <p
+                                              style={{
+                                                fontWeight: "400",
+                                                color: "red",
+                                                margin: "auto",
+                                                textAlign: "center",
+                                                fontSize: "18px",
+                                                marginBottom: "0px",
+                                              }}
+                                            >
+                                              {" "}
+                                              Failed
+                                            </p>
+                                          ))}
+                                      </div>
+                                    </>
+                                  )}
+                                  <CustomButton
+                                    label="Continue Shopping"
+                                    styles={{
+                                      backgroundColor: "#38CCCC",
+                                      margin: "20px auto",
+                                      width: "80%",
+                                      textAlign: "center",
+                                    }}
+                                    onClick={() => {
+                                      history.push("/");
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              <div className={Styles.EmptyCartBanner}>
+                                <p>Your shopping cart is empty.</p>
+                                <CustomButton
+                                  label="Continue Shopping"
+                                  styles={{
+                                    backgroundColor: "#38CCCC",
+                                    margin: "20px auto",
+
+                                    textAlign: "center",
+                                  }}
+                                  onClick={() => {
+                                    history.push("/");
+                                  }}
+                                />
+                              </div>
+                            ))}
+                        </div>
+                      ) : (
+                        <div className={Styles.EmptyCartBanner}>
+                          <span
+                            class="material-icons"
+                            style={{ color: "red", fontSize: "45px" }}
+                          >
+                            error
+                          </span>
+                          <p>{shoppingCart.error}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </>
+              )}
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 }

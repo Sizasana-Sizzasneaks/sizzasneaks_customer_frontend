@@ -301,7 +301,7 @@ function SignUpPage() {
                       var passwordValidationResult =
                         await InputValidation.validateSignUpPassword(
                           event.target.value
-                        ); //checks the Passord for input validation shows error if all the requiured criteria is not met
+                        ); //checks the Password for input validation shows error if all the required criteria is not met
                       setErrorPassword(passwordValidationResult);
                     }}
                   />
@@ -358,7 +358,7 @@ function SignUpPage() {
                     if (flag) {
                       setSignUpState(null);
                       setLoading(true);
-                      //signUpResult is used to see if the sign was sucessfull
+                      //signUpResult is used to see if the sign was successfull
                       var signUpResult = await signUp({
                         firstName,
                         lastName,

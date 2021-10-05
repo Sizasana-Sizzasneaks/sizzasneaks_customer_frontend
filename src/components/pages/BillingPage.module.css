@@ -1,0 +1,31 @@
+.container {
+  margin-bottom: 20px;
+}
+
+.BillingDetailsCardContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 18px;
+  margin-right: 5%;
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+.DateAndCVV {
+  display: flex;
+}
+
+.CheckBoxRow {
+  display: inline;
+  height: 30px;
+  margin-top: 10px;
+}
+
+.CompletePaymentBox {
+  background-color: white;
+  height: max-content;
+  padding: 10px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
