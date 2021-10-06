@@ -21,9 +21,6 @@ import ShippingPage from "./components/pages/ShippingPage.js";
 import BillingPage from "./components/pages/BillingPage.js";
 import ProfilePage from "./components/pages/ProfilePage";
 
-import OrdersPage from "./components/pages/OrdersPage.js";
-
-
 import store from "./redux/index.js";
 import { isLoaded, isEmpty } from "react-redux-firebase";
 import { getUserProfile } from "./redux/actions/profile.js";
@@ -90,7 +87,7 @@ function App() {
               />
               <ProtectedRoute
                 exact
-                path="/billing/:orderId"
+                path="/billing"
                 children={<BillingPage />}
               />
               <ProtectedRoute
@@ -99,7 +96,7 @@ function App() {
                 children={<ProfilePage />}
               />
 
-              <ProtectedRoute exact path="/orders" children={<OrdersPage />} />
+            
 
               <Route exact path="/sign-up">
                 <SignUpPage />

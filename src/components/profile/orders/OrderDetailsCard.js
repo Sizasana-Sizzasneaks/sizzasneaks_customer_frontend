@@ -1,25 +1,16 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import Styles from "./OrderDetailsCard.module.css";
+import { useHistory } from "react-router";
 import { CircularProgress } from "@material-ui/core";
-import InputTextArea from "../general/InputTextArea.js";
 
-import { validateProductDescriptionString } from "../../services/InputValidation.js";
 function OrderDetailsCard(props) {
+  const history = useHistory();
   var formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "ZAR",
   });
 
-  //Loading State For Order Update
-  var [loadShipp, setLoadShipp] = React.useState(false);
-  var [loadDeliver, setLoadDeliver] = React.useState(false);
-  var [loadCancel, setLoadCancel] = React.useState(false);
-  var [cancelDescription, setCancelDescription] = React.useState(null);
-
-  var [showCancelBox, setShowCancelBox] = React.useState(false);
-  var [cancelDescriptionError, setCancelDescriptionError] =
-    React.useState(null);
   return (
     <>
       <Row className={Styles.OrderDetailsCard}>
@@ -66,7 +57,7 @@ function OrderDetailsCard(props) {
             <>
               <Row className={Styles.TextRow}>
                 <Col xl={2}>
-                  <p>Product Name</p>
+                  <p>{item.productName}</p>
                 </Col>
 
                 <Col xl={2}>
@@ -84,7 +75,11 @@ function OrderDetailsCard(props) {
 
                 <Col xl={4}>
                   <p style={{ textAlign: "right" }}>
-                    {formatter.format(item.sellingPriceAmount * item.quantity)}
+                    {formatter.format(
+                      (item.sellingPriceAmount -
+                        item.sellingPriceAmount * 0.15) *
+                        item.quantity
+                    )}
                   </p>
                 </Col>
               </Row>
@@ -96,6 +91,37 @@ function OrderDetailsCard(props) {
             </>
           );
         })}
+        <Row className={Styles.TaxDeliveryLine}>
+          <Col xl={6}>
+            <p>Tax Amount</p>
+          </Col>
+
+          <Col xl={6}>
+            <p style={{ textAlign: "right" }}>{props.totalTax}</p>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <hr />
+          </Col>
+        </Row>
+
+        <Row className={Styles.TaxDeliveryLine}>
+          <Col xl={6}>
+            <p>Delivery Charge</p>
+          </Col>
+
+          <Col xl={6}>
+            <p style={{ textAlign: "right" }}>
+              {formatter.format(props.shippingCost)}
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <hr />
+          </Col>
+        </Row>
 
         <Row className={Styles.SummaryLine}>
           <Col xl={4}>
@@ -189,7 +215,31 @@ function OrderDetailsCard(props) {
                 </Col>
                 <Col xl={1}>
                   {" "}
-                  <p>{props.paymentComplete ? "Done" : "False"}</p>
+                  <p>
+                    {props.paymentComplete ? (
+                      "Done"
+                    ) : (
+                      <>
+                        {props.isCancelled ? (
+                          "False"
+                        ) : (
+                          <div
+                            className={Styles.PayFlag}
+                            onClick={async () => {
+                              history.push({
+                                pathname: "/billing",
+                                state: {
+                                  orderId: props.orderId,
+                                },
+                              });
+                            }}
+                          >
+                            <p>Pay</p>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </p>
                 </Col>
                 <Col xl={8} style={{ textAlign: "right" }}>
                   {" "}
@@ -210,35 +260,7 @@ function OrderDetailsCard(props) {
                 <Col xl={3}>
                   <p>Shipped:</p>
                 </Col>
-                <Col xl={1}>
-                  {loadShipp ? (
-                    <div className={Styles.loadingBox}>
-                      <CircularProgress size={20} />
-                    </div>
-                  ) : (
-                    <p>
-                      {props.hasShipped ? (
-                        "Done"
-                      ) : (
-                        <div
-                          className={Styles.SetFlag}
-                          onClick={async () => {
-                            if (
-                              typeof props.setShipped !== "undefined" &&
-                              props.paymentComplete
-                            ) {
-                              setLoadShipp(true);
-                              await props.setShipped(props.orderId);
-                              setLoadShipp(false);
-                            }
-                          }}
-                        >
-                          <p>Set</p>
-                        </div>
-                      )}
-                    </p>
-                  )}
-                </Col>
+                <Col xl={1}>{props.hasShipped ? "Done" : "False"}</Col>
 
                 <Col xl={8} style={{ textAlign: "right" }}>
                   {" "}
@@ -261,34 +283,7 @@ function OrderDetailsCard(props) {
                   <p>Delivered:</p>
                 </Col>
                 <Col xl={1}>
-                  {" "}
-                  {loadDeliver ? (
-                    <div className={Styles.loadingBox}>
-                      <CircularProgress size={20} />
-                    </div>
-                  ) : (
-                    <p>
-                      {props.hasBeenDelivered ? (
-                        "Done"
-                      ) : (
-                        <div
-                          className={Styles.SetFlag}
-                          onClick={async () => {
-                            if (
-                              typeof props.setDelivered !== "undefined" &&
-                              props.hasShipped
-                            ) {
-                              setLoadDeliver(true);
-                              await props.setDelivered(props.orderId);
-                              setLoadDeliver(false);
-                            }
-                          }}
-                        >
-                          <p>Set</p>
-                        </div>
-                      )}
-                    </p>
-                  )}
+                  <p>{props.hasBeenDelivered ? "Done" : "False"}</p>
                 </Col>
                 <Col xl={8} style={{ textAlign: "right" }}>
                   {" "}
@@ -311,94 +306,13 @@ function OrderDetailsCard(props) {
                     <p>Cancelled:</p>
                   </Col>
                   <Col xl={1}>
-                    {" "}
-                    {loadCancel ? (
-                      <div className={Styles.loadingBox}>
-                        <CircularProgress size={20} />
-                      </div>
-                    ) : (
-                      <p>
-                        {props.isCancelled ? (
-                          "Done"
-                        ) : (
-                          <div
-                            className={Styles.SetFlag}
-                            onClick={async () => {
-                              if (!props.hasBeenDelivered) {
-                                setShowCancelBox(!showCancelBox);
-                              }
-                            }}
-                          >
-                            <p>Set</p>
-                          </div>
-                        )}
-                      </p>
-                    )}
+                    <p>{props.isCancelled ? "Done" : "False"}</p>
                   </Col>
                   <Col xl={8} style={{ textAlign: "right" }}>
                     {" "}
                     <p>{props.isCancelled ? props.cancelTime : ""}</p>
                   </Col>
                 </Row>
-
-                {showCancelBox && (
-                  <>
-                    {" "}
-                    <Row style={{ marginTop: "5px" }}>
-                      <InputTextArea
-                        value={cancelDescription}
-                        placeholder="Cancel Description"
-                        entireComponentStyle={{ width: "100%" }}
-                        wrapperStyle={{ width: "100%", height: "60px" }}
-                        onChange={(value) => {
-                          setCancelDescription(value);
-                        }}
-                        onBlur={async (value) => {
-                          var validateCancelDescription =
-                            await validateProductDescriptionString(
-                              cancelDescription
-                            );
-                          setCancelDescriptionError(validateCancelDescription);
-                        }}
-                        error={cancelDescriptionError}
-                      />
-                    </Row>
-                    <Row>
-                      <div
-                        className={Styles.cancelFlag}
-                        onClick={async () => {
-                          var validateCancelDescription =
-                            await validateProductDescriptionString(
-                              cancelDescription
-                            );
-
-                          if (!validateCancelDescription.ok) {
-                            setCancelDescriptionError(
-                              validateCancelDescription
-                            );
-                          } else {
-                            setCancelDescription(null);
-                            setCancelDescriptionError(null);
-                            setShowCancelBox(false);
-                            if (
-                              typeof props.setCancelled !== "undefined" &&
-                              !props.hasBeenDelivered
-                            ) {
-                              setLoadCancel(true);
-                              await props.setCancelled(
-                                props.orderId,
-                                cancelDescription
-                              );
-                              setLoadCancel(false);
-                            }
-                          }
-                        }}
-                      >
-                        <p>Cancel Order</p>
-                      </div>
-                    </Row>
-                  </>
-                )}
               </Row>
 
               {props.cancelDescription && (

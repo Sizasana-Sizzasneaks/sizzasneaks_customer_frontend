@@ -38,6 +38,22 @@
   width: auto;
 }
 
+.CartNotFullAvailable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ed4337;
+  margin-left: 3%;
+  margin-right: 2%;
+  border-style: solid;
+  border-width: 1.5px;
+  border-color: #ed4337;
+  padding: 8px;
+}
+.CartNotFullAvailable p{
+margin-bottom: 0px;
+}
 .SingleLineItem {
   margin-top: 5px;
   margin-bottom: 5px;

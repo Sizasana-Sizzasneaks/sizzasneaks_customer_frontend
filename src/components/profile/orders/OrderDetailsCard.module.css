@@ -46,10 +46,19 @@
 
 .SummaryLine {
   font-weight: 500;
-  font-size: 19px;
+  font-size: 20px;
 }
 
 .SummaryLine p {
+  margin-bottom: 0px;
+}
+
+.TaxDeliveryLine {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.TaxDeliveryLine p {
   margin-bottom: 0px;
 }
 
@@ -82,24 +91,24 @@
   margin-bottom: 8px;
 }
 
-.SetFlag {
-  background-color: rgba(255, 255, 0, 0.822);
+.PayFlag {
+  background-color: #00c04a;
   width: max-content;
   padding: 3px 6px;
   border-style: solid;
   border-width: 1px;
 }
 
-.cancelFlag {
-  background-color: rgba(255, 255, 0, 0.822);
-  width: max-content;
-  padding: 3px 6px;
-  border-style: solid;
-  border-width: 1px;
-  margin-left: auto;
-  margin-right: 14px;
-  margin-top: 8px;
+.PayFlag  p{
+  font-size: 18px;
+  font-weight: 400;
 }
+
+.PayFlag:hover{
+ cursor: pointer;
+}
+
+
 
 .cancelFlag:hover {
   cursor: pointer;

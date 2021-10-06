@@ -25,6 +25,7 @@ import {
   getShippingAddresses,
   deleteShippingAddress,
 } from "../../api/shipping.js";
+import { postOrder } from "../../api/orders.js";
 
 import { validateAddressSelected } from "../../services/inputValidation.js";
 import BoxSelector from "../general/BoxSelector.js";
@@ -55,7 +56,7 @@ function ShippingPage() {
   var [actionState, setActionState] = React.useState(null);
 
   //Place Order State
-  var [placeOrderState, setPlaceOrderState] = React.useState(null);
+  var [placeOrderError, setPlaceOrderError] = React.useState(null);
   var [placeOrderLoading, setPlaceOrderLoading] = React.useState(false);
 
   //Place Order State
@@ -69,19 +70,29 @@ function ShippingPage() {
   React.useEffect(() => {
     dispatch(getUserCart());
     getAddresses();
-    // addNewShippingAddress(
-    //   "Home",
-    //   "Matamando",
-    //   "Kalilani",
-    //   "144 Peter Rd",
-    //   "Ruimsig, Roodepoort",
-    //   "Johannesburg",
-    //   "Gauteng",
-    //   "South Africa",
-    //   1724,
-    //   "0743018891"
-    // );
   }, []);
+
+  function generateTaxAmount() {
+    var totalTax = 0;
+    shoppingCart.cart.cart.forEach((item) => {
+      if (item.available) {
+        totalTax = totalTax + item.sellingPrice * 0.15 * item.quantity;
+      }
+    });
+    return totalTax;
+  }
+
+  function generateTotalCost() {
+    var totalCost = 0;
+    shoppingCart.cart.cart.forEach((item) => {
+      if (item.available) {
+        totalCost = totalCost + item.sellingPrice * item.quantity;
+      }
+    });
+    totalCost = totalCost + shoppingCart.cart.cartDeliveryCharge;
+
+    return totalCost;
+  }
 
   async function addNewShippingAddress(
     addressName,
@@ -192,6 +203,27 @@ function ShippingPage() {
     }
   }
 
+  async function createOrder() {
+    setPlaceOrderLoading(true);
+    setPlaceOrderError(null);
+    setUserAddresses(null);
+    var postOrderResult = await postOrder(selectedAddress);
+
+    if (postOrderResult.ok) {
+      history.push({
+        pathname: "/billing",
+        state: {
+          orderId: postOrderResult.id,
+        },
+      });
+
+      dispatch(getUserCart());
+    } else {
+      setPlaceOrderLoading(false);
+      setPlaceOrderError(postOrderResult);
+    }
+  }
+
   function switchMode(mode) {
     switch (mode.mode) {
       case "new":
@@ -231,448 +263,529 @@ function ShippingPage() {
         <Breadcrumb.Item active>Shipping Address</Breadcrumb.Item>
       </Breadcrumb>
 
-      <Container className={Styles.container}>
-        <Row>
-          <Col xs={12} md={8}>
-            {showEditAddress ? (
-              <EditShippingAddress
-                newMode={newMode}
-                editAddress={editAddress}
-                switchMode={switchMode}
-              />
-            ) : (
-              <Card>
-                <Card.Header className={Styles.Name}>
-                  Select a shipping address
-                  <span class="material-icons">arrow_drop_down</span>
-                  {stateLoading ? (
-                    <div
-                      style={{
-                        marginLeft: "auto",
-                        display: "flex",
-                        justifyContent: "left",
-                        alignItems: "center",
-                      }}
-                    >
-                      <CircularProgress size={25} />
-                    </div>
+      {placeOrderLoading ? (
+        <div className={Styles.LoadingBox}>
+          <CircularProgress size={150} />
+        </div>
+      ) : (
+        <>
+          {placeOrderError && (
+            <div className={Styles.ErrorBox}>
+              <div className={Styles.InnerErrorBox}>
+                <span class="material-icons">error</span>
+              </div>
+              <div className={Styles.InnerErrorBox}>
+                <p>{placeOrderError.message}</p>
+              </div>
+            </div>
+          )}
+          {userAddresses && (
+            <Container className={Styles.container}>
+              <Row>
+                <Col xs={12} md={8}>
+                  {showEditAddress ? (
+                    <EditShippingAddress
+                      newMode={newMode}
+                      editAddress={editAddress}
+                      switchMode={switchMode}
+                    />
                   ) : (
-                    <>
-                      {actionState ? (
-                        <>
-                          {actionState.ok ? (
-                            <p className={Styles.StateMessageSuccess}>
-                              {actionState.message}
-                            </p>
-                          ) : (
-                            <p className={Styles.StateMessageError}>
-                              {actionState.message}
-                            </p>
-                          )}
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  )}
-                </Card.Header>
+                    <Card>
+                      <Card.Header className={Styles.Name}>
+                        Select a shipping address
+                        <span class="material-icons">arrow_drop_down</span>
+                        {stateLoading ? (
+                          <div
+                            style={{
+                              marginLeft: "auto",
+                              display: "flex",
+                              justifyContent: "left",
+                              alignItems: "center",
+                            }}
+                          >
+                            <CircularProgress size={25} />
+                          </div>
+                        ) : (
+                          <>
+                            {actionState ? (
+                              <>
+                                {actionState.ok ? (
+                                  <p className={Styles.StateMessageSuccess}>
+                                    {actionState.message}
+                                  </p>
+                                ) : (
+                                  <p className={Styles.StateMessageError}>
+                                    {actionState.message}
+                                  </p>
+                                )}
+                              </>
+                            ) : (
+                              <></>
+                            )}
+                          </>
+                        )}
+                      </Card.Header>
 
-                {loadingAddresses && <LinearProgress />}
+                      {loadingAddresses && <LinearProgress />}
 
-                {userAddresses &&
-                  userAddresses.map((address) => {
-                    return (
-                      <ShippingAddressLine
-                        key={address._id}
-                        selected={address._id === selectedAddress}
-                        id={address._id}
-                        addressName={address.addressName}
-                        name={address.firstName + " " + address.lastName}
-                        addressLineOne={address.addressLineOne}
-                        addressLineTwo={address.addressLineTwo}
-                        city={address.city}
-                        province={address.province}
-                        country={address.country}
-                        zipCode={address.zipCode}
-                        contactNumber={address.contactNumber}
-                        deleteAddress={deleteAddress}
-                        selectAddress={selectAddress}
-                        showEditAddress={switchMode}
+                      {userAddresses &&
+                        userAddresses.map((address) => {
+                          return (
+                            <ShippingAddressLine
+                              key={address._id}
+                              selected={address._id === selectedAddress}
+                              id={address._id}
+                              addressName={address.addressName}
+                              name={address.firstName + " " + address.lastName}
+                              addressLineOne={address.addressLineOne}
+                              addressLineTwo={address.addressLineTwo}
+                              city={address.city}
+                              province={address.province}
+                              country={address.country}
+                              zipCode={address.zipCode}
+                              contactNumber={address.contactNumber}
+                              deleteAddress={deleteAddress}
+                              selectAddress={selectAddress}
+                              showEditAddress={switchMode}
+                            />
+                          );
+                        })}
+                      {errorAddresses && <p>{errorAddresses.message}</p>}
+                      <CustomButton
+                        label="Add New Address"
+                        styles={{
+                          backgroundColor: "#38CCCC",
+                          margin: "20px auto",
+
+                          textAlign: "center",
+                        }}
+                        onClick={() => {
+                          switchMode({ mode: "new" });
+                        }}
                       />
-                    );
-                  })}
-                {errorAddresses && <p>{errorAddresses.message}</p>}
-                <CustomButton
-                  label="Add New Address"
-                  styles={{
-                    backgroundColor: "#38CCCC",
-                    margin: "20px auto",
+                    </Card>
+                  )}
+                </Col>
 
-                    textAlign: "center",
-                  }}
-                  onClick={() => {
-                    switchMode({mode:"new"});
-                  }}
-                />
-              </Card>
-            )}
-          </Col>
+                {/* Summary detail card component */}
+                <Col xs={6} md={4}>
+                  <Card className="cardStyle">
+                    <Card.Header className={Styles.Name}>
+                      {" "}
+                      Cart Summary
+                    </Card.Header>
 
-          {/* Summary detail card component */}
-          <Col xs={6} md={4}>
-            <Card className="cardStyle">
-              <Card.Header className={Styles.Name}> Cart Summary</Card.Header>
+                    {authState.isEmpty ? (
+                      <div className={Styles.EmptyCartBanner}>
+                        <p>Your shopping cart is empty.</p>
+                        <CustomButton
+                          label="Continue Shopping"
+                          styles={{
+                            backgroundColor: "#38CCCC",
+                            margin: "20px auto",
 
-              {authState.isEmpty ? (
-                <div className={Styles.EmptyCartBanner}>
-                  <p>Your shopping cart is empty.</p>
-                  <CustomButton
-                    label="Continue Shopping"
-                    styles={{
-                      backgroundColor: "#38CCCC",
-                      margin: "20px auto",
-
-                      textAlign: "center",
-                    }}
-                    onClick={() => {
-                      history.push("/");
-                    }}
-                  />
-                </div>
-              ) : (
-                <>
-                  {shoppingCart.loading ? (
-                    <div className={Styles.CartSummaryLoading}>
-                      <CircularProgress size={90} />
-                    </div>
-                  ) : (
-                    <div>
-                      {!shoppingCart.error ? (
-                        <div>
-                          {shoppingCart.cart &&
-                            (shoppingCart.cart.cart.length != 0 ? (
+                            textAlign: "center",
+                          }}
+                          onClick={() => {
+                            history.push("/");
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        {shoppingCart.loading ? (
+                          <div className={Styles.CartSummaryLoading}>
+                            <CircularProgress size={90} />
+                          </div>
+                        ) : (
+                          <div>
+                            {!shoppingCart.error ? (
                               <div>
-                                <ListGroup variant="flush">
-                                  <ListGroup.Item
-                                    className={Styles.SingleLineItem}
-                                  >
-                                    <Row>
-                                      <Col
-                                        xl={6}
-                                        className={Styles.SummaryItemLabel}
-                                      >
-                                        {" "}
-                                        <p>
-                                          Price ({shoppingCart.cart.cartCount}{" "}
-                                          Items):{" "}
-                                        </p>
-                                      </Col>
-                                      {/* <Col xl={1} /> */}
-                                      <Col
-                                        xl={6}
-                                        className={Styles.SummaryCostValue}
-                                      >
-                                        {formatter.format(
-                                          shoppingCart.cart.cartTotal
-                                        )}
-                                      </Col>
-                                    </Row>
-                                  </ListGroup.Item>
-                                  <ListGroup.Item
-                                    className={Styles.SingleLineItem}
-                                  >
-                                    <Row>
-                                      <Col
-                                        xl={6}
-                                        className={Styles.SummaryItemLabel}
-                                      >
-                                        {" "}
-                                        <p>Delivery Charge: </p>{" "}
-                                      </Col>
+                                {shoppingCart.cart &&
+                                  (shoppingCart.cart.cart.length != 0 ? (
+                                    <div>
+                                      <ListGroup variant="flush">
+                                        <ListGroup.Item
+                                          className={Styles.SingleLineItem}
+                                        >
+                                          <Row>
+                                            <Col
+                                              xl={6}
+                                              className={
+                                                Styles.SummaryItemLabel
+                                              }
+                                            >
+                                              {" "}
+                                              <p>
+                                                Price (
+                                                {shoppingCart.cart.cartCount}{" "}
+                                                Items):{" "}
+                                              </p>
+                                            </Col>
+                                            {/* <Col xl={1} /> */}
+                                            <Col
+                                              xl={6}
+                                              className={
+                                                Styles.SummaryCostValue
+                                              }
+                                            >
+                                              {formatter.format(
+                                                generateTotalCost() -
+                                                  generateTaxAmount() -
+                                                  shoppingCart.cart
+                                                    .cartDeliveryCharge
+                                              )}
+                                            </Col>
+                                          </Row>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                          className={Styles.SingleLineItem}
+                                        >
+                                          <Row>
+                                            <Col
+                                              xl={6}
+                                              className={
+                                                Styles.SummaryItemLabel
+                                              }
+                                            >
+                                              {" "}
+                                              <p>Tax Amount: </p>{" "}
+                                            </Col>
 
-                                      <Col
-                                        xl={6}
-                                        className={Styles.SummaryCostValue}
-                                      >
-                                        {formatter.format(
-                                          shoppingCart.cart.cartDeliveryCharge
-                                        )}
-                                      </Col>
-                                    </Row>
-                                  </ListGroup.Item>
-                                  <ListGroup.Item
-                                    className={Styles.SingleLineItem}
-                                  >
-                                    <Row>
-                                      <Col
-                                        xl={4}
-                                        className={Styles.SummaryItemLabel}
-                                      >
-                                        <p>Total Price: </p>
-                                      </Col>
+                                            <Col
+                                              xl={6}
+                                              className={
+                                                Styles.SummaryCostValue
+                                              }
+                                            >
+                                              {formatter.format(
+                                                generateTaxAmount()
+                                              )}
+                                            </Col>
+                                          </Row>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                          className={Styles.SingleLineItem}
+                                        >
+                                          <Row>
+                                            <Col
+                                              xl={6}
+                                              className={
+                                                Styles.SummaryItemLabel
+                                              }
+                                            >
+                                              {" "}
+                                              <p>Delivery Charge: </p>{" "}
+                                            </Col>
 
-                                      <Col
-                                        xl={8}
-                                        className={Styles.SummaryCostValue}
+                                            <Col
+                                              xl={6}
+                                              className={
+                                                Styles.SummaryCostValue
+                                              }
+                                            >
+                                              {formatter.format(
+                                                shoppingCart.cart
+                                                  .cartDeliveryCharge
+                                              )}
+                                            </Col>
+                                          </Row>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item
+                                          className={Styles.SingleLineItem}
+                                        >
+                                          <Row>
+                                            <Col
+                                              xl={4}
+                                              className={
+                                                Styles.SummaryItemLabel
+                                              }
+                                            >
+                                              <p>Total Amount: </p>
+                                            </Col>
+
+                                            <Col
+                                              xl={8}
+                                              className={
+                                                Styles.SummaryCostValue
+                                              }
+                                              style={{
+                                                fontSize: "23px",
+                                                fontWeight: "500",
+                                              }}
+                                            >
+                                              {formatter.format(
+                                                generateTotalCost()
+                                              )}
+                                            </Col>
+                                          </Row>
+                                        </ListGroup.Item>
+                                      </ListGroup>
+                                      <div
                                         style={{
-                                          fontSize: "23px",
-                                          fontWeight: "500",
+                                          display: "grid",
+                                          alignItems: "center",
+                                          marginTop: "15px",
+                                          marginBottom: "15px",
                                         }}
                                       >
-                                        {formatter.format(
-                                          shoppingCart.cart.cartTotal +
-                                            shoppingCart.cart.cartDeliveryCharge
+                                        {authState.isEmpty ||
+                                        authState.isAnonymous ? (
+                                          <div
+                                            className={Styles.VerifiyEmailBox}
+                                          >
+                                            <p
+                                              style={{
+                                                margin: "auto",
+                                                textAlign: "center",
+                                                fontSize: "16px",
+                                                padding: "10px",
+                                              }}
+                                            >
+                                              <span
+                                                className={
+                                                  Styles.RequestVerificationText
+                                                }
+                                                onClick={() => {
+                                                  history.push("/sign-up");
+                                                }}
+                                                style={{ fontWeight: "500" }}
+                                              >
+                                                Sign up
+                                              </span>{" "}
+                                              /{" "}
+                                              <span
+                                                className={
+                                                  Styles.RequestVerificationText
+                                                }
+                                                onClick={() => {
+                                                  history.push("/log-in");
+                                                }}
+                                                style={{ fontWeight: "500" }}
+                                              >
+                                                log in
+                                              </span>{" "}
+                                              to{" "}
+                                              <span
+                                                style={{ fontWeight: "500" }}
+                                              >
+                                                place{" "}
+                                              </span>
+                                              an{" "}
+                                              <span
+                                                style={{ fontWeight: "500" }}
+                                              >
+                                                order
+                                              </span>
+                                              .
+                                            </p>
+                                          </div>
+                                        ) : authState.emailVerified ? (
+                                          <>
+                                            {placeOrderValidation && (
+                                              <div
+                                                className={
+                                                  Styles.CartNotFullAvailable
+                                                }
+                                              >
+                                                {" "}
+                                                <p>{placeOrderValidation}</p>
+                                              </div>
+                                            )}
+                                            <CustomButton
+                                              label="Place Order"
+                                              styles={{
+                                                backgroundColor: "#18723A",
+                                                color: "white",
+                                                margin: "10px auto",
+                                                width: "80%",
+                                                textAlign: "center",
+                                              }}
+                                              onClick={async () => {
+                                                //place Order
+                                                var result =
+                                                  await validatePaceOrderRequest();
+
+                                                if (result) {
+                                                  createOrder();
+                                                }
+                                              }}
+                                            />
+                                          </>
+                                        ) : (
+                                          <>
+                                            <div
+                                              className={Styles.VerifiyEmailBox}
+                                            >
+                                              <p
+                                                style={{
+                                                  margin: "auto",
+                                                  textAlign: "center",
+                                                  fontSize: "16px",
+                                                  marginBottom: "10px",
+                                                }}
+                                              >
+                                                Please
+                                                <span
+                                                  style={{ fontWeight: "500" }}
+                                                >
+                                                  {" "}
+                                                  verify your email address{" "}
+                                                </span>
+                                                to
+                                                <span
+                                                  style={{ fontWeight: "500" }}
+                                                >
+                                                  {" "}
+                                                  place{" "}
+                                                </span>
+                                                an
+                                                <span
+                                                  style={{ fontWeight: "500" }}
+                                                >
+                                                  {" "}
+                                                  order
+                                                </span>
+                                                .
+                                              </p>
+                                              <p
+                                                className={
+                                                  Styles.RequestVerificationText
+                                                }
+                                                onClick={async () => {
+                                                  setRequestVerEmailState(null);
+                                                  setLoadingRequest(true);
+                                                  var sendEmailVerificationEmailResult =
+                                                    await sendEmailVerificationEmail();
+
+                                                  if (
+                                                    sendEmailVerificationEmailResult.ok
+                                                  ) {
+                                                    setLoadingRequest(false);
+                                                    setRequestVerEmailState({
+                                                      ok: true,
+                                                    });
+                                                  } else {
+                                                    setLoadingRequest(false);
+                                                    setRequestVerEmailState({
+                                                      ok: false,
+                                                    });
+                                                  }
+                                                }}
+                                                style={{
+                                                  fontWeight: "500",
+                                                  color: "blue",
+                                                  margin: "auto",
+                                                  textAlign: "center",
+                                                  fontSize: "16px",
+                                                  marginBottom: "10px",
+                                                }}
+                                              >
+                                                {" "}
+                                                Request Verification Email
+                                              </p>
+                                              {loadingRequest && (
+                                                <div
+                                                  style={{
+                                                    alignContent: "center",
+                                                    display: "flex",
+                                                  }}
+                                                >
+                                                  <CircularProgress
+                                                    size={20}
+                                                    style={{
+                                                      margin: "0px auto",
+                                                    }}
+                                                  />
+                                                </div>
+                                              )}
+                                              {requestVerEmailState &&
+                                                (requestVerEmailState.ok ? (
+                                                  <p
+                                                    style={{
+                                                      fontWeight: "400",
+                                                      color: "green",
+                                                      margin: "auto",
+                                                      textAlign: "center",
+                                                      fontSize: "18px",
+                                                      marginBottom: "0px",
+                                                    }}
+                                                  >
+                                                    {" "}
+                                                    Sent
+                                                  </p>
+                                                ) : (
+                                                  <p
+                                                    style={{
+                                                      fontWeight: "400",
+                                                      color: "red",
+                                                      margin: "auto",
+                                                      textAlign: "center",
+                                                      fontSize: "18px",
+                                                      marginBottom: "0px",
+                                                    }}
+                                                  >
+                                                    {" "}
+                                                    Failed
+                                                  </p>
+                                                ))}
+                                            </div>
+                                          </>
                                         )}
-                                      </Col>
-                                    </Row>
-                                  </ListGroup.Item>
-                                </ListGroup>
-                                <div
-                                  style={{
-                                    display: "grid",
-                                    alignItems: "center",
-                                    marginTop: "15px",
-                                    marginBottom: "15px",
-                                  }}
-                                >
-                                  {authState.isEmpty ||
-                                  authState.isAnonymous ? (
-                                    <div className={Styles.VerifiyEmailBox}>
-                                      <p
-                                        style={{
-                                          margin: "auto",
-                                          textAlign: "center",
-                                          fontSize: "16px",
-                                          padding: "10px",
-                                        }}
-                                      >
-                                        <span
-                                          className={
-                                            Styles.RequestVerificationText
-                                          }
-                                          onClick={() => {
-                                            history.push("/sign-up");
+                                        <CustomButton
+                                          label="Continue Shopping"
+                                          styles={{
+                                            backgroundColor: "#38CCCC",
+                                            margin: "20px auto",
+                                            width: "80%",
+                                            textAlign: "center",
                                           }}
-                                          style={{ fontWeight: "500" }}
-                                        >
-                                          Sign up
-                                        </span>{" "}
-                                        /{" "}
-                                        <span
-                                          className={
-                                            Styles.RequestVerificationText
-                                          }
                                           onClick={() => {
-                                            history.push("/log-in");
+                                            history.push("/");
                                           }}
-                                          style={{ fontWeight: "500" }}
-                                        >
-                                          log in
-                                        </span>{" "}
-                                        to{" "}
-                                        <span style={{ fontWeight: "500" }}>
-                                          place{" "}
-                                        </span>
-                                        an{" "}
-                                        <span style={{ fontWeight: "500" }}>
-                                          order
-                                        </span>
-                                        .
-                                      </p>
+                                        />
+                                      </div>
                                     </div>
-                                  ) : authState.emailVerified ? (
-                                    <>
-                                      {placeOrderValidation && (
-                                        <div
-                                          className={
-                                            Styles.PlaceOrderValidationError
-                                          }
-                                        >
-                                          {" "}
-                                          <p>{placeOrderValidation}</p>
-                                        </div>
-                                      )}
+                                  ) : (
+                                    <div className={Styles.EmptyCartBanner}>
+                                      <p>Your shopping cart is empty.</p>
                                       <CustomButton
-                                        label="Place Order"
+                                        label="Continue Shopping"
                                         styles={{
-                                          backgroundColor: "#18723A",
-                                          color: "white",
-                                          margin: "10px auto",
-                                          width: "80%",
+                                          backgroundColor: "#38CCCC",
+                                          margin: "20px auto",
+
                                           textAlign: "center",
                                         }}
-                                        onClick={async () => {
-                                          //place Order
-                                          var result =
-                                            await validatePaceOrderRequest();
-
-                                          if (result) {
-                                            console.log("Pacing Order");
-                                          }
+                                        onClick={() => {
+                                          history.push("/");
                                         }}
                                       />
-                                    </>
-                                  ) : (
-                                    <>
-                                      <div className={Styles.VerifiyEmailBox}>
-                                        <p
-                                          style={{
-                                            margin: "auto",
-                                            textAlign: "center",
-                                            fontSize: "16px",
-                                            marginBottom: "10px",
-                                          }}
-                                        >
-                                          Please
-                                          <span style={{ fontWeight: "500" }}>
-                                            {" "}
-                                            verify your email address{" "}
-                                          </span>
-                                          to
-                                          <span style={{ fontWeight: "500" }}>
-                                            {" "}
-                                            place{" "}
-                                          </span>
-                                          an
-                                          <span style={{ fontWeight: "500" }}>
-                                            {" "}
-                                            order
-                                          </span>
-                                          .
-                                        </p>
-                                        <p
-                                          className={
-                                            Styles.RequestVerificationText
-                                          }
-                                          onClick={async () => {
-                                            setRequestVerEmailState(null);
-                                            setLoadingRequest(true);
-                                            var sendEmailVerificationEmailResult =
-                                              await sendEmailVerificationEmail();
-
-                                            if (
-                                              sendEmailVerificationEmailResult.ok
-                                            ) {
-                                              setLoadingRequest(false);
-                                              setRequestVerEmailState({
-                                                ok: true,
-                                              });
-                                            } else {
-                                              setLoadingRequest(false);
-                                              setRequestVerEmailState({
-                                                ok: false,
-                                              });
-                                            }
-                                          }}
-                                          style={{
-                                            fontWeight: "500",
-                                            color: "blue",
-                                            margin: "auto",
-                                            textAlign: "center",
-                                            fontSize: "16px",
-                                            marginBottom: "10px",
-                                          }}
-                                        >
-                                          {" "}
-                                          Request Verification Email
-                                        </p>
-                                        {loadingRequest && (
-                                          <div
-                                            style={{
-                                              alignContent: "center",
-                                              display: "flex",
-                                            }}
-                                          >
-                                            <CircularProgress
-                                              size={20}
-                                              style={{ margin: "0px auto" }}
-                                            />
-                                          </div>
-                                        )}
-                                        {requestVerEmailState &&
-                                          (requestVerEmailState.ok ? (
-                                            <p
-                                              style={{
-                                                fontWeight: "400",
-                                                color: "green",
-                                                margin: "auto",
-                                                textAlign: "center",
-                                                fontSize: "18px",
-                                                marginBottom: "0px",
-                                              }}
-                                            >
-                                              {" "}
-                                              Sent
-                                            </p>
-                                          ) : (
-                                            <p
-                                              style={{
-                                                fontWeight: "400",
-                                                color: "red",
-                                                margin: "auto",
-                                                textAlign: "center",
-                                                fontSize: "18px",
-                                                marginBottom: "0px",
-                                              }}
-                                            >
-                                              {" "}
-                                              Failed
-                                            </p>
-                                          ))}
-                                      </div>
-                                    </>
-                                  )}
-                                  <CustomButton
-                                    label="Continue Shopping"
-                                    styles={{
-                                      backgroundColor: "#38CCCC",
-                                      margin: "20px auto",
-                                      width: "80%",
-                                      textAlign: "center",
-                                    }}
-                                    onClick={() => {
-                                      history.push("/");
-                                    }}
-                                  />
-                                </div>
+                                    </div>
+                                  ))}
                               </div>
                             ) : (
                               <div className={Styles.EmptyCartBanner}>
-                                <p>Your shopping cart is empty.</p>
-                                <CustomButton
-                                  label="Continue Shopping"
-                                  styles={{
-                                    backgroundColor: "#38CCCC",
-                                    margin: "20px auto",
-
-                                    textAlign: "center",
-                                  }}
-                                  onClick={() => {
-                                    history.push("/");
-                                  }}
-                                />
+                                <span
+                                  class="material-icons"
+                                  style={{ color: "red", fontSize: "45px" }}
+                                >
+                                  error
+                                </span>
+                                <p>{shoppingCart.error}</p>
                               </div>
-                            ))}
-                        </div>
-                      ) : (
-                        <div className={Styles.EmptyCartBanner}>
-                          <span
-                            class="material-icons"
-                            style={{ color: "red", fontSize: "45px" }}
-                          >
-                            error
-                          </span>
-                          <p>{shoppingCart.error}</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </>
-              )}
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                            )}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </Card>
+                </Col>
+              </Row>
+            </Container>
+          )}
+        </>
+      )}
     </div>
   );
 }

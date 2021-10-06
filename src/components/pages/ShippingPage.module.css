@@ -26,7 +26,6 @@
   color: red;
 }
 
-
 .PlaceOrderValidationError {
   display: flex;
   justify-content: center;
@@ -39,7 +38,6 @@
 
   color: red;
 }
-
 
 .SingleLineItem {
   margin-top: 5px;
@@ -76,4 +74,51 @@
 .bottom-right {
   bottom: 0;
   right: 0;
+}
+.LoadingBox {
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CartNotFullAvailable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ed4337;
+  margin-left: 3%;
+  margin-right: 2%;
+  border-style: solid;
+  border-width: 1.5px;
+  border-color: #ed4337;
+  padding: 8px;
+}
+.CartNotFullAvailable p {
+  margin-bottom: 0px;
+}
+
+.ErrorBox {
+  height: 65vh;
+  width: 100%;
+  color: red;
+  text-align: "center";
+  padding-top: 80px;
+}
+
+.ErrorBox span {
+  font-size: 90px;
+}
+
+.InnerErrorBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.InnerErrorBox p {
+  font-size: 28px;
+  margin-top: 20px;
+  color: rgb(0, 0, 0);
 }

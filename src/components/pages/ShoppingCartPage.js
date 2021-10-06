@@ -35,9 +35,44 @@ function ShoppingCartPage() {
   var [loadingRequest, setLoadingRequest] = React.useState(false);
   var [requestVerEmailState, setRequestVerEmailState] = React.useState(null);
 
+  var [showCarUnavailableMessage, setShowCarUnavailableMessage] =
+    React.useState(false);
+
   React.useEffect(() => {
+    setShowCarUnavailableMessage(false);
     dispatch(getUserCart());
   }, []);
+
+  function generateTaxAmount() {
+    var totalTax = 0;
+    shoppingCart.cart.cart.forEach((item) => {
+      if (item.available) {
+      totalTax = totalTax + item.sellingPrice * 0.15 * item.quantity;
+      }
+    });
+    return totalTax;
+  }
+
+  function generateTotalCost() {
+    var totalCost = 0;
+    shoppingCart.cart.cart.forEach((item) => {
+      if (item.available) {
+        totalCost = totalCost + item.sellingPrice * item.quantity;
+      }
+    });
+    totalCost = totalCost + shoppingCart.cart.cartDeliveryCharge;
+
+    return totalCost;
+  }
+
+  function canPlaceOrder() {
+    for (var item of shoppingCart.cart.cart) {
+      if (!item.available) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   return (
     <div>
@@ -203,8 +238,30 @@ function ShoppingCartPage() {
                                         className={Styles.SummaryCostValue}
                                       >
                                         {formatter.format(
-                                          shoppingCart.cart.cartTotal
+                                          generateTotalCost() -
+                                            generateTaxAmount() -
+                                            shoppingCart.cart.cartDeliveryCharge
                                         )}
+                                      </Col>
+                                    </Row>
+                                  </ListGroup.Item>
+                                  <ListGroup.Item
+                                    className={Styles.SingleLineItem}
+                                  >
+                                    <Row>
+                                      <Col
+                                        xl={6}
+                                        className={Styles.SummaryItemLabel}
+                                      >
+                                        {" "}
+                                        <p>Tax Amount: </p>{" "}
+                                      </Col>
+
+                                      <Col
+                                        xl={6}
+                                        className={Styles.SummaryCostValue}
+                                      >
+                                        {formatter.format(generateTaxAmount())}
                                       </Col>
                                     </Row>
                                   </ListGroup.Item>
@@ -238,7 +295,7 @@ function ShoppingCartPage() {
                                         xl={4}
                                         className={Styles.SummaryItemLabel}
                                       >
-                                        <p>Total Price: </p>
+                                        <p>Total Amount: </p>
                                       </Col>
 
                                       <Col
@@ -249,10 +306,7 @@ function ShoppingCartPage() {
                                           fontWeight: "500",
                                         }}
                                       >
-                                        {formatter.format(
-                                          shoppingCart.cart.cartTotal +
-                                            shoppingCart.cart.cartDeliveryCharge
-                                        )}
+                                        {formatter.format(generateTotalCost())}
                                       </Col>
                                     </Row>
                                   </ListGroup.Item>
@@ -311,20 +365,39 @@ function ShoppingCartPage() {
                                       </p>
                                     </div>
                                   ) : authState.emailVerified ? (
-                                    <CustomButton
-                                      label="Place Order"
-                                      styles={{
-                                        backgroundColor: "#18723A",
-                                        color: "white",
-                                        margin: "10px auto",
-                                        width: "80%",
-                                        textAlign: "center",
-                                      }}
-                                      onClick={() => {
-                                        //Push To Shipping
-                                        history.push("/shipping");
-                                      }}
-                                    />
+                                    <>
+                                      {showCarUnavailableMessage && (
+                                        <div
+                                          className={
+                                            Styles.CartNotFullAvailable
+                                          }
+                                        >
+                                          <p>
+                                            Some cart items are not available.
+                                          </p>
+                                        </div>
+                                      )}
+
+                                      <CustomButton
+                                        disabled={!canPlaceOrder()}
+                                        label="Place Order"
+                                        styles={{
+                                          backgroundColor: "#18723A",
+                                          color: "white",
+                                          margin: "10px auto",
+                                          width: "80%",
+                                          textAlign: "center",
+                                        }}
+                                        onClick={() => {
+                                          //Push To Shipping
+                                          if (canPlaceOrder()) {
+                                            history.push("/shipping");
+                                          } else {
+                                            setShowCarUnavailableMessage(true);
+                                          }
+                                        }}
+                                      />
+                                    </>
                                   ) : (
                                     <>
                                       <div className={Styles.VerifiyEmailBox}>

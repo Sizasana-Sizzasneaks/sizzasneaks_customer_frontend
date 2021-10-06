@@ -1,0 +1,50 @@
+.ProfileCatBanner {
+  padding-left: 20px;
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.BannerDivideBox {
+  padding: 0px 22px;
+}
+.BannerDivideBox hr {
+  margin: 0px;
+  margin-bottom: 0px;
+}
+
+.OrderCardRow {
+  padding: 0px 22px;
+}
+
+.LoadingBox {
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ErrorBox {
+  height: 65vh;
+  width: 100%;
+  color: red;
+  text-align: "center";
+  padding-top: 80px;
+}
+
+.ErrorBox span {
+  font-size: 90px;
+}
+
+.InnerErrorBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.InnerErrorBox p {
+  font-size: 28px;
+  margin-top: 20px;
+  color: rgb(0, 0, 0);
+}

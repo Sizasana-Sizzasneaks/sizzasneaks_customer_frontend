@@ -33,7 +33,7 @@ export const getOrders = async () => {
           }) // returns the corresponding data for a signed in user's cart
           .catch((error) => {
             // returns general error when trying to getting cart is unsuccessful
-            return { ok: false, error: error };
+            return { ok: false, message: "Network Error: Please Check your internet connection." };
           });
       } else {
         //returns a general error when the system has failed to get the user's token
@@ -79,7 +79,7 @@ export const getOrder = async (orderId) => {
           }) // returns the corresponding data for a signed in user's cart
           .catch((error) => {
             // returns general error when trying to getting cart is unsuccessful
-            return { ok: false, error: error };
+            return { ok: false, message: "Network Error: Please Check your internet connection." };
           });
       } else {
         //returns a general error when the system has failed to get the user's token
@@ -128,7 +128,7 @@ export const postOrder = async (shippingAddressId) => {
           }) // returns the corresponding data for a signed in user's cart
           .catch((error) => {
             // returns general error when trying to getting cart is unsuccessful
-            return { ok: false, error: error };
+            return { ok: false, message: "Network Error: Please Check your internet connection." };
           });
       } else {
         //returns a general error when the system has failed to get the user's token
@@ -178,7 +178,7 @@ export const orderPayment = async (orderId, billingDetails) => {
           }) // returns the corresponding data for a signed in user's cart
           .catch((error) => {
             // returns general error when trying to getting cart is unsuccessful
-            return { ok: false, error: error };
+            return { ok: false, message: "Network Error: Please Check your internet connection." };
           });
       } else {
         //returns a general error when the system has failed to get the user's token

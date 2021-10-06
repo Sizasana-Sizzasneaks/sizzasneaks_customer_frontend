@@ -46,7 +46,7 @@ export const addToCart = async (productId, variant) => {
           return res.data; // returns the corresponding data for the product that has been added to the cart
         })
         .catch((error) => {
-          return { ok: false, error: error }; // returns general error when adding products to the cart is unsuccessful
+          return { ok: false, message: "Network Error: Please Check your internet connection." };// returns general error when adding products to the cart is unsuccessful
         });
     } else {
       return getTokenResult; //returns a general error when the system has failed to get the user's token
@@ -83,7 +83,7 @@ export const getCart = async () => {
           }) // returns the corresponding data for a signed in user's cart
           .catch((error) => {
             // returns general error when trying to getting cart is unsuccessful
-            return { ok: false, error: error };
+            return { ok: false, message: "Network Error: Please Check your internet connection." };
           });
       } else {
         //returns a general error when the system has failed to get the user's token
@@ -133,7 +133,7 @@ export const updateCartItemQuantity = async (
           }) //returns the value of the respective quantity change being made by the user
           .catch((error) => {
             //returns a general error when the system has failed to change the quantity of a product in a user's cart
-            return { ok: false, error: error };
+            return { ok: false, message: "Network Error: Please Check your internet connection." };
           });
       } else {
         //returns a general error when the system has failed to get the user's token
@@ -180,7 +180,7 @@ export const deleteSingleCartItem = async (product_id, option) => {
           }) //returns the corresponding data of an item being deleted from a user's cart
           .catch((error) => {
             //Request Unsuccesfull
-            return { ok: false, error: error }; //returns a general error when the system is unsuccessful with the deletion process
+            return { ok: false, message: "Network Error: Please Check your internet connection." };//returns a general error when the system is unsuccessful with the deletion process
           });
       } else {
         //returns a general error when the system has failed to get the user's token

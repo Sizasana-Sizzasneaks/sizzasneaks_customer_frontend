@@ -54,7 +54,7 @@ export const createNewShippingAddress = async (
       })
       .catch((error) => {
         // returns general error when the system fails to retrieve a user's details
-        return { ok: false, error: error };
+        return { ok: false, message: "Network Error: Please Check your internet connection." };
       });
   } else {
     //returns a general error when the system has failed to get the user's token
@@ -119,7 +119,7 @@ export const deleteShippingAddress = async (address_id) => {
       })
       .catch((error) => {
         // returns general error when the system fails to retrieve a user's details
-        return { ok: false, error: error };
+        return { ok: false, message: "Network Error: Please Check your internet connection." };
       });
   } else {
     //returns a general error when the system has failed to get the user's token
@@ -148,7 +148,7 @@ export const getShippingAddresses = async () => {
       })
       .catch((error) => {
         // returns general error when the system fails to retrieve a user's shipping address
-        return { ok: false, error: error };
+        return { ok: false, message: "Network Error: Please Check your internet connection." };
       });
   } else {
     //returns a general error when the system has failed to get the user's token
@@ -181,7 +181,7 @@ export const updateShippingAddressById = async (addressId, addressData) => {
       })
       .catch((error) => {
         // returns general error when the system fails to retrieve a user's shipping address
-        return { ok: false, error: error };
+        return { ok: false, message: "Network Error: Please Check your internet connection." };
       });
   } else {
     //returns a general error when the system has failed to get the user's token

@@ -24,6 +24,7 @@ function Button(props) {
       className={Styles.Button}
       style={{
         // boxShadow: "0px 0px 3px 0.5px #888888",
+    
         padding: "10px 15px",
         backgroundColor: backgroundColor,
         display: "inline-block",
@@ -32,6 +33,7 @@ function Button(props) {
         fontSize: "15px",
         color: color,
         ...props.styles,
+        
       }}
     >
       {props.label}
