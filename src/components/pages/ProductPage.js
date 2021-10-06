@@ -108,9 +108,10 @@ function ProductPage() {
               setAddToCartState(state);
             }}
           />{" "}
+          <ReviewBox productId={id} />
         </>
       )}
-      <ReviewBox productId={id} />
+      
       {error && (
         <div
           style={{

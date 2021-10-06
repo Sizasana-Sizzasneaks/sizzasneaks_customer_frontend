@@ -1,9 +1,9 @@
 import React from "react";
 import Styles from "./Button.module.css";
-//making a button component 
+//making a button component
 function Button(props) {
-  var backgroundColor; //backgroud color of the button 
-  var color; // main color of the button 
+  var backgroundColor; //backgroud color of the button
+  var color; // main color of the button
   //if the button is disabled color will red
   //else the button will be dark red
   if (typeof props.disabled === "undefined" || props.disabled !== true) {
@@ -13,7 +13,7 @@ function Button(props) {
     backgroundColor = "#FF61584D";
     color = "#0000004D";
   }
-// when the button is pressed these actions will take place
+  // when the button is pressed these actions will take place
   return (
     <div
       onClick={() => {
@@ -24,7 +24,7 @@ function Button(props) {
       className={Styles.Button}
       style={{
         // boxShadow: "0px 0px 3px 0.5px #888888",
-    
+
         padding: "10px 15px",
         backgroundColor: backgroundColor,
         display: "inline-block",
@@ -33,10 +33,9 @@ function Button(props) {
         fontSize: "15px",
         color: color,
         ...props.styles,
-        
       }}
     >
-      {props.label}
+      <p style={{ marginBottom: "0px", ...props.textStyle }}>{props.label}</p>
     </div>
   );
 }

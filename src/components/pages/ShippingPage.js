@@ -21,7 +21,6 @@ import ShippingAddressLine from "../shippingAddress/ShippingAddressLine.js";
 
 import {
   createNewShippingAddress,
-  updateShippingAddressById,
   getShippingAddresses,
   deleteShippingAddress,
 } from "../../api/shipping.js";
@@ -57,7 +56,7 @@ function ShippingPage() {
 
   //Place Order State
   var [placeOrderError, setPlaceOrderError] = React.useState(null);
-  var [placeOrderLoading, setPlaceOrderLoading] = React.useState(false);
+  var [placeOrderLoading, setPlaceOrderLoading] = React.useState(true);
 
   //Place Order State
   var [placeOrderValidation, setPlaceOrderValidation] = React.useState(null);
@@ -133,7 +132,9 @@ function ShippingPage() {
 
   async function getAddresses() {
     setSelectedAddress(null);
+    setPlaceOrderLoading(true);
     setLoadingAddresses(true);
+
     setUserAddresses(null);
     setErrorAddresses(null);
 
@@ -141,9 +142,11 @@ function ShippingPage() {
 
     if (getShippingAddressesResult.ok) {
       setLoadingAddresses(false);
+      setPlaceOrderLoading(false);
       setUserAddresses(getShippingAddressesResult.data);
     } else {
       setLoadingAddresses(false);
+      setPlaceOrderLoading(false);
       setErrorAddresses(getShippingAddressesResult);
     }
   }

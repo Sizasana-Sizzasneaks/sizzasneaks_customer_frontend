@@ -32,11 +32,15 @@ function InputTextArea(props) {
         <textarea
           className={Styles.InputTextArea}
           style={props.inputStyle}
+          placeholder={props.placeholder}
           onFocus={() => {
             setFocus(true);
           }}
           onBlur={() => {
             setFocus(false);
+            if (typeof props.onBlur !== "undefined") {
+              props.onBlur(props.value);
+            }
           }}
           value={props.value}
           onChange={(event) => {

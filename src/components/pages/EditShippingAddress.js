@@ -6,7 +6,7 @@ import { CircularProgress } from "@material-ui/core";
 import CustomButton from "../general/Button.js";
 import BoxSelector from "../general/BoxSelector.js";
 import InputField from "../general/InputField.js";
-import InputTextArea from "../general/InputField.js";
+import InputTextArea from "../general/InputTextArea.js";
 import { Card, Row, Col, Container } from "react-bootstrap";
 
 import {
@@ -295,23 +295,27 @@ function EditShippingAddress(props) {
   return (
     <Card>
       {props.newMode ? (
-        <Card.Header className={Styles.Name}> Create New Address</Card.Header>
+        <Card.Header className={Styles.Name}>
+          {" "}
+          Create new shipping address
+        </Card.Header>
       ) : (
-        <Card.Header className={Styles.Name}> Edit Address</Card.Header>
+        <Card.Header className={Styles.Name}>
+          {" "}
+          Edit shipping address
+        </Card.Header>
       )}
 
       {/* Address data column  */}
-      <Container>
-        <Row
-          style={{
-            margin: "10px auto 10px",
-            padding: "0px 40px",
-          }}
-        >
+      <Container className={Styles.FullFormBox}>
+        <Row className={Styles.InputRow}>
           {" "}
           <Col>
             <InputField
               label="Address Name"
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "100%" }}
+              inputStyle={{ width: "98%" }}
               value={addressName}
               onChange={async (value) => {
                 if (typeof setAddressName !== "undefined") {
@@ -328,27 +332,22 @@ function EditShippingAddress(props) {
             />
           </Col>
         </Row>
-        <Row
-          xs="2"
-          style={{
-            margin: "10px auto 10px",
-            padding: "0px 40px",
-          }}
-        >
-          <Col >
+        <Row className={Styles.InputRow}>
+          <Col>
             <InputField
               label="First Name"
               value={firstName}
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "95%" }}
+              inputStyle={{ width: "98%" }}
               onChange={async (value) => {
                 if (typeof setFirstName !== "undefined") {
                   setFirstName(value);
                 }
               }}
               onBlur={async (value) => {
-                if (typeof setFirstNameError !== "undefined") {
-                  var firstNameCheck = await validateAddressName(value);
-                  setErrorFirstName(firstNameCheck);
-                }
+                var firstNameCheck = await validateAddressName(value);
+                setErrorFirstName(firstNameCheck);
               }}
               error={errorFirstName}
             />
@@ -357,26 +356,31 @@ function EditShippingAddress(props) {
             <InputField
               label="Last Name"
               value={lastName}
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "100%" }}
+              inputStyle={{ width: "98%" }}
               onChange={async (value) => {
                 if (typeof setLastName !== "undefined") {
                   setLastName(value);
                 }
               }}
               onBlur={async (value) => {
-                if (typeof setLastNameError !== "undefined") {
-                  var lastNameCheck = await validateAddressName(value);
-                  setErrorLastName(lastNameCheck);
-                }
+                var lastNameCheck = await validateAddressName(value);
+                setErrorLastName(lastNameCheck);
               }}
               error={errorLastName}
             />
           </Col>
-
+        </Row>
+        <Row className={Styles.InputRow}>
           <Col>
             <InputField
               label="Address Line One"
               placeholder="Street Name"
               value={addressLineOne}
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "95%" }}
+              inputStyle={{ width: "98%" }}
               onChange={async (value) => {
                 if (typeof setAddressLineOne !== "undefined") {
                   setAddressLineOne(value);
@@ -396,6 +400,9 @@ function EditShippingAddress(props) {
               label="Address Line Two"
               placeholder="Suburb"
               value={addressLineTwo}
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "100%" }}
+              inputStyle={{ width: "98%" }}
               onChange={async (value) => {
                 if (typeof setAddressLineTwo !== "undefined") {
                   setAddressLineTwo(value);
@@ -410,11 +417,16 @@ function EditShippingAddress(props) {
               error={errorAddressLineTwo}
             />
           </Col>
-         
+        </Row>
+
+        <Row className={Styles.InputRow}>
           <Col>
             <InputField
               label="City"
               value={city}
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "95%" }}
+              inputStyle={{ width: "98%" }}
               onChange={async (value) => {
                 if (typeof setCity !== "undefined") {
                   setCity(value);
@@ -433,6 +445,9 @@ function EditShippingAddress(props) {
             <InputField
               label="Country"
               value={country}
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "100%" }}
+              inputStyle={{ width: "98%" }}
               onChange={async (value) => {
                 if (typeof setCountry !== "undefined") {
                   setCountry(value);
@@ -447,10 +462,16 @@ function EditShippingAddress(props) {
               error={errorCountry}
             />
           </Col>
+        </Row>
+
+        <Row className={Styles.InputRow}>
           <Col>
             <InputField
               label="Province/State"
               value={province}
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "95%" }}
+              inputStyle={{ width: "98%" }}
               onChange={async (value) => {
                 if (typeof setProvince !== "undefined") {
                   setProvince(value);
@@ -469,6 +490,9 @@ function EditShippingAddress(props) {
             <InputField
               label="Zip Code"
               value={zipCode}
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "100%" }}
+              inputStyle={{ width: "98%" }}
               onChange={async (value) => {
                 if (typeof setZipCode !== "undefined") {
                   setZipCode(value);
@@ -483,10 +507,16 @@ function EditShippingAddress(props) {
               error={errorZipCode}
             />
           </Col>
+        </Row>
+
+        <Row className={Styles.InputRow}>
           <Col>
             <InputField
               label="Contact Number"
               value={contactNumber}
+              entireComponentStyle={{ width: "100%" }}
+              wrapperStyle={{ width: "100%" }}
+              inputStyle={{ width: "98%" }}
               onChange={async (value) => {
                 if (typeof setContactNumber !== "undefined") {
                   setContactNumber(value);
@@ -502,14 +532,11 @@ function EditShippingAddress(props) {
             />
           </Col>
         </Row>
-        <Row
-          style={{
-            backgroundColor: "#FFFFFF",
-            padding: "0px 40px",
-          }}
-        >
+        <Row className={Styles.InputRow}>
           <Col>
             <InputTextArea
+              label="Delivery Instructions"
+              value={deliveryInstruction}
               entireComponentStyle={{ width: "100%" }}
               wrapperStyle={{
                 width: "100%",
@@ -518,8 +545,6 @@ function EditShippingAddress(props) {
               inputStyle={{
                 width: "98%",
               }}
-              label="Delivery Instructions"
-              value={deliveryInstruction}
               onChange={async (value) => {
                 if (typeof setDeliveryInstruction !== "undefined") {
                   setDeliveryInstruction(value);
@@ -536,20 +561,29 @@ function EditShippingAddress(props) {
             />
           </Col>
         </Row>
-        <Row>
+        <Row className={Styles.InputRow}>
           {loading ? (
             <div
               style={{
-                marginLeft: "auto",
+                paddingTop:"5px",
                 display: "flex",
                 justifyContent: "left",
-                alignItems: "center",
+                alignItems: "flex-start",
+                width:"max-content"
               }}
             >
               <CircularProgress size={25} />
             </div>
           ) : (
-            <>
+            <div
+              style={{
+                paddingTop:"5px",
+                display: "flex",
+                justifyContent: "left",
+                alignItems: "flex-start",
+                width:"max-content"
+              }}
+            >
               {addressState ? (
                 <>
                   {addressState.ok ? (
@@ -565,19 +599,19 @@ function EditShippingAddress(props) {
               ) : (
                 <></>
               )}
-            </>
+            </div>
           )}
           <CustomButton
             label="Discard"
             styles={{
-              backgroundColor: "#18723A",
-              color: "white",
-              margin: "10px auto",
-              marginTop: "40px",
-              marginBottom: "30px",
+              backgroundColor: "White",
+              borderStyle: "solid",
+              borderWidth: "1.2px",
+              marginRight: "40px",
+              marginBottom: "10px",
+              marginLeft: "auto",
               width: "max-content",
               textAlign: "center",
-              float: "right",
               height: "max-content",
             }}
             onClick={async (event) => {
@@ -588,16 +622,12 @@ function EditShippingAddress(props) {
           />
           {props.newMode ? (
             <CustomButton
-              label="Add A New Address"
+              label="Save Address"
               styles={{
-                backgroundColor: "#18723A",
-                color: "white",
-                margin: "10px auto",
-                marginTop: "40px",
-                marginBottom: "30px",
-                width: "170px",
+                backgroundColor: "#38CCCC",
+                width: "max-content",
                 textAlign: "center",
-                float: "right",
+                height:"max-content"
               }}
               onClick={async (event) => {
                 await checkFormFieldsValidity();
@@ -609,18 +639,12 @@ function EditShippingAddress(props) {
             />
           ) : (
             <CustomButton
-              label={"Update Address " + addressName}
+              label={"Save Address"}
               styles={{
-                backgroundColor: "#18723A",
-                color: "white",
-                margin: "10px auto",
-                marginTop: "40px",
-                marginBottom: "30px",
-                marginRight: " 20px",
+                backgroundColor: "#38CCCC",
                 width: "max-content",
                 textAlign: "center",
-                float: "right",
-                height: "max-content",
+                height:"max-content"
               }}
               onClick={async (event) => {
                 //Input Validation

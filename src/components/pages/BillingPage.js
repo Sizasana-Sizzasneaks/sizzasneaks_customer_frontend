@@ -253,7 +253,6 @@ function BillingPage(props) {
     setLoadingOrder(false);
     if (orderPaymentResult.ok) {
       setPaymentCompleteSuccess(orderPaymentResult);
-    
     } else {
       setPaymentCompleteError(orderPaymentResult);
     }
@@ -389,7 +388,7 @@ function BillingPage(props) {
           <Link to="/">Home</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <Link to="/">Orders</Link>
+          <Link to="/profile">Orders</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>Place Order - Billing</Breadcrumb.Item>
       </Breadcrumb>
@@ -424,16 +423,15 @@ function BillingPage(props) {
           )}
 
           {order && (
-            <Container className={Styles.container}>
+            <Container className={Styles.FullFormBox}>
               <Row>
                 <Col xs={12} md={8}>
                   <Card className="cardStyle">
                     <Card.Header className={Styles.Name}>
-                      {" "}
                       Billing Details
                     </Card.Header>
                     <Row className={Styles.BillingDetailsCardContent}>
-                      <Row>
+                      <Row className={Styles.InputRow}>
                         <p
                           style={{
                             paddingLeft: "0px",
@@ -477,11 +475,14 @@ function BillingPage(props) {
                           </p>
                         </div>
                       </Row>
-                      <Row>
+                      <Row className={Styles.InputRow}>
                         <Col>
                           <InputField
                             label="First Name"
                             value={firstName}
+                            entireComponentStyle={{ width: "100%" }}
+                            wrapperStyle={{ width: "95%" }}
+                            inputStyle={{ width: "98%" }}
                             onChange={async (value) => {
                               if (typeof setFirstName !== "undefined") {
                                 setFirstName(value);
@@ -509,6 +510,9 @@ function BillingPage(props) {
                           <InputField
                             label="Last Name"
                             value={lastName}
+                            entireComponentStyle={{ width: "100%" }}
+                            wrapperStyle={{ width: "100%" }}
+                            inputStyle={{ width: "98%" }}
                             onChange={async (value) => {
                               if (typeof setLastName !== "undefined") {
                                 setLastName(value);
@@ -532,13 +536,16 @@ function BillingPage(props) {
                           />
                         </Col>
                       </Row>
-                      <Row>
+                      <Row className={Styles.InputRow}>
                         <Col>
                           {" "}
                           <InputField
                             label="Address Line One"
                             placeholder="Street Name"
                             value={addressLineOne}
+                            entireComponentStyle={{ width: "100%" }}
+                            wrapperStyle={{ width: "95%" }}
+                            inputStyle={{ width: "98%" }}
                             onChange={async (value) => {
                               if (typeof setAddressLineOne !== "undefined") {
                                 setAddressLineOne(value);
@@ -568,6 +575,9 @@ function BillingPage(props) {
                             label="Address Line Two"
                             placeholder="Suburb"
                             value={addressLineTwo}
+                            entireComponentStyle={{ width: "100%" }}
+                            wrapperStyle={{ width: "100%" }}
+                            inputStyle={{ width: "98%" }}
                             onChange={async (value) => {
                               if (typeof setAddressLineTwo !== "undefined") {
                                 setAddressLineTwo(value);
@@ -593,12 +603,15 @@ function BillingPage(props) {
                           />
                         </Col>
                       </Row>
-                      <Row>
+                      <Row className={Styles.InputRow}>
                         <Col>
                           {" "}
                           <InputField
                             label="City"
                             value={city}
+                            entireComponentStyle={{ width: "100%" }}
+                            wrapperStyle={{ width: "95%" }}
+                            inputStyle={{ width: "98%" }}
                             onChange={async (value) => {
                               if (typeof setCity !== "undefined") {
                                 setCity(value);
@@ -626,6 +639,9 @@ function BillingPage(props) {
                           <InputField
                             label="Country"
                             value={country}
+                            entireComponentStyle={{ width: "100%" }}
+                            wrapperStyle={{ width: "100%" }}
+                            inputStyle={{ width: "98%" }}
                             onChange={async (value) => {
                               if (typeof setCountry !== "undefined") {
                                 setCountry(value);
@@ -649,11 +665,14 @@ function BillingPage(props) {
                           />
                         </Col>
                       </Row>
-                      <Row>
+                      <Row className={Styles.InputRow}>
                         <Col>
                           <InputField
                             label="Province/State"
                             value={province}
+                            entireComponentStyle={{ width: "100%" }}
+                            wrapperStyle={{ width: "95%" }}
+                            inputStyle={{ width: "98%" }}
                             onChange={async (value) => {
                               if (typeof setProvince !== "undefined") {
                                 setProvince(value);
@@ -678,6 +697,9 @@ function BillingPage(props) {
                           <InputField
                             label="Zip Code"
                             value={zipCode}
+                            entireComponentStyle={{ width: "100%" }}
+                            wrapperStyle={{ width: "100%" }}
+                            inputStyle={{ width: "98%" }}
                             onChange={async (value) => {
                               if (typeof setZipCode !== "undefined") {
                                 setZipCode(value);
@@ -697,7 +719,7 @@ function BillingPage(props) {
                           />
                         </Col>
                       </Row>
-                      <Row>
+                      <Row className={Styles.InputRow}>
                         <p
                           style={{
                             paddingLeft: "0px",
@@ -711,13 +733,16 @@ function BillingPage(props) {
                         <hr style={{ marginBottom: "6px" }} />
                       </Row>
                       <Row>
-                        <Row>
+                        <Row className={Styles.InputRow}>
                           {" "}
                           <Col>
                             {" "}
                             <InputField
                               label="Card Number"
                               value={cardNumber}
+                              entireComponentStyle={{ width: "100%" }}
+                              wrapperStyle={{ width: "250px" }}
+                              inputStyle={{ width: "98%" }}
                               onChange={async (value) => {
                                 var newValue = value
                                   .replace(/[^0-9.]/g, "")
@@ -739,13 +764,16 @@ function BillingPage(props) {
                             />
                           </Col>
                         </Row>
-                        <Row>
+                        <Row className={Styles.InputRow}>
                           {" "}
                           <Col>
                             {" "}
                             <InputField
                               label="Card Holder Name"
                               value={cardHolderName}
+                              entireComponentStyle={{ width: "100%" }}
+                              wrapperStyle={{ width: "250px" }}
+                              inputStyle={{ width: "98%" }}
                               onChange={async (value) => {
                                 if (typeof setZipCode !== "undefined") {
                                   setCardHolerName(value);
@@ -763,7 +791,7 @@ function BillingPage(props) {
                             />
                           </Col>
                         </Row>
-                        <Row>
+                        <Row className={Styles.InputRow}>
                           <Col className={Styles.DateAndCVV}>
                             {" "}
                             <InputField
@@ -918,6 +946,12 @@ function BillingPage(props) {
                     <CustomButton
                       label="Complete Payment"
                       disabled={!formValid}
+                      styles={{
+                        backgroundColor: "#209e4f",
+                        paddingLeft: "30px",
+                        paddingRight: "30px",
+                      }}
+                      textStyle={{ color: "white" }}
                       onClick={async () => {
                         if (formValid) {
                           payOrder();
