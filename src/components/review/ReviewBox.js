@@ -21,7 +21,7 @@ function ReviewBox(props) {
   React.useEffect(() => {
     getReviews();
   }, []);
-//Functtion used to get all the reviews for the certain product
+  //Functtion used to get all the reviews for the certain product
   async function getReviews() {
     setGetReviewError(null);
     setReviews(null);
@@ -34,18 +34,21 @@ function ReviewBox(props) {
     if (getReviewsByProductIdResult.ok === true) {
       setReviews(getReviewsByProductIdResult.data);
 
-     
       console.log(getReviewsByProductIdResult);
     } else {
       setGetReviewError(getReviewsByProductIdResult);
     }
   }
-//deleteReview functions is used to delete a review by a customer only if he publish the review 
+  //deleteReview functions is used to delete a review by a customer only if he publish the review
   async function deleteReview(review_id) {
     //if the reviewId id defined only then delete the review else show error message
-    if (typeof review_id !== "undefined") {
+    if (
+      typeof review_id !== "undefined" &&
+      typeof props.productId !== "undefined"
+    ) {
       var deleteReviewByReviewIdResult = await deleteReviewByReviewId(
-        review_id
+        review_id,
+        props.productId
       );
 
       return deleteReviewByReviewIdResult;
@@ -53,7 +56,7 @@ function ReviewBox(props) {
       return { ok: false, message: " Insufficient Information Supplied" };
     }
   }
-//function used to write review by cutomer 
+  //function used to write review by cutomer
   async function writeAReview(review) {
     if (
       typeof review.rating !== "undefined" &&
@@ -72,7 +75,7 @@ function ReviewBox(props) {
       return { ok: false, message: "Review Fields Insufficient" };
     }
   }
-//below shows average rating of a product with stars, 
+  //below shows average rating of a product with stars,
   return (
     <div className={Styles.reviewBox}>
       <Row>
@@ -85,7 +88,7 @@ function ReviewBox(props) {
       </Row>
       {reviews && (
         <Row>
-          <Col className={Styles.averageRating}> 
+          <Col className={Styles.averageRating}>
             <span
               style={{ fontSize: "25px", alignItems: "baseline" }}
               class="material-icons"
@@ -123,7 +126,7 @@ function ReviewBox(props) {
       {getReviewError && (
         <p style={{ color: "red", fontSize: "20px", marginTop: "15px" }}>
           {getReviewError.message}
-        </p>//delete review button 
+        </p> //delete review button
       )}
 
       {reviewLoad && (

@@ -71,7 +71,7 @@ export const getReviewsByProductId = async (id) => {
     });
 };
 
-export const deleteReviewByReviewId = async (id) => {
+export const deleteReviewByReviewId = async (id, productId) => {
   var getTokenResult = await getCurrentUserIdToken();
 
   // checks whether the current user's token was retrieved successfully 
@@ -81,6 +81,9 @@ export const deleteReviewByReviewId = async (id) => {
       headers: {
         credentialclaims: "customer",
         Authorization: "Bearer " + getTokenResult.data,
+      },
+      params: {
+        productId: productId,
       },
     };
     return axios
