@@ -36,7 +36,7 @@ export const updateUserDetails = async (data) => {
       })
       .catch((error) => {
         //returns a general error when the initial patch request is unsuccessful 
-        return { ok: false, error: error };
+        return { ok: false, message: "Network Error: Please Check your internet connection." };
       });
   } else {
     //returns a general error when the system has failed to get the user's token 
@@ -65,7 +65,7 @@ export const getUserDetails = async () => {
       })
       .catch((error) => {
         // returns general error when the system fails to retrieve a user's details 
-        return { ok: false, error: error };
+        return { ok: false, message: "Network Error: Please Check your internet connection." };
       });
   } else {
     //returns a general error when the system has failed to get the user's token 
@@ -94,7 +94,36 @@ export const createNewUser = async (userData) => {
       })//sends the data from a user's input in signup form to the customer collection in the database
       .catch((error) => {
         //returns a general error when the post request is unsuccessful
-        return { ok: false, error: error };
+        return { ok: false, message: "Network Error: Please Check your internet connection." };
+      });
+  } else {
+    //returns a general error when the system has failed to get the user's token 
+    return getTokenResult;
+  }
+};
+
+
+export const logInUser = async () => {
+  var getTokenResult = await getCurrentUserIdToken();
+
+  // checks whether the current user's token was retrieved successfully 
+  if (getTokenResult.ok === true) {
+    // sets the necessary header information for authentication based on the user's token
+    const config = {
+      headers: {credentialclaims: "customer",
+       Authorization: "Bearer " + getTokenResult.data
+      },
+    };
+    return axios
+      .post(API_CONSTANTS.USER_ROUTE + "/log-in",{}, config)
+      .then((res) => {
+        // Request Succesfull
+        //Handle Different HTTP Status Codes and Responses
+        return { ok: true, data: res.data };// returns the corresponding details for a signed in user
+      })
+      .catch((error) => {
+        // returns general error when the system fails to retrieve a user's details 
+        return { ok: false, message: "Network Error: Please Check your internet connection." };
       });
   } else {
     //returns a general error when the system has failed to get the user's token 

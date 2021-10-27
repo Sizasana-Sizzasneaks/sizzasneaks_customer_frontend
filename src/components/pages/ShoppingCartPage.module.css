@@ -1,0 +1,87 @@
+.container {
+  margin-bottom: 50px;
+}
+
+.Name {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.CartItemsLoading {
+  margin: 80px auto;
+}
+
+.CartSummaryLoading {
+  margin: 95px auto;
+}
+
+.VerifiyEmailBox {
+  border-style: solid;
+  background-color: "#ECFFF7";
+  border-color: #005651;
+  border-width: 1.5px;
+  margin: 10px 15px;
+  border-radius: 3px;
+  padding: 5px;
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(0, 0, 0, 0.12);
+}
+
+.ButtonGrouping {
+  margin-top: 20px;
+}
+
+.ContinueShoppingButton {
+  margin-top: 20px;
+  width: auto;
+}
+
+.CartNotFullAvailable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ed4337;
+  margin-left: 3%;
+  margin-right: 2%;
+  border-style: solid;
+  border-width: 1.5px;
+  border-color: #ed4337;
+  padding: 8px;
+}
+.CartNotFullAvailable p{
+margin-bottom: 0px;
+}
+.SingleLineItem {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.SummaryCostValue {
+  text-align: right;
+}
+
+.SummaryItemLabel {
+  margin-bottom: 0px;
+  display: flex;
+  align-items: center;
+}
+
+.SummaryItemLabel p {
+  margin-bottom: 0px;
+}
+
+.EmptyCartBanner {
+  text-align: center;
+  margin: 20px;
+}
+
+.RequestVerificationText {
+  color: blue;
+}
+
+.RequestVerificationText:hover {
+  cursor: pointer;
+}

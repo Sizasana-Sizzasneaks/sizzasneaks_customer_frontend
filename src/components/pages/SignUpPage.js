@@ -4,12 +4,16 @@ import { useDispatch } from "react-redux";
 import { useFirebase } from "react-redux-firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import "mdbreact/dist/css/mdb.css";
-import { MDBContainer, MDBRow, MDBCol, MDBBtn } from "mdb-react-ui-kit";
+import { MDBContainer, MDBRow, MDBCol } from "mdb-react-ui-kit";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { getUserProfile } from "../../redux/actions/profile";
+import { getUserProfile } from "../../redux/actions/profile.js";
+import { getUserCart } from "../../redux/actions/cart.js";
 import * as InputValidation from "../../services/inputValidation.js";
 import { signUp } from "../../services/authentication.js";
 import Button from "../general/Button.js";
+import Notification from "../general/Notification.js";
+
+import Styles from "./SignUpPage.module.css";
 
 // This is the Sign up page
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +53,7 @@ function SignUpPage() {
   const classes = useStyles();
 
   React.useEffect(() => {
-    checkFormValid();
+    checkFormValidity();
   }, [
     errorFirstName,
     errorLastName,
@@ -58,8 +62,43 @@ function SignUpPage() {
     errorPassword,
     errorRetypePsw,
   ]);
+
+  async function checkFormFieldsValidity() {
+    //Check FirstName
+    var firstNameValidationResult = await InputValidation.validateName(
+      firstName
+    );
+    await setErrorFirstName(firstNameValidationResult);
+
+    //Check Last Name
+    var lastNameValidationResult = await InputValidation.validateName(lastName);
+    await setErrorLastName(lastNameValidationResult);
+
+    //Check Email
+    var emailValidationResult = await InputValidation.validateEmail(email);
+    await setErrorEmail(emailValidationResult);
+
+    //Check Mobile Number
+    var mobileNumberValidationResult =
+      await InputValidation.validateMobileNumber(mobileNumber);
+    await setErrorMobile(mobileNumberValidationResult);
+
+    //Check Password
+    var passwordValidationResult = await InputValidation.validateSignUpPassword(
+      password
+    );
+    await setErrorPassword(passwordValidationResult);
+
+    //Check Retype Password
+    var retypePasswordValidationResult =
+      await InputValidation.validateRetypePassword(password, retypePsw);
+    await setErrorRetypePsw(retypePasswordValidationResult);
+
+    return { ok: true };
+  }
+
   //function below checks if all the feilds are filled or no and if the data provided is in correct format
-  function checkFormValid() {
+  function checkFormValidity() {
     if (
       errorFirstName && //if all the fields are provided only then proceed to next if statemen
       errorLastName &&
@@ -76,47 +115,78 @@ function SignUpPage() {
         errorPassword.valid === true &&
         errorRetypePsw.valid === true
       ) {
-        setFormValid(true); //if everything is fine then setFormValid is set to true otherwise false
+        setFormValid(true);
+        return true; //if everything is fine then setFormValid is set to true otherwise false
       } else {
         setFormValid(false);
+        return false;
       }
     } else {
-      setFormValid(false); //setFormValid is set false all the info in not provided
+      setFormValid(false);
+      return false; //setFormValid is set false all the info in not provided
     }
   }
   return (
     <div>
-      <p style={{ margin: "40px 0px 0px 0px", padding: "0px 50px 0px" }}>
-        Sign Up
-      </p>
+      <div style={{ display: "flex", marginTop: "25px", marginLeft: " 30px" }}>
+        <p style={{ marginRight: "10px" }}>Home</p>
+        <span style={{ marginRight: "10px" }} class="material-icons">
+          chevron_right
+        </span>
+        <p>Sign Up</p>
+      </div>{" "}
       <MDBContainer
         style={{
           margin: "10px auto 50px",
           backgroundColor: "#FFFFFF",
-          padding: "20px",
+          padding: "40px 0px",
         }}
       >
         <MDBRow>
+          <MDBCol
+            md={8}
+            style={{
+              margin: "0 auto",
+              marginBottom: "10px",
+              padding: "12px 24px",
+            }}
+          >
+            {signUpState && (
+              <>
+                {signUpState.ok === true ? (
+                  <Notification
+                    state="success"
+                    label={signUpState.message}
+                    styles={{ width: "100%" }}
+                  />
+                ) : (
+                  <Notification
+                    state="error"
+                    label={signUpState.message}
+                    styles={{ width: "100%" }}
+                  />
+                )}
+              </>
+            )}
+            {loading && (
+              <div style={{ paddingTop: "10px", paddingBottom: "20px" }}>
+                <LinearProgress />
+              </div>
+            )}
+          </MDBCol>{" "}
+        </MDBRow>
+        <MDBRow>
           <MDBCol md="8" className={classes.card} style={{ margin: "0 auto" }}>
             <form>
-              {loading && (
-                <div style={{ paddingTop: "10px", paddingBottom: "20px" }}>
-                  <LinearProgress />
-                </div>
-              )}
-              {signUpState && (
-                <>
-                  {signUpState.ok === true ? (
-                    <p className="success-prompt">{signUpState.message}</p>
-                  ) : (
-                    <p className="error-prompt">{signUpState.message}</p>
-                  )}
-                </>
-              )}
-              <p className="h4 text-left mb-4">Personal Details</p>
               <MDBRow>
+                <p className="h4 text-left mb-4">Personal Details</p>
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterNameEx">First name</label>
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterNameEx"
+                  >
+                    First name
+                  </label>
                   <input
                     type="text"
                     id="defaultFormRegisterNameEx"
@@ -136,7 +206,12 @@ function SignUpPage() {
                 </MDBCol>
 
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterNameEx">Last Name</label>
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterNameEx"
+                  >
+                    Last Name
+                  </label>
                   <input
                     type="text"
                     id="defaultFormRegisterNameEx"
@@ -157,7 +232,10 @@ function SignUpPage() {
               </MDBRow>
               <MDBRow>
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterEmailEx">
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterEmailEx"
+                  >
                     Email Address
                   </label>
                   <input
@@ -179,7 +257,10 @@ function SignUpPage() {
                 </MDBCol>
 
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterMobileEx">
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterMobileEx"
+                  >
                     Mobile Number
                   </label>
                   <input
@@ -204,7 +285,10 @@ function SignUpPage() {
               </MDBRow>
               <MDBRow>
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterPasswordEx">
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterPasswordEx"
+                  >
                     Password
                   </label>
                   <input
@@ -217,7 +301,7 @@ function SignUpPage() {
                       var passwordValidationResult =
                         await InputValidation.validateSignUpPassword(
                           event.target.value
-                        ); //checks the Passord for input validation shows error if all the requiured criteria is not met
+                        ); //checks the Password for input validation shows error if all the required criteria is not met
                       setErrorPassword(passwordValidationResult);
                     }}
                   />
@@ -228,7 +312,10 @@ function SignUpPage() {
                 </MDBCol>
 
                 <MDBCol md="6">
-                  <label htmlFor="defaultFormRegisterPasswordEx">
+                  <label
+                    className={Styles.InputLabel}
+                    htmlFor="defaultFormRegisterPasswordEx"
+                  >
                     Retype Password
                   </label>
                   <input
@@ -260,53 +347,55 @@ function SignUpPage() {
                   className="rounded amber"
                   styles={{
                     backgroundColor: "#FFC107",
-                    padding: "15px 25px",
+                    padding: "10px 20px",
                     fontSize: "16px",
                   }}
                   onClick={async (event) => {
-                    // event.preventDefault();
-                    setSignUpState(null);
-                    setLoading(true);
-                    //signUpResult is used to see if the sign was sucessfull
-                    var signUpResult = await signUp({
-                      firstName,
-                      lastName,
-                      email,
-                      mobileNumber,
-                      password,
-                    });
-                    setLoading(false);
-                    setSignUpState(signUpResult);
+                    await checkFormFieldsValidity();
 
-                    if (signUpResult.ok === true) {
-                      //Clear Fields
-                      setFirstName("");
-                      setLastName("");
-                      setEmail("");
-                      setMobileNumber("");
-                      setPassword("");
-                      setRetypePsw("");
+                    var flag = checkFormValidity();
 
-                      setErrorFirstName(null);
-                      setErrorLastName(null);
-                      setErrorEmail(null);
-                      setErrorMobile(null);
-                      setErrorPassword(null);
-                      setErrorRetypePsw(null);
+                    if (flag) {
+                      setSignUpState(null);
+                      setLoading(true);
+                      //signUpResult is used to see if the sign was successfull
+                      var signUpResult = await signUp({
+                        firstName,
+                        lastName,
+                        email,
+                        mobileNumber,
+                        password,
+                      });
+                      setLoading(false);
+                      setSignUpState(signUpResult);
 
-                      dispatch(getUserProfile());
+                      if (signUpResult.ok === true) {
+                        //Clear Fields
+                        setFirstName("");
+                        setLastName("");
+                        setEmail("");
+                        setMobileNumber("");
+                        setPassword("");
+                        setRetypePsw("");
 
-                      setTimeout(() => {
-                        history.push("/");
-                      }, 2000);
-                    } else {
-                      setEmail("");
-                      setPassword("");
-                      setRetypePsw("");
+                        setErrorFirstName(null);
+                        setErrorLastName(null);
+                        setErrorEmail(null);
+                        setErrorMobile(null);
+                        setErrorPassword(null);
+                        setErrorRetypePsw(null);
 
-                      setErrorEmail(null);
-                      setErrorPassword(null);
-                      setErrorRetypePsw(null);
+                        dispatch(getUserProfile());
+                        dispatch(getUserCart());
+                      } else {
+                        setEmail("");
+                        setPassword("");
+                        setRetypePsw("");
+
+                        setErrorEmail(null);
+                        setErrorPassword(null);
+                        setErrorRetypePsw(null);
+                      }
                     }
                   }}
                 />

@@ -13,12 +13,12 @@ function ProductsPage(props) {
   var { searchBy, category } = useParams(); //products can be shown by category
 
   React.useEffect(() => {
-    console.log("Use Effct");
+    console.log("Use Effect");
 
     getTheProducts();
   }, [searchBy, category]); //get the products from search
 
-  //This function will get the products by whatever the user serches by e.g. category, searchBy
+  //This function will get the products by whatever the user searchs by e.g. category, searchBy
   async function getTheProducts() {
     setError(null);
     setProducts(null);
@@ -63,7 +63,7 @@ function ProductsPage(props) {
           {category}
         </p>
       </div>
-      <Grid container spacing={5} style={{ height: "500px" }}>
+      <Grid container spacing={5} style={{ height: "min-content", marginBottom:"20px" }}>
         {products &&
           products.map((product) => {
             return (

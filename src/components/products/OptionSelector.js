@@ -7,7 +7,7 @@ function OptionSelector(props) {
       <div className={Styles.optionSelectorBanner}>
         <p>Color</p>
         <span class="material-icons">arrow_drop_down</span>
-        {props.colorSelectedError && <p>{props.colorSelectedError}</p>}
+        {props.colorSelectedError && <p className={Styles.OptionSelectionError}>{props.colorSelectedError.message}</p>}
       </div>
 
       <div className={Styles.optionSelectorOptions}>
@@ -20,7 +20,7 @@ function OptionSelector(props) {
                   typeof props.selectSize !== "undefined"
                 ) {
                   props.selectColor(index); //this checks which option is selected
-                  props.selectSize(null); //this checks which size is selected
+                  // props.selectSize(null); //this checks which size is selected
                 }
               }}
               className={
@@ -40,7 +40,7 @@ function OptionSelector(props) {
         <span class="material-icons">arrow_drop_down</span>
         {props.sizeSelectedError && (
           <p className={Styles.OptionSelectionError}>
-            {props.sizeSelectedError}
+            {props.sizeSelectedError.message}
           </p>
         )}
       </div>

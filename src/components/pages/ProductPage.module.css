@@ -15,3 +15,21 @@
     background-color: #FF6158;
 
 }
+
+@keyframes popUpLand {
+  0% {
+    transform: translateX(5%);
+    visibility: hidden;
+  }
+  /* 75%{
+    transform: translateY(-0.2%);
+  } */
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.NotificationBox{
+
+  animation: popUpLand 1.0s ;
+}

@@ -1,0 +1,128 @@
+.container {
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.BillingDetailsCardContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 18px;
+  margin-right: 5%;
+  margin-bottom: 30px;
+  margin-top: 10px;
+}
+.DateAndCVV {
+  display: flex;
+}
+
+.CheckBoxRow {
+  display: inline;
+  height: 30px;
+  margin-top: 10px;
+  margin: 10px auto 10px;
+  padding: 0px 40px;
+  margin-top: 0px;
+}
+
+.CompletePaymentBox {
+  background-color: white;
+  height: max-content;
+  padding: 10px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.LoadingBox {
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SingleLineItem {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.SummaryCostValue {
+  text-align: right;
+}
+
+.SummaryItemLabel {
+  margin-bottom: 0px;
+  display: flex;
+  align-items: center;
+}
+
+.SummaryItemLabel p {
+  margin-bottom: 0px;
+}
+
+.ErrorBox {
+  height: 65vh;
+  width: 100%;
+  color: red;
+  text-align: "center";
+  padding-top: 80px;
+}
+
+.ErrorBox span {
+  font-size: 90px;
+}
+
+.InnerErrorBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.InnerErrorBox p {
+  font-size: 28px;
+  margin-top: 20px;
+  color: rgb(0, 0, 0);
+}
+
+.SuccessBox {
+  height: 65vh;
+  width: 100%;
+  color: #18723a;
+  text-align: "center";
+  padding-top: 80px;
+}
+
+.SuccessBox span {
+  font-size: 100px;
+}
+
+.InnerSuccessBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.InnerSuccessBox p {
+  font-size: 28px;
+  margin-top: 20px;
+  color: rgb(0, 0, 0);
+}
+
+.InputRow {
+  margin: 10px auto 10px;
+  padding: 0px 40px;
+  margin-top: 5px;
+}
+
+.FullFormBox{
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.Name {
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}

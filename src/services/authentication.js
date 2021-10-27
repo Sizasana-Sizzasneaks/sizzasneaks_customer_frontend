@@ -1,43 +1,69 @@
 import { getFirebase } from "react-redux-firebase";
+import * as API from "../api/index.js";
 import * as USER_API from "../api/users.js";
 import store from "../redux/index.js";
 import { getUserProfile } from "../redux/actions/profile.js";
+import { getUserCart, clearUserCart } from "../redux/actions/cart.js";
+import { getCart, addToCart } from "../api/cart.js";
+import { logInUser } from "../api/users.js";
 
 // Firebase Fuction for Logging In a User.
 export const logIn = async (email, password) => {
-  var firebase = getFirebase();
+  try {
+    var wasAnonymous = false;
+    var anonymousUserCart = {};
+    const state = store.getState();
 
-  var output;
-  await firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then((user) => {
-      /* Build Two
-         Copy Shopping Cart of Anonyomous user that was there
-         before and add to Logged In account's shopping cart.
-         Then delete the Anonymouse Account. */
+    if (!state.firebase.auth.isEmpty && state.firebase.auth.isAnonymous) {
+      wasAnonymous = true;
 
-      store.dispatch(getUserProfile());
-      output = { ok: true, message: "Log In Succesfull" };
-    })
-    .catch((error) => {
-      console.log(error.code);
-      console.log(error.message);
-      if (
-        error.code === "auth/user-not-found" ||
-        error.code === "auth/wrong-password" ||
-        error.code === "auth/too-many-requests"
-      ) {
-        output = {
-          ok: false,
-          message: "Invalid Log In Credentials, Try Again",
-        };
+      var getAnonymousUserCartResult = await getCart();
+
+      if (getAnonymousUserCartResult.ok === true) {
+        anonymousUserCart = getAnonymousUserCartResult.data;
       } else {
-        output = { ok: false, message: "Log In Unsuccesfull" };
+        wasAnonymous = false;
       }
-    });
+    }
+    var output = {};
+    var firebase = getFirebase();
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        console.log("Credential Log In Done");
+        logInUser();
+        output = { ok: true, message: "Log in successful" };
+      })
+      .catch((error) => {
+        output = { ok: false, message: "Log In Unsuccessful" };
+      });
 
-  return output;
+    while (!state.firebase.auth.isLoaded) {
+      setTimeout(() => {
+        console.log("Logged In Auth State Not Ready");
+      }, 1000);
+    }
+
+    if (wasAnonymous) {
+      await anonymousUserCart.cart.forEach(async (cartItem) => {
+        var addToCartResult = await addToCart(
+          cartItem.product_id,
+          cartItem.option
+        );
+
+        if (!addToCartResult.ok) {
+          console.log(
+            "Failed to transfer Anonymous User Cart Item to Known User Cart"
+          );
+        }
+      });
+    }
+
+    return output;
+  } catch {
+    return { ok: false, message: "Error When Logging In User" };
+  }
 };
 
 // Firebase Fuction for Signing Up a New User.
@@ -50,8 +76,6 @@ export const signUp = async ({
   mobileNumber,
   password,
 }) => {
-
-
   const state = store.getState();
 
   if (state.firebase.auth.isEmpty || !state.firebase.auth.isAnonymous) {
@@ -112,7 +136,17 @@ export const signUp = async ({
     }
   }
 
-  return { ok: true, message: "Sign Up Succesfull" };
+  var sendEmailVerificationEmailResult = await sendEmailVerificationEmail();
+
+  if (sendEmailVerificationEmailResult.ok === true) {
+    return {
+      ok: true,
+      message:
+        "Sign Up Successful, " + sendEmailVerificationEmailResult.message,
+    };
+  } else {
+    return { ok: true, message: "Sign Up Successful" };
+  }
 };
 
 async function upgradeAnonymousAccount(email, password) {
@@ -125,7 +159,7 @@ async function upgradeAnonymousAccount(email, password) {
   await user
     .linkWithCredential(credential)
     .then(() => {
-      output = { ok: true, message: "Account Upgrade Succesfull" };
+      output = { ok: true, message: "Account Upgrade Successful" };
     })
     .catch((error) => {
       output = authErrorHandling(error);
@@ -142,7 +176,7 @@ async function vanillaSignUp(email, password) {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then((UserCredential) => {
-      output = { ok: true, message: "Sign Up Succesfull" };
+      output = { ok: true, message: "Sign Up Successful" };
     })
     .catch((error) => {
       output = authErrorHandling(error);
@@ -151,7 +185,32 @@ async function vanillaSignUp(email, password) {
   return output;
 }
 
-//Firebase Fuction for Logging Out the Current User
+export const sendEmailVerificationEmail = async () => {
+  var firebase = getFirebase();
+  var output = {};
+  await firebase
+    .auth()
+    .currentUser.sendEmailVerification()
+    .then(() => {
+      output = {
+        ok: true,
+        message:
+          "A verification email has been sent to " +
+          firebase.auth().currentUser.email +
+          ".",
+      };
+    })
+    .catch(() => {
+      output = {
+        ok: false,
+        message: "Failed to send Verification Email",
+      };
+    });
+
+  return output;
+};
+
+//Firebase Function for Logging Out the Current User
 export const signOutCurrentUser = () => {
   var firebase = getFirebase();
 
@@ -159,14 +218,14 @@ export const signOutCurrentUser = () => {
     .auth()
     .signOut()
     .then(() => {
-      return { ok: true, message: "Sign Out Succesfull" };
+      return { ok: true, message: "Sign Out Successful" };
     })
     .catch((error) => {
       return { ok: false, message: "Sign Out Failed" };
     });
 };
 
-//Firebase Fuction for getting the ID Token of the Current User
+//Firebase Function for getting the ID Token of the Current User
 export const getCurrentUserIdToken = async () => {
   var firebase = getFirebase();
   var output;
@@ -183,19 +242,55 @@ export const getCurrentUserIdToken = async () => {
 };
 
 export const createGuestUser = async () => {
+  try {
+    const firebase = getFirebase();
+    await firebase
+      .auth()
+      .signInAnonymously()
+      .then(async () => {
+        //Anonyomous Account Created
+        // Use Backend and Create New User in Database
+
+        await USER_API.createNewUser({ isAnonymous: true });
+      });
+
+    const state = store.getState();
+
+    //Making Sure that the Anonymous User is created and fully authenticated before returning.
+    while (!state.firebase.auth.isLoaded || !state.firebase.auth.isAnonymous) {
+      setTimeout(() => {
+        console.log("Anonymous Auth State Not Ready");
+      }, 1000);
+    }
+
+    return { ok: true, message: "Anonymous User Fully Signed In" };
+  } catch {
+    return { ok: false, message: "Failed To Authenticate Anonymous User" };
+  }
+};
+
+export const requestResetPassword = async (email) => {
+  var actionCodeSettings = {
+    url: window.location.href,
+    handleCodeInApp: false,
+  };
+  var output = {};
   const firebase = getFirebase();
-
-  firebase
+  await firebase
     .auth()
-    .signInAnonymously()
+    .sendPasswordResetEmail(email, actionCodeSettings)
     .then(() => {
-      //Anonyomous Account Created
-      // Use Backend and Create New User in Database
-
-      USER_API.createNewUser({ isAnonymous: true });
-
-      console.log("Anonyomous User");
+      output = { ok: true, message: "Password Reset Email sent to " + email };
+    })
+    .catch((error) => {
+      if (error.code === "auth/user-not-found") {
+        output = { ok: true, message: "Password Reset Email sent to " + email };
+      } else {
+        output = { ok: false, message: "Failed to Send Reset Email" };
+      }
     });
+
+  return output;
 };
 
 //Helper Functions
@@ -203,13 +298,13 @@ export const createGuestUser = async () => {
 function authErrorHandling(error) {
   var output;
   if (error.code === "auth/email-already-in-use") {
-    output = { ok: false, message: "Email Address already in Use" };
+    output = { ok: false, message: "Email address already in use" };
   } else if (error.code === "auth/invalid-email") {
-    output = { ok: false, message: "Invalid Email Address" };
+    output = { ok: false, message: "Invalid email address" };
   } else if (error.code === "auth/weak-password") {
     output = { ok: false, message: "Password too weak" };
   } else {
-    output = { ok: false, message: "Sign Up Unsuccesfull" };
+    output = { ok: false, message: "Sign up unsuccessful" };
   }
   return output;
 }

@@ -1,0 +1,26 @@
+.PopUpClose {
+  /* background-color: red; */
+  width: min-content;
+  display: flex;
+  float: inline-end;
+}
+
+.PopUpClose:hover {
+  cursor: pointer;
+}
+
+.RegisterNow:hover {
+  cursor: pointer;
+}
+
+.LoginBanner{
+
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
+  font-weight: 400;
+}
+
+.InputLabel{
+  margin-bottom: 5px;
+}

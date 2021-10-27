@@ -1,0 +1,44 @@
+.ShippingAddressLineBox {
+  height: max-content;
+  border-style: solid;
+  border-width: 1.2px;
+  margin: 10px;
+  padding: 10px 5px;
+}
+
+.CheckBoxSelected {
+  border-color: #18723a;
+  border-width: 2.5px;
+}
+
+.AddressNameBox {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 14px;
+}
+
+.AddressDetailsBox {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 14px;
+}
+.AddressUpdateBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 5px;
+}
+
+.AddressDeleteBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5px;
+}
+.AddressSelectBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

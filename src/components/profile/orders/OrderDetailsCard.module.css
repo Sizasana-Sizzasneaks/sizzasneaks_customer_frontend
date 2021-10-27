@@ -1,0 +1,160 @@
+.OrderDetailsCard {
+  background-color: white;
+  margin-top: 25px;
+  margin-bottom: 35px;
+  padding: 25px;
+  border-style: solid;
+  border-width: 1.5px;
+  border-radius: 3px;
+}
+
+.OrderDetailsHeader p {
+  font-size: 20px;
+}
+
+.RightAlign p {
+  text-align: right;
+}
+
+.OrderDetailsLabel p {
+  font-weight: 400;
+}
+
+.TopRow {
+  font-weight: 500;
+  font-size: 25px;
+}
+
+.CardRow {
+  font-weight: 500;
+  font-size: 18px;
+  margin-top: 22px;
+}
+
+.CardRow p {
+  margin-bottom: 0px;
+}
+
+.TextRow {
+  font-weight: 300;
+  font-size: 18px;
+}
+
+.TextRow p {
+  margin-bottom: 0px;
+}
+
+.SummaryLine {
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.SummaryLine p {
+  margin-bottom: 0px;
+}
+
+.TaxDeliveryLine {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.TaxDeliveryLine p {
+  margin-bottom: 0px;
+}
+
+.BottomDivider {
+  margin-bottom: 15px;
+}
+
+.ShippingAddress p {
+  margin-bottom: 4px;
+}
+
+.OrderStatus p {
+  margin-bottom: 8px;
+}
+
+.OrderStatusBanner {
+  /* padding: 0px 12px;
+} */
+}
+
+.TimeValues p {
+  text-align: right;
+}
+
+.TimeValues div {
+  padding: 0px;
+}
+
+.TopLine {
+  margin-bottom: 8px;
+}
+
+.PayFlag {
+  background-color: #00c04a;
+  width: max-content;
+  padding: 3px 6px;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.PayFlag  p{
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.PayFlag:hover{
+ cursor: pointer;
+}
+
+
+
+.cancelFlag:hover {
+  cursor: pointer;
+}
+
+.cancelFlag p {
+  margin-bottom: 0px;
+}
+
+.SetFlag:hover {
+  cursor: pointer;
+}
+
+.SetFlag p {
+  margin-bottom: 0px;
+}
+
+.OrderStatusRow {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  /* height: 50px; */
+  border-style: solid;
+  border-width: 1px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.OrderStatusRowComplete {
+  border-color: green;
+  border-width: 2.5px;
+}
+
+.OrderStatusRowCancelled {
+  border-color: red;
+  border-width: 2px;
+}
+
+.OrderStatusRow p {
+  margin-bottom: 0px;
+}
+
+.loadingBox {
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

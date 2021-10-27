@@ -7,9 +7,9 @@ import { getCurrentUserIdToken } from "../services/authentication.js";
 export const sendAReview = async (review) => {
   var getTokenResult = await getCurrentUserIdToken();
 
-  // checks whether the current user's token was retrieved successfully 
+  // checks whether the current user's token was retrieved successfully
   if (getTokenResult.ok === true) {
-    const config = { 
+    const config = {
       // sets the necessary header information for authentication based on the user's token
       headers: {
         credentialclaims: "customer",
@@ -21,7 +21,7 @@ export const sendAReview = async (review) => {
         API_CONSTANTS.REVIEWS_ROUTE + "/" + review.product_id,
         review,
         config
-      )//sends the data of the review of a product based on its id in addition to with the user's details to the review collection in the database
+      ) //sends the data of the review of a product based on its id in addition to with the user's details to the review collection in the database
       .then((res) => {
         //Request Succesfull
         //Handle Different HTTP Status Codes and Responses
@@ -31,15 +31,18 @@ export const sendAReview = async (review) => {
           console.log(res.data);
           return res.data; //returns the data of the review that has just been created
         } else {
-          return res.data;//returns a general error when adding a review to the product is unsuccessful 
+          return res.data; //returns a general error when adding a review to the product is unsuccessful
         }
       })
       .catch((error) => {
-        //returns a general error when the initial post request is unsuccessful 
-        return { ok: false, error: error };
+        //returns a general error when the initial post request is unsuccessful
+        return {
+          ok: false,
+          message: "Network Error: Please Check your internet connection.",
+        };
       });
   } else {
-    //returns a general error when the system has failed to get the user's token 
+    //returns a general error when the system has failed to get the user's token
     return getTokenResult;
   }
 };
@@ -52,7 +55,7 @@ export const getReviewsByProductId = async (id) => {
   };
 
   return axios
-    .get(API_CONSTANTS.REVIEWS_ROUTE + "/" + id, config) //gets the data of all the reviews made for a product based on its id 
+    .get(API_CONSTANTS.REVIEWS_ROUTE + "/" + id, config) //gets the data of all the reviews made for a product based on its id
     .then((res) => {
       //Request Succesfull
       //Handle Different HTTP Status Codes and Responses
@@ -60,21 +63,24 @@ export const getReviewsByProductId = async (id) => {
       //checks whether the post request was successful
       if (res.status === 200) {
         console.log(res.data);
-        return res.data;//returns the data of the review that has just been created
+        return res.data; //returns the data of the review that has just been created
       } else {
-        return res.data;//returns a general error when adding a review to the product is unsuccessful
+        return res.data; //returns a general error when adding a review to the product is unsuccessful
       }
     })
     .catch((error) => {
-      //returns a general error when the initial get request is unsuccessful 
-      return { ok: false, error: error };
+      //returns a general error when the initial get request is unsuccessful
+      return {
+        ok: false,
+        message: "Network Error: Please Check your internet connection.",
+      };
     });
 };
 
 export const deleteReviewByReviewId = async (id, productId) => {
   var getTokenResult = await getCurrentUserIdToken();
 
-  // checks whether the current user's token was retrieved successfully 
+  // checks whether the current user's token was retrieved successfully
   if (getTokenResult.ok === true) {
     const config = {
       // sets the necessary header information for authentication based on the user's token
@@ -87,7 +93,7 @@ export const deleteReviewByReviewId = async (id, productId) => {
       },
     };
     return axios
-      .delete(API_CONSTANTS.REVIEWS_ROUTE + "/" + id, config)//removes a review from the reviews collection based on an id
+      .delete(API_CONSTANTS.REVIEWS_ROUTE + "/" + id, config) //removes a review from the reviews collection based on an id
       .then((res) => {
         //Request Succesfull
         //Handle Different HTTP Status Codes and Responses
@@ -95,17 +101,20 @@ export const deleteReviewByReviewId = async (id, productId) => {
         //checks whether the post request was successful
         if (res.status === 200) {
           console.log(res.data);
-          return res.data;//returns the data of the review that has just been deleted
+          return res.data; //returns the data of the review that has just been deleted
         } else {
-          return res.data;//returns a general error when adding a review to the product is unsuccessful
+          return res.data; //returns a general error when adding a review to the product is unsuccessful
         }
       })
       .catch((error) => {
         //returns a general error when the initial delete request is unsuccessful
-        return { ok: false, error: error };
+        return {
+          ok: false,
+          message: "Network Error: Please Check your internet connection.",
+        };
       });
   } else {
-    //returns a general error when the system has failed to get the user's token 
+    //returns a general error when the system has failed to get the user's token
     return getTokenResult;
   }
 };
