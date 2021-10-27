@@ -89,7 +89,7 @@ export const deleteReviewByReviewId = async (id, productId) => {
         Authorization: "Bearer " + getTokenResult.data,
       },
       params: {
-        productId: productId,
+        product_id: productId,
       },
     };
     return axios
@@ -118,3 +118,5 @@ export const deleteReviewByReviewId = async (id, productId) => {
     return getTokenResult;
   }
 };
+
+
