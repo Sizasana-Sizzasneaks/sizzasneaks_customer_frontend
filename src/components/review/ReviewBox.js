@@ -67,7 +67,7 @@ function ReviewBox(props) {
       review.product_id = props.productId;
 
       var writeAReviewResult = await sendAReview(review);
-      getReviews();
+      // getReviews();
 
       return writeAReviewResult;
       //Send Review
