@@ -4,7 +4,7 @@ import * as API_CONSTANTS from "./index.js";
 //used to display all the products from the database based on a specified query
 export const getProducts = async (queryObject) => {
   const config = {
-    //sets the necessary header information and route parameter with a querry defined by the user
+    //sets the necessary header information and route parameter with a query defined by the user
     headers: {},
     params: queryObject,
   };
@@ -13,9 +13,8 @@ export const getProducts = async (queryObject) => {
     .get(API_CONSTANTS.PRODUCTS_ROUTE, config)
     .then((res) => {
       return res.data;
-    }) //returns the corresponding product data based on the user specified querry
+    }) //returns the corresponding product data based on the user specified query
     .catch((error) => {
-      console.log(error.message);
       //checks whether the user's internet connection is fine
       if (error.message === "Network Error") {
         return {
@@ -24,7 +23,7 @@ export const getProducts = async (queryObject) => {
         }; //returns a message if there is a problem with the user's internet connection
       }
       //returns a message if the system failed to get the products from the database
-      return { ok: false, message: "Error getting products" };
+      return { ok: false, message: "Error when getting products - Please try again" };
     });
 };
 
@@ -40,7 +39,7 @@ export const getProduct = async (id) => {
       return res.data;
     }) //returns the details of the product selected based on its id
     .catch((error) => {
-      console.log(error.message);
+     
 
       //checks whether the user's internet connection is fine
       if (error.message === "Network Error") {
@@ -50,7 +49,7 @@ export const getProduct = async (id) => {
         }; //returns a message if there is a problem with the user's internet connection
       }
       //returns a message if the system failed to get the product's details from the database
-      return { ok: false, message: "Error getting products" };
+      return { ok: false, message: "Error when getting product - Please try again" };
     });
 };
 
@@ -65,7 +64,6 @@ export const getProductBrands = async () => {
       return res.data;
     }) //returns the details of the product selected based on its id
     .catch((error) => {
-      console.log(error.message);
 
       //checks whether the user's internet connection is fine
       if (error.message === "Network Error") {
@@ -75,6 +73,6 @@ export const getProductBrands = async () => {
         }; //returns a message if there is a problem with the user's internet connection
       }
       //returns a message if the system failed to get the product's details from the database
-      return { ok: false, message: "Error getting product brands" };
+      return { ok: false, message: "Error getting product brands - Please try again" };
     });
 };

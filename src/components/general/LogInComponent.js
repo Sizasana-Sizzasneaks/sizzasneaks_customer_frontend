@@ -2,9 +2,13 @@ import React from "react";
 import * as InputValidation from "../../services/inputValidation.js";
 import { logIn } from "../../services/authentication.js";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../redux/actions/profile.js";
 import { getUserCart } from "../../redux/actions/cart.js";
+import {
+  toggleLogInPopUp,
+  hideLogInPopUp,
+} from "../../redux/actions/logInPopUp.js";
 
 //Components
 import ResetPasswordForm from "./ResetPasswordForm.js";
@@ -31,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 function LogInComponent(props) {
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const logInPopUpState = useSelector((state) => state.logInPopUpState);
   //Form State
   var [email, setEmail] = React.useState("");
   var [password, setPassword] = React.useState("");
@@ -91,13 +97,7 @@ function LogInComponent(props) {
               <div
                 className={Styles.PopUpClose}
                 onClick={() => {
-                  if (typeof props.setShowLogInForm !== "undefined") {
-                    props.setShowLogInForm(false);
-                    setEmail(null);
-                    setPassword(null);
-                    setErrorEmail(null);
-                    setErrorPassword(null);
-                  }
+                  dispatch(hideLogInPopUp());
                 }}
               >
                 <span class="material-icons">close</span>
@@ -234,12 +234,11 @@ function LogInComponent(props) {
                             setErrorPassword(null); //if password or Username is false set both feilds to null
                             setPassword("");
                           } else {
+                            history.push("/");
                             dispatch(getUserProfile());
                             dispatch(getUserCart());
                             setTimeout(() => {
-                              props.setShowLogInForm(false);
-
-                              // history.push("/");
+                              dispatch(hideLogInPopUp());
                             }, 2000);
                           }
                         }
@@ -252,10 +251,8 @@ function LogInComponent(props) {
                         className={Styles.RegisterNow}
                         style={{ color: "blue", display: "inline-flex" }}
                         onClick={() => {
-                          if (typeof props.setShowLogInForm !== "undefined") {
-                            props.setShowLogInForm(false);
-                            history.push("/sign-up");
-                          }
+                          dispatch(hideLogInPopUp());
+                          history.push("/sign-up");
                         }}
                       >
                         {" "}

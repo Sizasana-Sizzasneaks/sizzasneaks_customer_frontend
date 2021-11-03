@@ -15,24 +15,23 @@ export const getUserCart = () => async (dispatch) => {
         payload: { cart: getUserCartResult.data, loading: false },
       });
     } else {
-        console.log("Got");
+        
       dispatch({
         type: "GET_USER_CART",
         payload: {
           ok: false,
-          error: "Failed Getting User Cart",
+          error: "Error getting user cart",
           loading: false,
         },
       });
     }
   } catch (error){
-    console.log("Error");
-    console.log(error);
+    
     dispatch({
       type: "GET_USER_CART",
       payload: {
         ok: false,
-        error: "Error Getting User Cart",
+        error: "Error getting user cart",
         loading: false,
       },
     });

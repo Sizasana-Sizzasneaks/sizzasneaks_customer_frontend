@@ -1,13 +1,11 @@
 import { getFirebase } from "react-redux-firebase";
-import * as API from "../api/index.js";
 import * as USER_API from "../api/users.js";
 import store from "../redux/index.js";
-import { getUserProfile } from "../redux/actions/profile.js";
-import { getUserCart, clearUserCart } from "../redux/actions/cart.js";
+
 import { getCart, addToCart } from "../api/cart.js";
 import { logInUser } from "../api/users.js";
 
-// Firebase Fuction for Logging In a User.
+// Firebase Function for Logging In a User.
 export const logIn = async (email, password) => {
   try {
     var wasAnonymous = false;
@@ -31,17 +29,16 @@ export const logIn = async (email, password) => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
-        console.log("Credential Log In Done");
         logInUser();
-        output = { ok: true, message: "Log in successful" };
+        output = { ok: true, message: "Log In successful" };
       })
       .catch((error) => {
-        output = { ok: false, message: "Log In Unsuccessful" };
+        output = { ok: false, message: "Log In unsuccessful" };
       });
 
     while (!state.firebase.auth.isLoaded) {
       setTimeout(() => {
-        console.log("Logged In Auth State Not Ready");
+        
       }, 1000);
     }
 
@@ -53,21 +50,19 @@ export const logIn = async (email, password) => {
         );
 
         if (!addToCartResult.ok) {
-          console.log(
-            "Failed to transfer Anonymous User Cart Item to Known User Cart"
-          );
+          
         }
       });
     }
 
     return output;
   } catch {
-    return { ok: false, message: "Error When Logging In User" };
+    return { ok: false, message: "Error when logging in user" };
   }
 };
 
-// Firebase Fuction for Signing Up a New User.
-// This involves convering the anonymous account on device to a permanent account.
+// Firebase Function for Signing Up a New User.
+// This involves converting the anonymous account on device to a permanent account.
 // Then the user must be signed out and logged in again to register the account changes.
 export const signUp = async ({
   firstName,
@@ -142,10 +137,10 @@ export const signUp = async ({
     return {
       ok: true,
       message:
-        "Sign Up Successful, " + sendEmailVerificationEmailResult.message,
+        "Sign up successful, " + sendEmailVerificationEmailResult.message,
     };
   } else {
-    return { ok: true, message: "Sign Up Successful" };
+    return { ok: true, message: "Sign up successful" };
   }
 };
 
@@ -159,7 +154,7 @@ async function upgradeAnonymousAccount(email, password) {
   await user
     .linkWithCredential(credential)
     .then(() => {
-      output = { ok: true, message: "Account Upgrade Successful" };
+      output = { ok: true, message: "Account upgrade successful" };
     })
     .catch((error) => {
       output = authErrorHandling(error);
@@ -176,7 +171,7 @@ async function vanillaSignUp(email, password) {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then((UserCredential) => {
-      output = { ok: true, message: "Sign Up Successful" };
+      output = { ok: true, message: "Sign up successful" };
     })
     .catch((error) => {
       output = authErrorHandling(error);
@@ -218,10 +213,10 @@ export const signOutCurrentUser = () => {
     .auth()
     .signOut()
     .then(() => {
-      return { ok: true, message: "Sign Out Successful" };
+      return { ok: true, message: "Sign out successful" };
     })
     .catch((error) => {
-      return { ok: false, message: "Sign Out Failed" };
+      return { ok: false, message: "Sign out failed" };
     });
 };
 
@@ -236,7 +231,7 @@ export const getCurrentUserIdToken = async () => {
       output = { ok: true, data: idToken };
     })
     .catch((error) => {
-      output = { ok: false, message: "Failed to get Id Token" };
+      output = { ok: false, message: "Failed to authenticate user" };
     });
   return output;
 };
@@ -248,7 +243,7 @@ export const createGuestUser = async () => {
       .auth()
       .signInAnonymously()
       .then(async () => {
-        //Anonyomous Account Created
+        //Anonymous Account Created
         // Use Backend and Create New User in Database
 
         await USER_API.createNewUser({ isAnonymous: true });
@@ -259,13 +254,13 @@ export const createGuestUser = async () => {
     //Making Sure that the Anonymous User is created and fully authenticated before returning.
     while (!state.firebase.auth.isLoaded || !state.firebase.auth.isAnonymous) {
       setTimeout(() => {
-        console.log("Anonymous Auth State Not Ready");
+        console.log("Anonymous auth state not ready");
       }, 1000);
     }
 
-    return { ok: true, message: "Anonymous User Fully Signed In" };
+    return { ok: true, message: "Anonymous user fully signed in" };
   } catch {
-    return { ok: false, message: "Failed To Authenticate Anonymous User" };
+    return { ok: false, message: "Failed to authenticate anonymous ser" };
   }
 };
 
@@ -280,13 +275,13 @@ export const requestResetPassword = async (email) => {
     .auth()
     .sendPasswordResetEmail(email, actionCodeSettings)
     .then(() => {
-      output = { ok: true, message: "Password Reset Email sent to " + email };
+      output = { ok: true, message: "Password reset email sent to " + email };
     })
     .catch((error) => {
       if (error.code === "auth/user-not-found") {
-        output = { ok: true, message: "Password Reset Email sent to " + email };
+        output = { ok: true, message: "Password reset email sent to " + email };
       } else {
-        output = { ok: false, message: "Failed to Send Reset Email" };
+        output = { ok: false, message: "Failed to send reset email" };
       }
     });
 

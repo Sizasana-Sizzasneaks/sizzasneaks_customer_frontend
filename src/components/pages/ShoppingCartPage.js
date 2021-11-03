@@ -1,11 +1,8 @@
 import React from "react";
 import { sendEmailVerificationEmail } from "../../services/authentication.js";
-import {
-  updateCartItemQuantity,
-  deleteSingleCartItem,
-} from "../../api/cart.js";
 import { useHistory, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { toggleLogInPopUp } from "../../redux/actions/logInPopUp.js";
 import { getUserCart } from "../../redux/actions/cart.js";
 
 import {
@@ -31,6 +28,7 @@ function ShoppingCartPage() {
 
   const authState = useSelector((state) => state.firebase.auth);
   const shoppingCart = useSelector((state) => state.cart);
+  const logInPopUpState = useSelector((state) => state.logInPopUpState);
 
   var [loadingRequest, setLoadingRequest] = React.useState(false);
   var [requestVerEmailState, setRequestVerEmailState] = React.useState(null);
@@ -47,7 +45,7 @@ function ShoppingCartPage() {
     var totalTax = 0;
     shoppingCart.cart.cart.forEach((item) => {
       if (item.available) {
-      totalTax = totalTax + item.sellingPrice * 0.15 * item.quantity;
+        totalTax = totalTax + item.sellingPrice * 0.15 * item.quantity;
       }
     });
     return totalTax;
@@ -347,7 +345,8 @@ function ShoppingCartPage() {
                                             Styles.RequestVerificationText
                                           }
                                           onClick={() => {
-                                            history.push("/log-in");
+                                            dispatch(toggleLogInPopUp(!logInPopUpState.show))
+                                            
                                           }}
                                           style={{ fontWeight: "500" }}
                                         >
@@ -392,6 +391,12 @@ function ShoppingCartPage() {
                                           //Push To Shipping
                                           if (canPlaceOrder()) {
                                             history.push("/shipping");
+                                            history.push({
+                                              pathname: "/shipping",
+                                              state: {
+                                                cameFromCart: true,
+                                              },
+                                            });
                                           } else {
                                             setShowCarUnavailableMessage(true);
                                           }

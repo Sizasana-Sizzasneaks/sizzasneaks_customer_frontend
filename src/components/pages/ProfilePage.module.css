@@ -44,7 +44,8 @@
 }
 
 .InnerErrorBox p {
-  font-size: 28px;
+  font-size: 22px;
   margin-top: 20px;
-  color: rgb(0, 0, 0);
+ 
+  color: red;
 }

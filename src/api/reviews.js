@@ -28,7 +28,7 @@ export const sendAReview = async (review) => {
 
         //checks whether the post request was successful
         if (res.status === 200) {
-          console.log(res.data);
+          
           return res.data; //returns the data of the review that has just been created
         } else {
           return res.data; //returns a general error when adding a review to the product is unsuccessful
@@ -62,7 +62,7 @@ export const getReviewsByProductId = async (id) => {
 
       //checks whether the post request was successful
       if (res.status === 200) {
-        console.log(res.data);
+        
         return res.data; //returns the data of the review that has just been created
       } else {
         return res.data; //returns a general error when adding a review to the product is unsuccessful
@@ -100,7 +100,7 @@ export const deleteReviewByReviewId = async (id, productId) => {
 
         //checks whether the post request was successful
         if (res.status === 200) {
-          console.log(res.data);
+          
           return res.data; //returns the data of the review that has just been deleted
         } else {
           return res.data; //returns a general error when adding a review to the product is unsuccessful

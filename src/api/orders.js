@@ -41,11 +41,11 @@ export const getOrders = async () => {
       }
     } else {
       //returns a message if the current user is not signed into the platform
-      return { ok: false, message: "No User Signed In" };
+      return { ok: false, message: "No user signed in" };
     }
   } else {
     //returns a message when data has not been loaded from the redux store.
-    return { ok: false, message: "Getting Orders Failed - Try again" };
+    return { ok: false, message: "Getting Orders Failed - Please try again" };
   }
 };
 
@@ -87,11 +87,11 @@ export const getOrder = async (orderId) => {
       }
     } else {
       //returns a message if the current user is not signed into the platform
-      return { ok: false, message: "No User Signed In" };
+      return { ok: false, message: "No user signed in" };
     }
   } else {
     //returns a message when data has not been loaded from the redux store.
-    return { ok: false, message: "Getting Order Failed - Try again" };
+    return { ok: false, message: "Getting Order Failed - Please try again" };
   }
 };
 
@@ -136,11 +136,11 @@ export const postOrder = async (shippingAddressId) => {
       }
     } else {
       //returns a message if the current user is not signed into the platform
-      return { ok: false, message: "No User Signed In" };
+      return { ok: false, message: "No user signed in" };
     }
   } else {
     //returns a message when data has not been loaded from the redux store.
-    return { ok: false, message: "Post Order Failed - Try again" };
+    return { ok: false, message: "Create Order Failed - Please try again" };
   }
 };
 
@@ -186,10 +186,10 @@ export const orderPayment = async (orderId, billingDetails) => {
       }
     } else {
       //returns a message if the current user is not signed into the platform
-      return { ok: false, message: "No User Signed In" };
+      return { ok: false, message: "No user signed in" };
     }
   } else {
     //returns a message when data has not been loaded from the redux store.
-    return { ok: false, message: "Post Order Failed - Try again" };
+    return { ok: false, message: "Order Payment Failed - Please try again" };
   }
 };
