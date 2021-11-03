@@ -1,0 +1,39 @@
+.Page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  background-color: white;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.ReturnLink {
+  font-size: 16px;
+  color: blue;
+}
+
+.ReturnLink:hover {
+  cursor: pointer;
+}
+
+.Heading {
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.ErrorBox {
+  height: max-content;
+}
+
+.ErrorBox {
+  text-align: center;
+  display: flex;
+}
+
+.InnerErrorBox {
+  margin: auto;
+}
+
+/* .InnerErrorBox p {
+  font-size: 17px;
+} */

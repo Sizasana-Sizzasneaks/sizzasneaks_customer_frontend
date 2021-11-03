@@ -17,9 +17,17 @@ import SignUpPage from "./components/pages/SignUpPage.js";
 import LogInComponent from "./components/general/LogInComponent.js";
 import ShoppingCartPage from "./components/pages/ShoppingCartPage.js";
 import ShippingPage from "./components/pages/ShippingPage.js";
-
 import BillingPage from "./components/pages/BillingPage.js";
 import ProfilePage from "./components/pages/ProfilePage";
+
+//Legal Pages
+import PrivacyPolicy from "./components/pages/PrivacyPolicy.js";
+import ReturnPolicy from "./components/pages/ReturnPolicy.js";
+import TermsOfUse from "./components/pages/TermsOfUse.js";
+
+// Additional Pages
+import PageNotFound from "./components/pages/PageNotFound.js";
+
 
 import store from "./redux/index.js";
 import { isLoaded, isEmpty } from "react-redux-firebase";
@@ -68,6 +76,15 @@ function App() {
           <Navbar />
           <Container fluid="xl" style={{ padding: "0" }}>
             <Switch>
+              <Route exact path="/privacy-policy">
+                <PrivacyPolicy />
+              </Route>
+              <Route exact path="/return-policy">
+                <ReturnPolicy />
+              </Route>
+              <Route exact path="/terms-of-use">
+                <TermsOfUse />
+              </Route>
               <Route exact path="/products/:id">
                 <ProductPage />
               </Route>
@@ -80,6 +97,7 @@ function App() {
               <Route exact path="/cart">
                 <ShoppingCartPage />
               </Route>
+
               <ProtectedRoute
                 exact
                 path="/shipping"
@@ -96,8 +114,6 @@ function App() {
                 children={<ProfilePage />}
               />
 
-            
-
               <Route exact path="/sign-up">
                 <SignUpPage />
               </Route>
@@ -107,6 +123,7 @@ function App() {
               <Route exact path="/">
                 <HomePage />
               </Route>
+              <Route path='*' exact={true} component={PageNotFound} />
             </Switch>
           </Container>
           <Footer />
