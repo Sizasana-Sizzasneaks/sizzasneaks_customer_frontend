@@ -85,3 +85,11 @@ margin-bottom: 0px;
 .RequestVerificationText:hover {
   cursor: pointer;
 }
+
+@media screen and (max-width: 992px) {
+  .CardCol{
+
+    margin-top: 25px;
+  }
+
+}

@@ -15,11 +15,11 @@ function ShippingAddressLine(props) {
           : Styles.ShippingAddressLineBox
       }
     >
-      <Col xl={2} className={Styles.AddressNameBox}>
+      <Col xs={2} className={Styles.AddressNameBox}>
         {/* Address name component */}
         {props.addressName}
       </Col>
-      <Col xl={7} className={Styles.AddressDetailsBox}>
+      <Col xs={7} className={Styles.AddressDetailsBox}>
         {/* Address detail component */}
         {props.name}
         <br />
@@ -29,7 +29,7 @@ function ShippingAddressLine(props) {
         <br />
         {props.contactNumber}
       </Col>
-      <Col xl={1} className={Styles.AddressUpdateBox}>
+      <Col xs={1} className={Styles.AddressUpdateBox}>
         {/* Update address button component */}
         <IconButton
           styles={{
@@ -49,7 +49,7 @@ function ShippingAddressLine(props) {
           <span class="material-icons">edit</span>
         </IconButton>
       </Col>
-      <Col xl={1} className={Styles.AddressDeleteBox}>
+      <Col xs={1} className={Styles.AddressDeleteBox}>
         {/* Delete button component */}
         <IconButton
           styles={{
@@ -69,7 +69,7 @@ function ShippingAddressLine(props) {
           <span class="material-icons">delete</span>
         </IconButton>
       </Col>
-      <Col xl={1} className={Styles.AddressSelectBox}>
+      <Col xs={1} className={Styles.AddressSelectBox}>
         {/* checkbox select option component */}
         <InputCheckBox
           checked={props.selected}

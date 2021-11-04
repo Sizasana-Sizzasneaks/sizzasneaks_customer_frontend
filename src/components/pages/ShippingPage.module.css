@@ -137,3 +137,11 @@
 .CartSummaryLoading {
   margin: 95px auto;
 }
+
+@media screen and (max-width: 992px) {
+  .CardCol{
+
+    margin-top: 25px;
+  }
+
+}

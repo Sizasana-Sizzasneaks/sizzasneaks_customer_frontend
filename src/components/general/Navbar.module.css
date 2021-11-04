@@ -1,60 +1,109 @@
 .NavbarBanner {
-    background-color: #ffffff;
-    height: 88px;
+  background-color: #ffffff;
+  height: 88px;
+}
+
+.LogoBanner {
+  font-size: 39px;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.TopRightNavBannerLinks {
+  margin-left: 50px;
+  height: 26px;
+  margin-top: 19px;
+}
+
+.TopRightNavBannerLink {
+  text-align: center;
+  margin-top: 2px;
+  height: 100%;
+  padding: 0;
+  /* margin-bottom: 20px; */
+}
+.TopRightNavBannerLink:hover {
+  cursor: pointer;
+}
+
+.TopRightNavBannerLink p {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.ResponsiveCart{
+
+  text-align: center;
+  margin-top: 2px;
+  height: 100%;
+  padding: 0;
+  /* margin-bottom: 20px; */
+}
+.ResponsiveCart :hover{
+  cursor: pointer;
+}
+
+.ResponsiveCart p{
+  font-size: 16px;
+  margin-bottom: 0px;
+  font-weight: 400;
+}
+
+
+.VerticalDivider {
+  height: 100%;
+  background-color: black;
+  width: 2px;
+}
+
+.NavbarLinksSegment {
+  background-color: #38cccc;
+  height: 55px;
+}
+
+.NavbarNavigationLink {
+  height: 100%;
+  display: inline-flex;
+  text-align: center;
+  padding-top: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 14px;
+}
+
+.NavbarNavigationLink:hover {
+  background-color: rgba(00, 00, 00, 0.16);
+  cursor: pointer;
+}
+.DropDownCol {
+  display: none;
+}
+
+@media screen and (max-width: 992px) {
+  .SearchBarCon {
+    display: none;
   }
-  
-  .LogoBanner {
-    font-size: 39px;
-    font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+  .SearchBarCon {
+    display: none;
+  }
+  .DropDownCol {
+    display:initial;
+    
+  }
+
+  .DropDownCol div {
+    float: right;
+    margin-right: 8px;
     margin-top: 5px;
-    margin-bottom: 0px;
-  }
-  
-  .TopRightNavBannerLinks {
-    margin-left: 50px;
-    height: 26px;
-    margin-top: 19px;
-
-  }
-  
-  .TopRightNavBannerLink {
-    text-align: center;
-    margin-top: 2px;
-    height: 100%;
-    padding: 0;
-    /* margin-bottom: 20px; */
-  }
-  .TopRightNavBannerLink:hover {
-    cursor: pointer;
-  }
-  
-  .TopRightNavBannerLink p {
-    font-size: 16px;
-    font-weight: 400;
   }
 
-  .VerticalDivider {
-    height: 100%;
-    background-color: black;
-    width: 2px;
+  .TRNavBarLinkSCol{
+    display: none;
   }
-  
-  .NavbarLinksSegment {
-    background-color: #38CCCC;
-    height: 55px;
-  }
-  
-  .NavbarNavigationLink {
-    height: 100%;
-    display: inline-flex;
-    text-align: center;
-    padding-top: 15px;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 14px;
-  }
-  
-  .NavbarNavigationLink:hover {
-    background-color: rgba(00, 00, 00, 0.16);
-    cursor: pointer;
-  }
+}
+
+

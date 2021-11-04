@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, DropdownButton, Dropdown } from "react-bootstrap";
 
 import Styles from "./Navbar.module.css";
 
@@ -16,6 +16,7 @@ import { toggleLogInPopUp } from "../../redux/actions/logInPopUp.js";
 import { getProductBrands } from "../../api/products.js";
 
 import LogIn from "./LogInComponent";
+import { Style } from "@material-ui/icons";
 
 function Navbar() {
   const history = useHistory();
@@ -60,14 +61,18 @@ function Navbar() {
           }}
         >
           <Row>
-            <Col xl={4} style={{ padding: "0" }}>
+            <Col xs={4} style={{ padding: "0" }}>
               <Link to="/">
                 {" "}
                 <p className={Styles.LogoBanner}>SIZZASNEAKS</p>{" "}
               </Link>
             </Col>
 
-            <Col xl={4} style={{ padding: "0" }}>
+            <Col
+              xs={4}
+              style={{ padding: "0" }}
+              className={Styles.SearchBarCon}
+            >
               <SearchInputField
                 value={search}
                 placeHolderText="Search"
@@ -83,7 +88,9 @@ function Navbar() {
             </Col>
             {profileState.loading ? (
               <Col
-                xl={4}
+                // xl={4}
+                // lg={4}
+                // md={8}
                 style={{
                   padding: "0",
                   justifyContent: "center",
@@ -96,131 +103,209 @@ function Navbar() {
                 </div>
               </Col>
             ) : (
-              <Col
-                xl={4}
-                style={{
-                  padding: "0",
-                }}
-              >
-                <Row className={Styles.TopRightNavBannerLinks}>
-                  {authState.isEmpty || authState.isAnonymous ? (
-                    <>
-                      <Col
-                        className={Styles.TopRightNavBannerLink}
-                        onClick={() => {
-                          dispatch(toggleLogInPopUp(!logInPopUpState.show));
-                        }}
-                      >
-                        {" "}
-                        <p>Log In</p>
-                      </Col>
-                      <Col xl={1}>
-                        <VerticalDivider />
-                      </Col>
-                      <Col
-                        className={Styles.TopRightNavBannerLink}
-                        onClick={() => {
-                          history.push("/sign-up");
-                        }}
-                      >
-                        <p>Sign Up</p>
-                      </Col>
-                      <Col xl={1}>
-                        <VerticalDivider />
-                      </Col>
-                      <Col
-                        className={Styles.TopRightNavBannerLink}
-                        onClick={() => {
-                          history.push("/cart");
-                        }}
-                      >
-                        <p>
-                          {" "}
-                          <span
-                            style={{ float: "left" }}
-                            className="material-icons"
+              <>
+                <Col className={Styles.DropDownCol}>
+                  <div>
+                    {" "}
+                    <DropdownButton id="dropdown-basic-button" title={authState.isEmpty || authState.isAnonymous ? "Sign Up" : profileState.displayName}>
+                      {authState.isEmpty || authState.isAnonymous ? (
+                        <>
+                          <Dropdown.Item
+                            onClick={() => {
+                              dispatch(toggleLogInPopUp(!logInPopUpState.show));
+                            }}
                           >
-                            shopping_cart
-                          </span>
-                          {cartState.cart ? (
-                            <p>{cartState.cart.cartCount}</p>
-                          ) : (
-                            <div>
-                              {cartState.loading ? (
-                                <CircularProgress size={20} />
-                              ) : (
-                                <p>Cart</p>
-                              )}
-                            </div>
-                          )}
-                        </p>
-                      </Col>
-                      {logInPopUpState.show && (
-                        <LogIn  />
+                            Log In
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => {
+                              history.push("/sign-up");
+                            }}
+                          >
+                            Sign Up
+                          </Dropdown.Item>
+                        </>
+                      ) : (
+                        <>
+                          <Dropdown.Item
+                            onClick={() => {
+                              pushToProfilePage();
+                            }}
+                          >
+                            {profileState ? profileState.displayName : "User"}
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={async () => {
+                              await signOutCurrentUser();
+                              await dispatch(clearUserProfile());
+                              dispatch(clearUserCart());
+                              //Go to Home
+                              history.push("/");
+                            }}
+                          >
+                            Log Out
+                          </Dropdown.Item>
+                        </>
                       )}
-                    </>
-                  ) : (
-                    <>
-                      <Col
-                        className={Styles.TopRightNavBannerLink}
-                        onClick={() => {
-                          pushToProfilePage();
-                        }}
-                      >
+                    </DropdownButton>
+                    <Col
+                    
+                      className={Styles.ResponsiveCart}
+                      onClick={() => {
+                        history.push("/cart");
+                      }}
+                    >
+                      <p>
                         {" "}
-                        <p>
-                          {profileState ? profileState.displayName : "User"}
-                        </p>
-                      </Col>
-                      <Col xl={1}>
-                        <VerticalDivider />
-                      </Col>
-                      <Col
-                        className={Styles.TopRightNavBannerLink}
-                        onClick={async () => {
-                          await signOutCurrentUser();
-                          await dispatch(clearUserProfile());
-                          dispatch(clearUserCart());
-                          //Go to Home
-                          history.push("/");
-                        }}
-                      >
-                        <p>Log Out</p>
-                      </Col>
-                      <Col xl={1}>
-                        <VerticalDivider />
-                      </Col>
-                      <Col
-                        className={Styles.TopRightNavBannerLink}
-                        onClick={async () => {
-                          history.push("/cart");
-                        }}
-                      >
-                        <p>
+                        <span
+                          style={{fontSize:"20px" }}
+                          className="material-icons"
+                        >
+                          shopping_cart
+                        </span>
+                        {cartState.cart ? (
+                          <p>{cartState.cart.cartCount}</p>
+                        ) : (
+                          <div>
+                            {cartState.loading ? (
+                              <CircularProgress size={20} />
+                            ) : (
+                              <p>Cart</p>
+                            )}
+                          </div>
+                        )}
+                      </p>
+                    </Col>
+                    {logInPopUpState.show && <LogIn />}
+                  </div>
+                </Col>
+                <Col
+                  xl={4}
+                  lg={4}
+                  md={8}
+                  style={{
+                    padding: "0",
+                  }}
+                  className={Styles.TRNavBarLinkSCol}
+                >
+                  <Row className={Styles.TopRightNavBannerLinks}>
+                    {authState.isEmpty || authState.isAnonymous ? (
+                      <>
+                        <Col
+                          className={Styles.TopRightNavBannerLink}
+                          onClick={() => {
+                            dispatch(toggleLogInPopUp(!logInPopUpState.show));
+                          }}
+                        >
                           {" "}
-                          <span
-                            style={{ float: "left" }}
-                            className="material-icons"
-                          >
-                            shopping_cart
-                          </span>
-                          {cartState.cart ? (
-                            <p>{cartState.cart.cartCount}</p>
-                          ) : (
-                            <div>
-                              {cartState.loading ? (
-                                <CircularProgress size={30} />
-                              ) : (
-                                <p>Cart</p>
-                              )}
-                            </div>
-                          )}
-                        </p>
-                      </Col>
-                    </>
-                  )}
-                </Row>
-              </Col>
+                          <p>Log In</p>
+                        </Col>
+                        <Col xs={1}>
+                          <VerticalDivider />
+                        </Col>
+                        <Col
+                          className={Styles.TopRightNavBannerLink}
+                          onClick={() => {
+                            history.push("/sign-up");
+                          }}
+                        >
+                          <p>Sign Up</p>
+                        </Col>
+                        <Col xs={1}>
+                          <VerticalDivider />
+                        </Col>
+                        <Col
+                          className={Styles.TopRightNavBannerLink}
+                          onClick={() => {
+                            history.push("/cart");
+                          }}
+                        >
+                          <p>
+                            {" "}
+                            <span
+                              style={{ float: "left" }}
+                              className="material-icons"
+                            >
+                              shopping_cart
+                            </span>
+                            {cartState.cart ? (
+                              <p>{cartState.cart.cartCount}</p>
+                            ) : (
+                              <div>
+                                {cartState.loading ? (
+                                  <CircularProgress size={20} />
+                                ) : (
+                                  <p>Cart</p>
+                                )}
+                              </div>
+                            )}
+                          </p>
+                        </Col>
+                        {logInPopUpState.show && <LogIn />}
+                      </>
+                    ) : (
+                      <>
+                        <Col
+                          className={Styles.TopRightNavBannerLink}
+                          onClick={() => {
+                            pushToProfilePage();
+                          }}
+                        >
+                          {" "}
+                          <p>
+                            {profileState ? profileState.displayName : "User"}
+                          </p>
+                        </Col>
+                        <Col xs={1}>
+                          <VerticalDivider />
+                        </Col>
+                        <Col
+                          className={Styles.TopRightNavBannerLink}
+                          onClick={async () => {
+                            await signOutCurrentUser();
+                            await dispatch(clearUserProfile());
+                            dispatch(clearUserCart());
+                            //Go to Home
+                            history.push("/");
+                          }}
+                        >
+                          <p>Log Out</p>
+                        </Col>
+                        <Col xs={1}>
+                          <VerticalDivider />
+                        </Col>
+                        <Col
+                          className={Styles.TopRightNavBannerLink}
+                          onClick={async () => {
+                            history.push("/cart");
+                          }}
+                        >
+                          <p>
+                            {" "}
+                            <span
+                              style={{ float: "left" }}
+                              className="material-icons"
+                            >
+                              shopping_cart
+                            </span>
+                            {cartState.cart ? (
+                              <p>{cartState.cart.cartCount}</p>
+                            ) : (
+                              <div>
+                                {cartState.loading ? (
+                                  <CircularProgress size={30} />
+                                ) : (
+                                  <p>Cart</p>
+                                )}
+                              </div>
+                            )}
+                          </p>
+                        </Col>
+                      </>
+                    )}
+                  </Row>
+                </Col>
+              </>
             )}
           </Row>
         </Container>

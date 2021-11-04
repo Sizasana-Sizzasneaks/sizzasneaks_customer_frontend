@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
+import { HashLink } from "react-router-hash-link";
 import Styles from "./ProductItem.module.css";
 import { Link } from "react-router-dom";
 
@@ -12,7 +13,11 @@ function ProductItem(props) {
     currency: "ZAR",
   });
   return (
-    <Link to={"/products/" + props.product._id}>
+    <HashLink
+      style={{ textDecoration: "none", color: "black" }}
+      smooth
+      to={"/products/" + props.product._id + "#top"}
+    >
       <div className={Styles.ProductItem}>
         <Row>
           <Col>
@@ -74,7 +79,7 @@ function ProductItem(props) {
           </Col>
         </Row>
       </div>
-    </Link>
+    </HashLink>
   );
 }
 

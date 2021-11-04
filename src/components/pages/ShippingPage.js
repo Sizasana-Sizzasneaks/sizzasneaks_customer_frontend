@@ -303,7 +303,7 @@ function ShippingPage() {
           {userAddresses && (
             <Container className={Styles.container}>
               <Row>
-                <Col xs={12} md={8}>
+                <Col xl={8} lg={8} md={12} xs={12} className={Styles.CardCol} >
                   {showEditAddress ? (
                     <EditShippingAddress
                       newMode={newMode}
@@ -389,7 +389,7 @@ function ShippingPage() {
                 </Col>
 
                 {/* Summary detail card component */}
-                <Col xs={6} md={4}>
+                <Col xl={4} lg={4} md={12} xs={12} className={Styles.CardCol}  >
                   <Card className="cardStyle">
                     <Card.Header className={Styles.Name}>
                       {" "}

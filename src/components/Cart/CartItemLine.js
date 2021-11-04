@@ -108,7 +108,7 @@ function CartItemLine(props) {
   }
   return (
     <Row className={Styles.CartItemLine}>
-      <Col xl={3}>
+      <Col xs={3} >
         <img
           onClick={goToProductPage}
           className={Styles.ProductImg}
@@ -116,7 +116,7 @@ function CartItemLine(props) {
           alt="ProductImage"
         ></img>
       </Col>
-      <Col xl={5} style={{ display: "grid" }}>
+      <Col xs={5} style={{ display: "grid" }}>
         <Row className={Styles.DetailLine}>
           <Col>
             {" "}
@@ -184,7 +184,7 @@ function CartItemLine(props) {
           </Col>
         </Row>
       </Col>
-      <Col xl={4}>
+      <Col xs={4}>
         <Row className={Styles.RemoveLine}>
           {deleteLoading ? (
             <div
