@@ -425,7 +425,7 @@ function BillingPage(props) {
           {order && (
             <Container className={Styles.FullFormBox}>
               <Row>
-                <Col xs={12} md={8}>
+                <Col xl={8} lg={8} md={12} xs={12} className={Styles.CardCol}>
                   <Card className="cardStyle">
                     <Card.Header className={Styles.Name}>
                       Billing Details
@@ -874,7 +874,7 @@ function BillingPage(props) {
                     </Row>
                   </Card>
                 </Col>
-                <Col xs={6} md={4}>
+                <Col xl={4} lg={4} md={12} xs={12} className={Styles.CardCol}>
                   <Card className="cardStyle">
                     <Card.Header className={Styles.Name}>
                       {" "}

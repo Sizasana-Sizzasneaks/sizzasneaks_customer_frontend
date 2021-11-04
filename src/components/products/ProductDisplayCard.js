@@ -135,7 +135,7 @@ function ProductDisplayCard(props) {
         </Row>
       </Col>
 
-      <Col className={Styles.currentProductDetailsSegment}>
+      <Col  className={Styles.currentProductDetailsSegment}>
         <Row>
           <Col className={Styles.brand}>
             <p>{props.product.brand}</p>

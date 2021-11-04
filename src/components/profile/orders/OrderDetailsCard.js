@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
+
 import Styles from "./OrderDetailsCard.module.css";
 import { useHistory } from "react-router";
 import { CircularProgress } from "@material-ui/core";
@@ -15,33 +16,33 @@ function OrderDetailsCard(props) {
     <>
       <Row className={Styles.OrderDetailsCard}>
         <Row className={Styles.TopRow}>
-          <Col xl={8}>
+          <Col xl={8} xs={12} >
             <p>#OrderID: {props.orderId}</p>
           </Col>
 
-          <Col xl={4}>
+          <Col xl={4} xs={12}>
             <p style={{ textAlign: "right" }}> {props.date}</p>
           </Col>
         </Row>
 
         <Row className={Styles.CardRow}>
-          <Col xl={2}>
+          <Col xs={2}>
             <p>Product Name</p>
           </Col>
 
-          <Col xl={2}>
+          <Col xs={2}>
             <p>Color</p>
           </Col>
 
-          <Col xl={2}>
+          <Col xs={2}>
             <p>Size</p>
           </Col>
 
-          <Col xl={2}>
+          <Col xs={2}>
             <p>Quantity</p>
           </Col>
 
-          <Col xl={4}>
+          <Col xs={4}>
             <p style={{ textAlign: "right" }}>Total</p>
           </Col>
         </Row>
@@ -56,24 +57,24 @@ function OrderDetailsCard(props) {
           return (
             <>
               <Row className={Styles.TextRow}>
-                <Col xl={2}>
+                <Col xs={2}>
                   <p>{item.productName}</p>
                 </Col>
 
-                <Col xl={2}>
+                <Col xs={2}>
                   {/* getting color of item */}
                   <p>{item.option.color}</p>
                 </Col>
 
-                <Col xl={2}>
+                <Col xs={2}>
                   <p>{item.option.size}</p>
                 </Col>
 
-                <Col xl={2}>
+                <Col xs={2}>
                   <p>{item.quantity}</p>
                 </Col>
 
-                <Col xl={4}>
+                <Col xs={4}>
                   <p style={{ textAlign: "right" }}>
                     {formatter.format(
                       (item.sellingPriceAmount -
@@ -92,11 +93,11 @@ function OrderDetailsCard(props) {
           );
         })}
         <Row className={Styles.TaxDeliveryLine}>
-          <Col xl={6}>
+          <Col xs={6}>
             <p>Tax Amount</p>
           </Col>
 
-          <Col xl={6}>
+          <Col xs={6}>
             <p style={{ textAlign: "right" }}>{props.totalTax}</p>
           </Col>
         </Row>
@@ -107,11 +108,11 @@ function OrderDetailsCard(props) {
         </Row>
 
         <Row className={Styles.TaxDeliveryLine}>
-          <Col xl={6}>
+          <Col xs={6}>
             <p>Delivery Charge</p>
           </Col>
 
-          <Col xl={6}>
+          <Col xs={6}>
             <p style={{ textAlign: "right" }}>
               {formatter.format(props.shippingCost)}
             </p>
@@ -124,11 +125,11 @@ function OrderDetailsCard(props) {
         </Row>
 
         <Row className={Styles.SummaryLine}>
-          <Col xl={4}>
+          <Col xs={4}>
             <p>Total</p>
           </Col>
 
-          <Col xl={8}>
+          <Col xs={8}>
             <p style={{ textAlign: "right" }}>{props.totalCost}</p>
           </Col>
         </Row>
@@ -139,7 +140,7 @@ function OrderDetailsCard(props) {
         </Row>
 
         <Row>
-          <Col xl={4} className={Styles.ShippingAddress}>
+          <Col xl={4} lg={12} className={Styles.ShippingAddress}>
             <Row>
               <p
                 style={{

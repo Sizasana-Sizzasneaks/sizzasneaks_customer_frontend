@@ -126,3 +126,11 @@
   justify-content: left;
   align-items: center;
 }
+
+@media screen and (max-width: 992px) {
+  .CardCol{
+
+    margin-top: 25px;
+  }
+
+}

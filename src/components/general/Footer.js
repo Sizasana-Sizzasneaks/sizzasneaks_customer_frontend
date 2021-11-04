@@ -1,4 +1,5 @@
 import React from "react";
+import { HashLink } from "react-router-hash-link";
 import { Container, Row, Col } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
@@ -22,25 +23,18 @@ function Footer() {
         // Under the Main headings we have links to functions related to the main headings
         // these are all the visual components of the footer
       >
-        <Row style={{ fontWeight: "bold", height: "30px" }}>
-          <Col xs={3} className="footer-heading-block">
-            <p className="footer-headingOne-text">SIZZASNEAKS</p>
-          </Col>
-          <Col xs={2} className="footer-heading-block">
-            <p className="footer-heading-text">SITE LINKS</p>
-          </Col>
-          <Col xs={2} className="footer-heading-block">
-            <p className="footer-heading-text">POLICY</p>
-          </Col>
-          <Col xs={2} className="footer-heading-block">
-            <p className="footer-heading-text">CATEGORIES</p>
-          </Col>
+        {/* <Row style={{ fontWeight: "bold", height: "30px" }}>
+          <Col xl={3} lg={3} md={12} className="footer-heading-block"></Col>
+          <Col xl={3} lg={3} md={12} className="footer-heading-block"></Col>
+          <Col xl={3} lg={3} md={12} className="footer-heading-block"></Col>
+          <Col xl={3} lg={3} md={12} className="footer-heading-block"></Col>
           {/* <Col xs={3} className="footer-heading-block">
             <p className="footer-heading-text">SUBSCRIBE</p>
-          </Col> */}
-        </Row>
+          </Col> *
+        </Row> */}
         <Row style={{ marginTop: "35px" }}>
-          <Col className="footer-segment-block" xs={3}>
+          <Col className="footer-segment-block" xl={3} lg={3} md={6} xs={12}>
+            <p className="footer-headingOne-text">SIZZASNEAKS</p>
             <FooterIconLink
               src={facebookIcon}
               alt="facebook-icon"
@@ -57,45 +51,29 @@ function Footer() {
               link="https://www.google.com"
             />
           </Col>
-          <Col xs={2} className="footer-segment-block">
-            <FooterSegmentItem label="Home" link="/" />
+          <Col xl={3} lg={3} md={6} xs={12} className="footer-segment-block">
+            <p className="footer-heading-text">SITE LINKS</p>
+            <FooterSegmentItem label="Home" link="/#top" />
           </Col>
-          <Col xs={2} className="footer-segment-block">
-            <FooterSegmentItem label="Terms of Use" link="/terms-of-use" />
-            <FooterSegmentItem label="Privacy Policy" link="/privacy-policy" />
-            <FooterSegmentItem label="Return Policy" link="/return-policy" />
+          <Col xl={3} lg={3} md={6} xs={12} className="footer-segment-block">
+            <p className="footer-heading-text">POLICY</p>
+            <FooterSegmentItem label="Terms of Use" link="/terms-of-use#top" />
+            <FooterSegmentItem label="Privacy Policy" link="/privacy-policy#top" />
+            <FooterSegmentItem label="Return Policy" link="/return-policy#top" />
           </Col>
-          <Col xs={2} className="footer-segment-block">
-            <FooterSegmentItem label="Men" link="/products/CATEGORY/MEN" />
-            <FooterSegmentItem label="Women" link="/products/CATEGORY/WOMEN" />
-            <FooterSegmentItem label="Kids" link="/products/CATEGORY/KIDS" />
-            <FooterSegmentItem label="New Arrivals" link="/products/NEW/NEW" />
+          <Col xl={3} lg={3} md={6} xs={12} className="footer-segment-block">
+            <p className="footer-heading-text">CATEGORIES</p>
+            <FooterSegmentItem label="Men" link="/products/CATEGORY/MEN#top" />
+            <FooterSegmentItem label="Women" link="/products/CATEGORY/WOMEN#top" />
+            <FooterSegmentItem label="Kids" link="/products/CATEGORY/KIDS#top" />
+            <FooterSegmentItem label="New Arrivals" link="/products/NEW/NEW#top" />
           </Col>
-          {/* <Col xs={3} className="footer-segment-block">
-            <FooterSegmentItem
-              label=" Subscribe to our newsletter, so that you can be the first to know
-              about new offers and promotions."
-            />
-            <div className="footer-newsletter-subscribe-box">
-              <input
-                id="footer-newsletter-subscribe-input"
-                type="text"
-                placeholder="Enter Email Address"
-              />
-              <div className="footer-subscribe-button">
-                <p>SUBSCRIBE</p>
-              </div>
-            </div>
-          </Col> */}
         </Row>
 
         <Row style={{ backgroundColor: "", height: "55px", marginTop: "30px" }}>
           <div style={{ display: "inline-flex", position: "relative" }}>
             <div className="copyright-container">
               <p>Copyright © 2021 SIZZASNEAKS. All Rights Reserved</p>
-            </div>
-            <div className="payment-container">
-              {/* <p >2021 All Rights Reserved</p> */}
             </div>
           </div>
         </Row>
@@ -109,16 +87,18 @@ export default Footer; //exporting the Footer
 function FooterSegmentItem(props) {
   const history = useHistory();
   return (
-    <p
-      className="footer-segment-item-text"
-      onClick={() => {
-        if (typeof props.link !== undefined) {
-          history.push(props.link);
-        }
-      }}
-    >
-      {props.label}{" "}
-    </p>
+    <HashLink style={{ textDecoration: "none", color:"black" }} smooth to={props.link}>
+      <p
+        className="footer-segment-item-text"
+        // onClick={() => {
+        //   if (typeof props.link !== undefined) {
+        //     history.push(props.link);
+        //   }
+        // }}
+      >
+        {props.label}{" "}
+      </p>
+    </HashLink>
   );
 }
 

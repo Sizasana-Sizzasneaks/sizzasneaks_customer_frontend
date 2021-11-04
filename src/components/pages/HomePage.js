@@ -88,7 +88,7 @@ function HomePage() {
         {products &&
           products.map((product, index) => {
             return index > -1 && index < 2 ? (
-              <Col xl={3} style={{ display: "flex", justifyContent: "center" }}>
+              <Col xl={3} md={6} style={{ display: "flex", justifyContent: "center" }}>
                 {products && <ProductItem product={product} />}
               </Col>
             ) : (
@@ -116,7 +116,7 @@ function HomePage() {
         {products &&
           products.map((product, index) => {
             return index > 1 && index < 4 ? (
-              <Col xl={3} style={{ display: "flex", justifyContent: "center" }}>
+              <Col xl={3} md={6} style={{ display: "flex", justifyContent: "center" }}>
                 {products && <ProductItem product={product} />}
               </Col>
             ) : (

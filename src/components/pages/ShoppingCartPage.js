@@ -83,7 +83,7 @@ function ShoppingCartPage() {
 
       <Container className={Styles.container}>
         <Row>
-          <Col xs={12} md={8}>
+          <Col xl={8} lg={8} md={12} xs={12} className={Styles.CardCol} >
             <Card>
               <Card.Header className={Styles.Name}> Cart Items</Card.Header>
 
@@ -182,7 +182,7 @@ function ShoppingCartPage() {
           </Col>
 
           {/* Summary detail card component */}
-          <Col xs={6} md={4}>
+          <Col xl={4} lg={4} md={12} xs={12} className={Styles.CardCol}>
             <Card className="cardStyle">
               <Card.Header className={Styles.Name}> Cart Summary</Card.Header>
 
@@ -345,8 +345,11 @@ function ShoppingCartPage() {
                                             Styles.RequestVerificationText
                                           }
                                           onClick={() => {
-                                            dispatch(toggleLogInPopUp(!logInPopUpState.show))
-                                            
+                                            dispatch(
+                                              toggleLogInPopUp(
+                                                !logInPopUpState.show
+                                              )
+                                            );
                                           }}
                                           style={{ fontWeight: "500" }}
                                         >

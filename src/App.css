@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
-
+a{
+  text-decoration: none;
+}
 
 .row {
   margin: 0;
@@ -65,15 +67,16 @@ footer {
 }
 
 .footer-heading-text {
-  margin-bottom: 0px;
-  position: absolute;
+  
+  /* position: absolute; */
   top: 6px;
   font-size: 18px;
+  margin-bottom: 18px;
   font-weight: bold;
 }
 .footer-headingOne-text {
-  margin-bottom: 0px;
-  position: absolute;
+  margin-bottom: 18px;
+  /* position: absolute; */
   top: 0px;
   font-size: 30px;
   font-weight: bold;
@@ -87,7 +90,8 @@ footer {
 }
 
 .footer-segment-block {
-  padding: 0;
+  /* padding: 0; */
+  margin-top: 30px;
 }
 
 .footer-segment-item-text {
