@@ -796,7 +796,7 @@ function BillingPage(props) {
                             {" "}
                             <InputField
                               label="Expiry Month"
-                              type="month"
+                              // type="month"
                               value={cardExpiryMonth}
                               entireComponentStyle={{
                                 marginRight: "20px",
