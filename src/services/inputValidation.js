@@ -221,8 +221,8 @@ export const validateDeliveryInstructionString = (text) => {
 // Zip code
 const zipCodeSchema = Yup.object().shape({
   text: Yup.number("Please enter a ZipCode")
-    .min(1000, "Need Four")
-    .max(9999, "Max")
+    .min(1000, "Invalid Zip Code")
+    .max(9999, "Invalid Zip Code")
     .required()
     .typeError("Invalid Zip Code"),
 });
