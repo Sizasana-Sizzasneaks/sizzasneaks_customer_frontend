@@ -19,7 +19,7 @@ export const getUserProfile = () => async (dispatch) => {
   } else {
     dispatch({
       type: "GET_USER_PROFILE",
-      payload: { ok: false, error: "Failed Getting Details From backend" },
+      payload: { ok: false, error: "Failed getting user credentials " },
     });
   }
 };

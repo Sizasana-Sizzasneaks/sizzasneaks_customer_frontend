@@ -22,7 +22,6 @@ function ProductPage() {
   var history = useHistory();
   //use effects
   React.useEffect(() => {
-    console.log("Use Effct");
 
     getTheProduct(id);
   }, []);
@@ -31,14 +30,17 @@ function ProductPage() {
     var getProductsResult = await getProduct(productId);
     //if the getProductsResult is true show the products
     if (getProductsResult.ok === true) {
-      console.log(getProductsResult);
       setLoading(false); // loading is canceled
       setProduct(getProductsResult.data[0]);
-      console.log(getProductsResult.data[0]); // print the getProductsResult to the terminal
     } else {
       setLoading(false); // loading is canceled
-      console.log(getProductsResult); // print the getProductsResult to the terminal
-      setError(getProductsResult); //will show error
+     
+      if(getProductsResult.message === "Invalid Product Id"){
+        setError({ok:false, message:"Product does not exist"}); //will show error
+      }else{
+        setError(getProductsResult); //will show error
+      }
+      
     }
   }
   //this method will return a display card for a single product

@@ -98,7 +98,7 @@ function BillingPage(props) {
       initialRun.current = false;
     }
     //Must run every time After the initial run
-    console.log("Run");
+
     checkFullForm();
   }, [
     errorFirstName,

@@ -91,7 +91,7 @@ export const getCart = async () => {
       }
     } else {
       //returns a message if the current user is not signed into the platform
-      return { ok: false, message: "No User Signed In" };
+      return { ok: false, message: "No user signed in" };
     }
   } else {
     //returns a message when data has not been loaded from the redux store.
@@ -141,11 +141,11 @@ export const updateCartItemQuantity = async (
       }
     } else {
       //returns a message if the current user is not signed into the platform
-      return { ok: false, message: "No User Signed In" };
+      return { ok: false, message: "No user signed in" };
     }
   } else {
     //returns a message when data has not been loaded from the redux store.
-    return { ok: false, message: "Updating a Cart Item Failed - Try again" };
+    return { ok: false, message: "Updating a Cart Item Failed - Please try again" };
   }
 };
 
@@ -188,10 +188,10 @@ export const deleteSingleCartItem = async (product_id, option) => {
       }
     } else {
       //returns a message if the current user is not signed into the platform
-      return { ok: false, message: "No User Signed In" };
+      return { ok: false, message: "No user signed in" };
     }
   } else {
     //returns a message when data has not been loaded from the redux store.
-    return { ok: false, message: "Deleting a Cart Item Failed - Try again" };
+    return { ok: false, message: "Deleting a Cart Item Failed - Please try again" };
   }
 };

@@ -1,8 +1,9 @@
 import React from "react";
 import { sendEmailVerificationEmail } from "../../services/authentication.js";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory, Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserCart } from "../../redux/actions/cart.js";
+import { toggleLogInPopUp } from "../../redux/actions/logInPopUp.js";
 
 import {
   Card,
@@ -34,10 +35,15 @@ function ShippingPage() {
     currency: "ZAR",
   });
   const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const authState = useSelector((state) => state.firebase.auth);
   const shoppingCart = useSelector((state) => state.cart);
+  const logInPopUpState = useSelector((state) => state.logInPopUpState);
+
+  //Start
+  const initialRun = React.useRef(true);
 
   var [loadingRequest, setLoadingRequest] = React.useState(false);
   var [requestVerEmailState, setRequestVerEmailState] = React.useState(null);
@@ -67,8 +73,21 @@ function ShippingPage() {
   var [editAddress, setEditAddress] = React.useState(true);
 
   React.useEffect(() => {
-    dispatch(getUserCart());
-    getAddresses();
+    if (initialRun.current) {
+      if (
+        typeof location.state === "undefined" ||
+        typeof location.state.cameFromCart === "undefined" ||
+        !location.state.cameFromCart
+      ) {
+        setTimeout(() => {
+          history.goBack();
+        }, 1);
+      } else {
+        dispatch(getUserCart());
+        getAddresses();
+      }
+      initialRun.current = false;
+    }
   }, []);
 
   function generateTaxAmount() {
@@ -121,11 +140,10 @@ function ShippingPage() {
 
     //confirm if it was a success
     if (createNewAddressResult.ok) {
-      console.log("Worked");
+      
       console.log(createNewAddressResult);
     } else {
       // sign it failed
-      console.log("Failed");
       console.log(createNewAddressResult);
     }
   }
@@ -147,7 +165,7 @@ function ShippingPage() {
     } else {
       setLoadingAddresses(false);
       setPlaceOrderLoading(false);
-      setErrorAddresses(getShippingAddressesResult);
+      setPlaceOrderError(getShippingAddressesResult);
     }
   }
 
@@ -562,7 +580,7 @@ function ShippingPage() {
                                                   Styles.RequestVerificationText
                                                 }
                                                 onClick={() => {
-                                                  history.push("/log-in");
+                                                  dispatch(toggleLogInPopUp(!logInPopUpState.show))
                                                 }}
                                                 style={{ fontWeight: "500" }}
                                               >

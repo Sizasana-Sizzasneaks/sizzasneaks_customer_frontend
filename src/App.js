@@ -28,7 +28,6 @@ import TermsOfUse from "./components/pages/TermsOfUse.js";
 // Additional Pages
 import PageNotFound from "./components/pages/PageNotFound.js";
 
-
 import store from "./redux/index.js";
 import { isLoaded, isEmpty } from "react-redux-firebase";
 import { getUserProfile } from "./redux/actions/profile.js";
@@ -85,45 +84,29 @@ function App() {
               <Route exact path="/terms-of-use">
                 <TermsOfUse />
               </Route>
-              <Route exact path="/products/:id">
-                <ProductPage />
-              </Route>
-              <Route
-                exact
-                path="/products/:searchBy/:category"
-                children={<ProductsPage />}
-              ></Route>
 
+              <ProtectedRoute exact path="/shipping" mustBeLoggedIn={true} component={ShippingPage} />
+              <ProtectedRoute exact path="/billing" mustBeLoggedIn={true} component={BillingPage} />
+              <ProtectedRoute exact path="/profile" mustBeLoggedIn={true}  component={ProfilePage} />
               <Route exact path="/cart">
                 <ShoppingCartPage />
               </Route>
-
-              <ProtectedRoute
-                exact
-                path="/shipping"
-                children={<ShippingPage />}
-              />
-              <ProtectedRoute
-                exact
-                path="/billing"
-                children={<BillingPage />}
-              />
-              <ProtectedRoute
-                exact
-                path="/profile"
-                children={<ProfilePage />}
-              />
-
+              <Route exact path="/products/:id">
+                <ProductPage />
+              </Route>
+              <Route exact path="/products/:searchBy/:category">
+                <ProductsPage />
+              </Route>
+              {/* <Route exact path="/log-in">
+                <LogInComponent />
+              </Route> */}
               <Route exact path="/sign-up">
                 <SignUpPage />
-              </Route>
-              <Route exact path="/log-in">
-                <LogInComponent />
               </Route>
               <Route exact path="/">
                 <HomePage />
               </Route>
-              <Route path='*' exact={true} component={PageNotFound} />
+              <Route path="*" exact={true} component={PageNotFound} />
             </Switch>
           </Container>
           <Footer />

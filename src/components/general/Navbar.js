@@ -12,6 +12,7 @@ import DropDownInput from "./DropDownInput.js";
 import { signOutCurrentUser } from "../../services/authentication.js";
 import { clearUserProfile } from "../../redux/actions/profile.js";
 import { clearUserCart } from "../../redux/actions/cart.js";
+import { toggleLogInPopUp } from "../../redux/actions/logInPopUp.js";
 import { getProductBrands } from "../../api/products.js";
 
 import LogIn from "./LogInComponent";
@@ -28,14 +29,9 @@ function Navbar() {
     getProductBrandsList();
   }, []);
 
-  function pushToProfilePage(){
-
-    history.push("/profile")
+  function pushToProfilePage() {
+    history.push("/profile");
   }
-
-  const handleClick = () => {
-    handleLoginClick();
-  };
 
   async function getProductBrandsList() {
     var getProductBrandsResult = await getProductBrands();
@@ -47,17 +43,10 @@ function Navbar() {
     }
   }
 
-  // declare a variable to use State Hook: isShowLogin
-  const [isShowLogin, setIsShowLogin] = useState(false);
-
-  //function setIsShowLogin to update our state
-  const handleLoginClick = () => {
-    setIsShowLogin((isShowLogin) => !isShowLogin);
-  };
-
   const authState = useSelector((state) => state.firebase.auth);
   const profileState = useSelector((state) => state.profile);
   const cartState = useSelector((state) => state.cart);
+  const logInPopUpState = useSelector((state) => state.logInPopUpState);
   return (
     <nav>
       <div className={Styles.NavbarBanner}>
@@ -119,7 +108,7 @@ function Navbar() {
                       <Col
                         className={Styles.TopRightNavBannerLink}
                         onClick={() => {
-                          handleClick();
+                          dispatch(toggleLogInPopUp(!logInPopUpState.show));
                         }}
                       >
                         {" "}
@@ -166,8 +155,8 @@ function Navbar() {
                           )}
                         </p>
                       </Col>
-                      {isShowLogin && (
-                        <LogIn setShowLogInForm={setIsShowLogin} />
+                      {logInPopUpState.show && (
+                        <LogIn  />
                       )}
                     </>
                   ) : (
