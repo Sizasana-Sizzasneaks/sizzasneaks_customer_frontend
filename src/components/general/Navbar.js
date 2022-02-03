@@ -354,7 +354,7 @@ function Navbar() {
               }}
             >
               <NavbarNavigationLink
-                label="NEW"
+                label="LATEST"
                 onClick={() => {
                   history.push("/products/NEW/NEW");
                 }}
